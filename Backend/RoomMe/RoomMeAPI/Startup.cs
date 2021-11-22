@@ -34,11 +34,11 @@ namespace RoomMeAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RoomMeAPI", Version = "v1" });
             });
-            services.AddDbContext<SQLContext>(options =>
+            /*services.AddDbContext<SQLContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Database")
                 )
-            );
+            ); */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
