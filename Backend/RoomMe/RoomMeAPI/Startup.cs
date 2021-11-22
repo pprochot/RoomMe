@@ -36,7 +36,7 @@ namespace RoomMeAPI
             });
             services.AddDbContext<SQLContext>(options =>
                 options.UseSqlServer(
-                    ""
+                    Configuration.GetConnectionString("Database")
                 )
             );
         }
@@ -47,9 +47,11 @@ namespace RoomMeAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RoomMeAPI v1"));
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RoomMeAPI v1"));
 
             app.UseHttpsRedirection();
 

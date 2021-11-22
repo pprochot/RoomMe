@@ -58,3 +58,4 @@ C:\PZ\RoomMe\Backend\RoomMe\RoomMeAPI\obj\Debug\net5.0\RoomMe.API.dll
 C:\PZ\RoomMe\Backend\RoomMe\RoomMeAPI\obj\Debug\net5.0\ref\RoomMe.API.dll
 C:\PZ\RoomMe\Backend\RoomMe\RoomMeAPI\obj\Debug\net5.0\RoomMe.API.pdb
 C:\PZ\RoomMe\Backend\RoomMe\RoomMeAPI\obj\Debug\net5.0\RoomMe.API.genruntimeconfig.cache
+C:\PZ\RoomMe\Backend\RoomMe\RoomMeAPI\obj\Debug\net5.0\RoomMe.API.MvcApplicationPartsAssemblyInfo.cs
