@@ -29,8 +29,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMeSQLContext\\RoomMe.SQLContext.csproj": {
-                "projectPath": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMeSQLContext\\RoomMe.SQLContext.csproj"
+              "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMe.SQLContext\\RoomMe.SQLContext.csproj": {
+                "projectPath": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMe.SQLContext\\RoomMe.SQLContext.csproj"
               }
             }
           }
@@ -72,14 +72,14 @@
         }
       }
     },
-    "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMeSQLContext\\RoomMe.SQLContext.csproj": {
+    "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMe.SQLContext\\RoomMe.SQLContext.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMeSQLContext\\RoomMe.SQLContext.csproj",
+        "projectUniqueName": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMe.SQLContext\\RoomMe.SQLContext.csproj",
         "projectName": "RoomMe.SQLContext",
-        "projectPath": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMeSQLContext\\RoomMe.SQLContext.csproj",
+        "projectPath": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMe.SQLContext\\RoomMe.SQLContext.csproj",
         "packagesPath": "C:\\Users\\Matbas\\.nuget\\packages\\",
-        "outputPath": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMeSQLContext\\obj\\",
+        "outputPath": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMe.SQLContext\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Matbas\\AppData\\Roaming\\NuGet\\NuGet.Config",
