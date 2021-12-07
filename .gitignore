@@ -1,2 +1,16 @@
 **/.idea/
 Backend/RoomMe/.vs/**/*
+Backend/RoomMe/RoomMe.API.Tests/obj/**/*
+Backend/RoomMe/*/obj/**/*
+
+
+*.suo
+*.user
+*.sln.docstates
+
+# Build results
+Backend/RoomMe/**/[Dd]ebug/
+Backend/RoomMe/**/[Rr]elease/
+Backend/RoomMe/**/x64/
+Backend/RoomMe/**/[Bb]in/
+Backend/RoomMe/**/[Oo]bj/
