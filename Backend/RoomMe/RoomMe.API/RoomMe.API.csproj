@@ -15,6 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\RoomMeSQLContext\RoomMe.SQLContext.csproj" />
+    <ProjectReference Include="..\RoomMe.SQLContext\RoomMe.SQLContext.csproj" />
   </ItemGroup>
 </Project>
