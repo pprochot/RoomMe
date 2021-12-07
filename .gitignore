@@ -1,2 +1,3 @@
 **/.idea/
 Backend/RoomMe/.vs/**/*
+Backend/RoomMe/RoomMe.API.Tests/obj/**/*
