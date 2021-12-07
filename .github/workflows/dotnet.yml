@@ -14,8 +14,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Backend/RoomMe
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build Backend/RoomMe --no-restore
     - name: Test
       run: dotnet test Backend/RoomMe --no-build --verbosity normal
