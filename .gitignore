@@ -1,16 +1,14 @@
 **/.idea/
-Backend/RoomMe/.vs/**/*
-Backend/RoomMe/RoomMe.API.Tests/obj/**/*
-Backend/RoomMe/*/obj/**/*
+**/.vs/**/*.*
 
-
-*.suo
-*.user
-*.sln.docstates
+**/*.cache
+**/*.suo
+**/*.user
+**/*.sln.docstates
 
 # Build results
-Backend/RoomMe/**/[Dd]ebug/
-Backend/RoomMe/**/[Rr]elease/
-Backend/RoomMe/**/x64/
-Backend/RoomMe/**/[Bb]in/
-Backend/RoomMe/**/[Oo]bj/
+**/[Dd]ebug/
+**/[Rr]elease/
+**/x64/
+**/[Bb]in/
+**/[Oo]bj/
