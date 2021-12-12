@@ -22,11 +22,11 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=RoomMe22" ^
    First, run interactive bash of the container.
 - Linux:
 ```
-sudo docker exec -it sql1 "bash"
+sudo docker exec -it RoomMeDb "bash"
 ```
 - Windows:
 ```
-docker exec -it sql1 "bash"
+docker exec -it RoomMeDb "bash"
 ```
 
 - Then run this:
