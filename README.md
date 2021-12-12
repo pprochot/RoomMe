@@ -66,6 +66,7 @@ to update your database to current iteration
 add-migration <<name>>
 ```
 where `<<name>>` should be replaced with the name of migration (e.g `add-migration create_users_table`)
+
 3. Verify whether the migration contains only changes that it should have (check new created file in `migrations` folder)
 4. If step above is positive, update your database using `update-database` then commit your changes
 5. If step 3. was negative, then revert your changes using
