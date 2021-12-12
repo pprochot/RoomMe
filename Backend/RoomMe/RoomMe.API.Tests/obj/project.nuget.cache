@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KspgninLKLCUvHdfe29HQZrBDsFiIPSBBd/QppWPMyLun+b7n/i3LXOr+b62nTENtjOR/FRCH5IKLqZSPg9aqg==",
+  "dgSpecHash": "/nm1HI75ZalJwCo3yjROj87TNySEcRMzkzVXPvZ/8OgpAjyapv8xZIeWvTtG/CNXcPrh/qADJ4NXAxHT3yO46w==",
   "success": true,
   "projectFilePath": "C:\\PZ\\RoomMe\\Backend\\RoomMe\\RoomMe.API.Tests\\RoomMe.API.Tests.csproj",
   "expectedPackageFiles": [

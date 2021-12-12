@@ -22,3 +22,6 @@ C:\PZ\RoomMe\Backend\RoomMe\RoomMe.SQLContext\obj\Debug\net5.0\RoomMe.SQLContext
 C:\PZ\RoomMe\Backend\RoomMe\RoomMe.SQLContext\obj\Debug\net5.0\RoomMe.SQLContext.dll
 C:\PZ\RoomMe\Backend\RoomMe\RoomMe.SQLContext\obj\Debug\net5.0\ref\RoomMe.SQLContext.dll
 C:\PZ\RoomMe\Backend\RoomMe\RoomMe.SQLContext\obj\Debug\net5.0\RoomMe.SQLContext.pdb
+C:\PZ\RoomMe\Backend\RoomMe\RoomMe.SQLContext\bin\Debug\net5.0\RoomMe.SQLContext.runtimeconfig.json
+C:\PZ\RoomMe\Backend\RoomMe\RoomMe.SQLContext\bin\Debug\net5.0\RoomMe.SQLContext.runtimeconfig.dev.json
+C:\PZ\RoomMe\Backend\RoomMe\RoomMe.SQLContext\obj\Debug\net5.0\RoomMe.SQLContext.genruntimeconfig.cache
