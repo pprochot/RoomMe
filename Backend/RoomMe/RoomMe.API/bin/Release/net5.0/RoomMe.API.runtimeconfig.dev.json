@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "C:\\Users\\Matbas\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Matbas\\.nuget\\packages"
-    ]
-  }
-}
