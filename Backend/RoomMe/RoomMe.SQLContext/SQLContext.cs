@@ -14,7 +14,7 @@ namespace RoomMe.SQLContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.AuthorId);
+                .HasOne(p => p.Author);
         }
     }
 }
