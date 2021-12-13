@@ -16,6 +16,10 @@ namespace RoomMe.SQLContext
         public DbSet<HouseworkFrequency> HouseworkFrequencies { get; set; }
         public DbSet<HouseworkSettings> HouseworkSettings { get; set; }
         public DbSet<HouseworkStatus> HouseworkStatuses { get; set; }
+        public DbSet<PrivateNotification> PrivateNotifications { get; set; }
+        public DbSet<FlatNotification> FlatNotifications { get; set; }
+        public DbSet<NotificationSettings> NotificationSettings { get; set; }
+        public DbSet<NotificationFrequency> NotificationFrequencies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
