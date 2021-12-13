@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace RoomMe.SQLContext.Models
 {
-    public class Flat
+    public class HouseworkFrequency
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
-        public List<User> Users { get; set; }
-        public List<Housework> Houseworks { get; set; }
+        public int Value { get; set; }
     }
 }
