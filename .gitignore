@@ -1,10 +1,10 @@
-**/.idea/
-**/.vs/**/*.*
+**/.idea
+**/.vs
 
-**/*.cache
-**/*.suo
-**/*.user
-**/*.sln.docstates
+*.cache
+*.suo
+*.user
+*.sln.docstates
 
 # Build results
 **/[Dd]ebug/
