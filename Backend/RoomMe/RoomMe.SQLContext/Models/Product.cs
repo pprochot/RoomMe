@@ -9,15 +9,16 @@ namespace RoomMe.SQLContext.Models
     public class Product
     {
         public int Id { get; set; }
-        public int ShoppingListID { get; set; }
+        public int ShoppingListId { get; set; }
+        public ShoppingList ShoppingList { get; set; }
         public int AuthorId { get; set; }
         public User Author { get; set; }
         public int CommonCostId { get; set; }
-        public String Name { get; set; }
-        public String Description { get; set; }
-        public String Reason { get; set; }
-        public String Quantity { get; set; }
-        public String Bought { get; set; }
-
+        public CommonCost CommonCost { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Reason { get; set; }
+        public int Quantity { get; set; }
+        public bool Bought { get; set; }
     }
 }
