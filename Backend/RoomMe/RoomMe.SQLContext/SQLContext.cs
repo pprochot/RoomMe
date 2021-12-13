@@ -9,6 +9,7 @@ namespace RoomMe.SQLContext
         public SQLContext(DbContextOptions<SQLContext> options) : base(options) { }
 
         public DbSet<User> users { get; set; }
+        public DbSet<Products> products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
