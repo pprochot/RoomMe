@@ -20,6 +20,8 @@ namespace RoomMe.SQLContext
         public DbSet<FlatNotification> FlatNotifications { get; set; }
         public DbSet<NotificationSettings> NotificationSettings { get; set; }
         public DbSet<NotificationFrequency> NotificationFrequencies { get; set; }
+        public DbSet<PrivateCost> PrivateCosts { get; set; }
+        public DbSet<CommonCost> CommonCosts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
