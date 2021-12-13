@@ -13,7 +13,7 @@ namespace RoomMe.SQLContext.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShoppingListID = table.Column<int>(type: "int", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
+                    AuthorIdId = table.Column<int>(type: "int", nullable: true),
                     CommonCostId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -24,7 +24,18 @@ namespace RoomMe.SQLContext.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_products_users_AuthorIdId",
+                        column: x => x.AuthorIdId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_products_AuthorIdId",
+                table: "products",
+                column: "AuthorIdId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
