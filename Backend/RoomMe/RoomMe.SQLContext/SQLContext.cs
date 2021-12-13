@@ -8,13 +8,12 @@ namespace RoomMe.SQLContext
     {
         public SQLContext(DbContextOptions<SQLContext> options) : base(options) { }
 
-        public DbSet<User> users { get; set; }
-        public DbSet<Product> products { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Flat> Flats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Author);
         }
     }
 }
