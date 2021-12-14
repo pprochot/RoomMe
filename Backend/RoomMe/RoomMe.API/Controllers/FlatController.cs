@@ -41,7 +41,7 @@ namespace RoomMe.API.Controllers
             return flat.ToFlatFullGetModel();
         }
 
-        [HttpPost("new", Name = nameof(CreateNewFlat))]
+        [HttpPost("", Name = nameof(CreateNewFlat))]
         public async Task<ActionResult<FlatPostReturnModel>> CreateNewFlat(FlatPostModel flat) 
         {
             List<User> users = new();
