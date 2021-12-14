@@ -8,7 +8,7 @@ using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
-    [DbContext(typeof(SQLContext))]
+    [DbContext(typeof(SqlContext))]
     [Migration("20211213202013_create_flat_table")]
     partial class create_flat_table
     {

@@ -8,7 +8,7 @@ using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
-    [DbContext(typeof(SQLContext))]
+    [DbContext(typeof(SqlContext))]
     [Migration("20211213160534_create-products-table")]
     partial class createproductstable
     {

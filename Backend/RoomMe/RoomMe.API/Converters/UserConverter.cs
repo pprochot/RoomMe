@@ -17,5 +17,18 @@ namespace RoomMe.API.Converters
                 Nickname = user.Nickname
             };
         }
+
+        public static User ToUser(this UserPostModel user)
+        {
+            return new User()
+            {
+                Nickname = user.Nickname,
+                Email = user.Email,
+                Password = user.Password,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
     }
 }

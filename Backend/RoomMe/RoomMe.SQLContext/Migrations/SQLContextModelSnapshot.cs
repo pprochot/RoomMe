@@ -8,7 +8,7 @@ using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
-    [DbContext(typeof(SQLContext))]
+    [DbContext(typeof(SqlContext))]
     partial class SQLContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
