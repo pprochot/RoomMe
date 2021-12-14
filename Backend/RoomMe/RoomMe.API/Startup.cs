@@ -33,7 +33,7 @@ namespace RoomMeAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RoomMeAPI", Version = "v1" });
             });
-            services.AddDbContext<SQLContext>(options =>
+            services.AddDbContext<SqlContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("MSSQL")
                 )

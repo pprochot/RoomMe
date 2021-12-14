@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RoomMe.API.Converters;
 using RoomMe.API.Models;
+using RoomMe.SQLContext;
 using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace RoomMe.API.Controllers
     public class FlatController
     {
         private readonly ILogger<FlatController> _logger;
-        private readonly SQLContext.SQLContext _sqlContext;
-        public FlatController(ILogger<FlatController> logger, SQLContext.SQLContext sqlContext)
+        private readonly SqlContext _sqlContext;
+        public FlatController(ILogger<FlatController> logger, SqlContext sqlContext)
         {
             _logger = logger;
             _sqlContext = sqlContext;
@@ -65,8 +66,8 @@ namespace RoomMe.API.Controllers
             }
 
             var flatEntity = flat.ToFlatModel(users);
-            await _sqlContext.Flats.AddAsync(flatEntity);
-            await _sqlContext.SaveChangesAsync();
+            await _sqlContext.Flats.AddAsync(flatEntity).ConfigureAwait(false);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
             return flatEntity.ToFlatPostReturnModel();
         }
