@@ -4,9 +4,9 @@ using RoomMe.SQLContext.Models;
 
 namespace RoomMe.SQLContext
 {
-    public class SQLContext: DbContext
+    public class SqlContext: DbContext
     {
-        public SQLContext(DbContextOptions<SQLContext> options) : base(options) { }
+        public SqlContext(DbContextOptions<SqlContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
