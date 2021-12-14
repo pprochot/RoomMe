@@ -21,5 +21,7 @@ namespace RoomMe.SQLContext.Models
         public List<FlatNotification> FlatNotifications { get; set; }
         public List<CommonCost> CommonCosts { get; set; }
         public List<PrivateCost> PrivateCosts { get; set; }
+        public List<Product> Products { get; set; }
+        public List<ShoppingList> ShoppingLists { get; set; }
     }
 }

@@ -14,11 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Converters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RoomMe.SQLContext\RoomMe.SQLContext.csproj" />
   </ItemGroup>
 </Project>

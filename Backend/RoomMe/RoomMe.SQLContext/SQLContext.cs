@@ -22,11 +22,16 @@ namespace RoomMe.SQLContext
         public DbSet<NotificationFrequency> NotificationFrequencies { get; set; }
         public DbSet<PrivateCost> PrivateCosts { get; set; }
         public DbSet<CommonCost> CommonCosts { get; set; }
+        public DbSet<ShoppingList> ShoppingLists { get; set; }
+        public DbSet<Receipt> Receipts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Housework>().HasOne(x => x.Author).WithOne().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Housework>().HasMany(x => x.Users).WithMany(x => x.Houseworks);
+
+            modelBuilder.Entity<Product>().HasOne(x => x.CommonCost).WithOne().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Product>().HasOne(x => x.ShoppingList).WithMany(y => y.Products).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
