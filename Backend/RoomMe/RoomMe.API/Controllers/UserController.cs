@@ -24,7 +24,7 @@ namespace RoomMe.API.Controllers
             _sqlContext = sqlContext;
         }
 
-        [HttpPost("Test/New", Name = nameof(CreateTestUser))]
+        [HttpPost("test/new", Name = nameof(CreateTestUser))]
         public async Task<ActionResult<UserPostReturnModel>> CreateTestUser(UserPostModel user)
         {
             var entity = await _sqlContext.Users

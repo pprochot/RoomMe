@@ -24,7 +24,7 @@ namespace RoomMe.API.Controllers
             _sqlContext = sqlContext;
         }
 
-        [HttpGet("{flatId}/Full", Name = nameof(GetFlatFull))]
+        [HttpGet("{flatId}/full", Name = nameof(GetFlatFull))]
         public async Task<ActionResult<FlatFullGetModel>> GetFlatFull(int flatId)
         {
             var flat = await _sqlContext.Flats
@@ -41,7 +41,7 @@ namespace RoomMe.API.Controllers
             return flat.ToFlatFullGetModel();
         }
 
-        [HttpPost("New", Name = nameof(CreateNewFlat))]
+        [HttpPost("new", Name = nameof(CreateNewFlat))]
         public async Task<ActionResult<FlatPostReturnModel>> CreateNewFlat(FlatPostModel flat) 
         {
             List<User> users = new();
