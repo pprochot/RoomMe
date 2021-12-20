@@ -8,3 +8,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "RoomMe"
 include ':app'
+include ':domain'
+include ':services'
