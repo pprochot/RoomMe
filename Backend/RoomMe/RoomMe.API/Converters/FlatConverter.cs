@@ -38,5 +38,19 @@ namespace RoomMe.API.Converters
                 CreationDate = DateTime.Now
             };
         }
+
+        public static FlatNameModel ToFlatNameModel(this Flat flat)
+        {
+            return new FlatNameModel()
+            {
+                Id = flat.Id,
+                Name = flat.Name
+            };
+        }
+
+        public static List<FlatNameModel> ToFlatNameModelList(this IEnumerable<Flat> flats)
+        {
+            return flats.Select(x => x.ToFlatNameModel()).ToList();
+        }
     }
 }
