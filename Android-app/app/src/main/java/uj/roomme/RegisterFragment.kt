@@ -1,14 +1,8 @@
 package uj.roomme
 
-import android.content.Context
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -17,12 +11,16 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onStart()
 
         val signUpButton = view?.findViewById<Button>(R.id.sign_up_button)
+        val toMainActivity = RegisterFragmentDirections.actionRegisterFragmentToMainActivity()
+        val navController = findNavController()
+
         signUpButton?.setOnClickListener {
             val isValid = validateInputs()
             if (isValid) {
                 // TODO call service
                 // TODO change activity
             }
+            navController.navigate(toMainActivity)
         }
     }
 

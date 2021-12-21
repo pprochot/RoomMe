@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomMe">
         <activity
+            android:name=".app.MainActivity"
+            android:theme="@style/Theme.RoomMe.NoActionBar"
+            android:exported="false" />
+        <activity
             android:name=".app.LoginActivity"
             android:exported="true">
             <intent-filter>

@@ -11,13 +11,13 @@
         android:orientation="vertical"
         tools:context=".RegisterFragment">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="Sign Up"
-            android:textSize="20sp"/>
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Sign Up"-->
+<!--            android:textSize="20sp"/>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nickname_inputlayout_registration"

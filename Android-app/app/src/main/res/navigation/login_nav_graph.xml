@@ -9,5 +9,14 @@
         android:id="@+id/registerFragment"
         android:name="uj.roomme.RegisterFragment"
         android:label="RegisterFragment"
-        tools:layout="@layout/fragment_register"/>
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="uj.roomme.app.MainActivity"
+        android:label="MainActivity"
+        tools:layout="@layout/activity_main"/>
 </navigation>
