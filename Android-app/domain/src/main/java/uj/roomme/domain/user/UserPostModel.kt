@@ -4,7 +4,7 @@ data class UserPostModel(
     val nickname: String,
     val email: String,
     val password: String,
-    val firstname: String,
-    val lastname: String,
+    val firstName: String,
+    val lastName: String,
     val phoneNumber: String
 )
