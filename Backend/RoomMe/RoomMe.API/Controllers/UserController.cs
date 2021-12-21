@@ -52,5 +52,22 @@ namespace RoomMe.API.Controllers
                 UserId = entity.Id
             };
         }
+
+        [HttpGet("{userId}/flats", Name = nameof(GetFlats))]
+        public async Task<ActionResult<IEnumerable<FlatNameModel>>> GetFlats(int userId)
+        {
+            var user = await _sqlContext.Users
+                .Include(x => x.Flats)
+                .FirstOrDefaultAsync(x => x.Id == userId)
+                .ConfigureAwait(false);
+
+            if(user == null)
+            {
+                _logger.LogError($"User not found for id {userId}");
+                return new BadRequestResult();
+            }
+
+            return user.Flats.ToFlatNameModelList();
+        }
     }
 }
