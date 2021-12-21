@@ -18,5 +18,18 @@
         android:id="@+id/apartmentsFragment"
         android:name="uj.roomme.ApartmentsFragment"
         android:label="fragment_apartments"
-        tools:layout="@layout/fragment_apartments" />
+        tools:layout="@layout/fragment_apartments" >
+        <action
+            android:id="@+id/action_apartmentsFragment_to_createApartmentFragment"
+            app:destination="@id/createApartmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createApartmentFragment"
+        android:name="uj.roomme.CreateApartmentFragment"
+        android:label="fragment_create_apartment"
+        tools:layout="@layout/fragment_create_apartment" >
+        <action
+            android:id="@+id/action_createApartmentFragment_to_apartmentsFragment"
+            app:destination="@id/apartmentsFragment" />
+    </fragment>
 </navigation>
