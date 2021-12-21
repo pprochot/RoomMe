@@ -24,6 +24,7 @@ namespace RoomMe.SQLContext
         public DbSet<CommonCost> CommonCosts { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
+        public DbSet<RentCost> RentCosts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,8 @@ namespace RoomMe.SQLContext
 
             modelBuilder.Entity<Product>().HasOne(x => x.CommonCost).WithOne().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Product>().HasOne(x => x.ShoppingList).WithMany(y => y.Products).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<RentCost>().HasKey(x => new { x.UserId, x.FlatId });
         }
     }
 }
