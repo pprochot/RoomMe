@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace RoomMe.SQLContext.Models
+namespace RoomMe.API.Models
 {
-    public class Product
+    public class ProductModel
     {
         public int Id { get; set; }
-        public int ShoppingListId { get; set; }
-        public ShoppingList ShoppingList { get; set; }
         public int AuthorId { get; set; }
-        public User Author { get; set; }
-        public int? CommonCostId { get; set; }
-        public CommonCost CommonCost { get; set; }
+        public string AuthorName { get; set; }
+        public CommonCostModel Cost { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Reason { get; set; }

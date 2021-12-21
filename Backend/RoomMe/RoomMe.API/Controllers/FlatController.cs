@@ -71,5 +71,33 @@ namespace RoomMe.API.Controllers
 
             return flatEntity.ToFlatPostReturnModel();
         }
+
+        [HttpPost("{flatId}/shopping-list", Name = nameof(CreateNewShoppingList))]
+        public async Task<ActionResult<ShoppingListPostReturnModel>> CreateNewShoppingList(int flatId, ShoppingListPostModel list)
+        {
+            var entity = list.ToShoppingList(flatId);
+            await _sqlContext.AddAsync(entity);
+            await _sqlContext.SaveChangesAsync();
+
+            return entity.ToShoppingListPostReturnModel();
+        }
+
+        [HttpGet("{flatId}/shopping-lists", Name = nameof(GetShoppingLists))]
+        public async Task<ActionResult<IEnumerable<ShoppingListGetModel>>> GetShoppingLists(int flatId)
+        {
+            var lists = await _sqlContext.ShoppingLists
+                .Include(x => x.Products)
+                .ThenInclude(y => y.CommonCost)
+                .ThenInclude(z => z.User)
+                .Include(x => x.Products)
+                .ThenInclude(y => y.Author)
+                .Include(x => x.Completor)
+                .Where(x => x.FlatId == flatId)
+                .Select(x => x.ToShoppingListGetModel())
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return lists;
+        }
     }
 }
