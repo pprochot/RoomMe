@@ -5,7 +5,7 @@
 
     <group >
         <item
-            android:id="@+id/item_apartments"
+            android:id="@id/apartmentsFragment"
             android:icon="@drawable/ic_home"
             android:title="Apartments" />
         <item
