@@ -2,6 +2,7 @@ package uj.roomme.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -14,6 +15,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import uj.roomme.R
+import uj.roomme.viewmodels.UserViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,11 +23,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    val args: MainActivityArgs by navArgs()
+    private val args: MainActivityArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val userViewModel: UserViewModel by viewModels()
+        userViewModel.userId = args.userId
+        userViewModel.userNickname = args.userNickname
+        userViewModel.userEmail = args.userEmail
+        println(userViewModel.userId)
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navController = findNavController(R.id.nav_host_fragment_container_main_activity)

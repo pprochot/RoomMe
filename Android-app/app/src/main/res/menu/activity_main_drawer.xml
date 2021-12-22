@@ -12,5 +12,9 @@
             android:id="@+id/item_statistics"
             android:icon="@drawable/ic_analytics"
             android:title="Statistics" />
+        <item
+            android:id="@id/userInfoFragment"
+            android:icon="@drawable/ic_person"
+            android:title="User info" />
     </group>
 </menu>

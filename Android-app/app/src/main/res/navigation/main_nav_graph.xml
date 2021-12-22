@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_apartmentsFragment"
             app:destination="@id/apartmentsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/apartmentsFragment"
@@ -32,4 +35,9 @@
             android:id="@+id/action_createApartmentFragment_to_apartmentsFragment"
             app:destination="@id/apartmentsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="uj.roomme.UserInfoFragment"
+        android:label="fragment_user_info"
+        tools:layout="@layout/fragment_user_info" />
 </navigation>

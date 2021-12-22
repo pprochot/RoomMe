@@ -4,16 +4,28 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import uj.roomme.ApartmentsFragmentDirections
 import uj.roomme.R
+import uj.roomme.domain.flat.FlatNameModel
 
-//TODO remove hardcoded data
-class ApartmentsAdapter(private var context: Context) :
-    RecyclerView.Adapter<ApartmentsAdapter.ViewHolder>() {
+class FlatsAdapter(private val context: Context, private val flats: List<FlatNameModel>) :
+    RecyclerView.Adapter<FlatsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameView: TextView = itemView.findViewById(R.id.rv_apartments_name)
+
+        init {
+//            val toFlatInfo =
+//                ApartmentsFragmentDirections.actionApartmentsFragmentToCreateApartmentFragment()
+//            itemView.setOnClickListener {
+//                it.findNavController().navigate(toFlatInfo)
+//            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,10 +35,10 @@ class ApartmentsAdapter(private var context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.nameView.text = "Heelu"
+        holder.nameView.text = flats[position].name
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return flats.size
     }
 }
