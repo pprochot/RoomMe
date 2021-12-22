@@ -15,5 +15,6 @@ namespace RoomMe.SQLContext.Models
         public List<Housework> Houseworks { get; set; }
         public List<FlatNotification> Notifications { get; set; }
         public List<CommonCost> Costs { get; set; }
+        public List<RentCost> RentCosts { get; set; }
     }
 }

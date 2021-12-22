@@ -72,6 +72,51 @@ namespace RoomMe.API.Controllers
             return flatEntity.ToFlatPostReturnModel();
         }
 
+        //TODO: In future userId should be retrieved based on JWT Token
+        [HttpPut("{flatId}/{userId}/rent", Name = nameof(SetFlatRentCost))]
+        public async Task<ActionResult<RentCostPostReturnModel>> SetFlatRentCost(int flatId, int userId,
+            RentCostPutModel cost)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.RentCosts)
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if (flat == null)
+            {
+                _logger.LogError($"Not found flat for given id {flatId}");
+                return new BadRequestResult();
+            }
+
+            var user = flat.Users.FirstOrDefault(x => x.Id == userId);
+
+            if (user == null)
+            {
+                _logger.LogError($"Not found user for given id {userId}");
+                return new BadRequestResult();
+            }
+
+            var rentId = flat.RentCosts.FindIndex(x => x.UserId == userId);
+            RentCost entity = null;
+
+            if (rentId == -1)
+            {
+                entity = cost.ToRentCost(flatId, userId);
+                flat.RentCosts.Add(entity);
+            }
+            else
+            {
+                flat.RentCosts[rentId].UpdateRentCost(cost);
+                entity = flat.RentCosts[rentId];
+            }
+
+            _sqlContext.Update(flat);
+            await _sqlContext.SaveChangesAsync();
+
+            return entity.ToRentCostPostReturnModel();
+        }
+
         [HttpPost("{flatId}/shopping-list", Name = nameof(CreateNewShoppingList))]
         public async Task<ActionResult<ShoppingListPostReturnModel>> CreateNewShoppingList(int flatId, ShoppingListPostModel list)
         {
