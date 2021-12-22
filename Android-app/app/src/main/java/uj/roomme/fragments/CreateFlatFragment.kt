@@ -18,12 +18,13 @@ import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
+class CreateFlatFragment : Fragment(R.layout.fragment_create_flat) {
 
     @Inject
     lateinit var flatService: FlatService
 
     private val userViewModel: UserViewModel by activityViewModels()
+    private var createNewApartmentButton: Button? = null
     private var flatNameView: TextInputEditText? = null
     private var flatAddressView: TextInputEditText? = null
 
@@ -32,25 +33,20 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
 
         flatNameView = view?.findViewById(R.id.textinputedit_flat_name)
         flatAddressView = view?.findViewById(R.id.textinputedit_flat_address)
-        val createNewApartmentButton = view?.findViewById<Button>(R.id.button_create_apartment)
+        createNewApartmentButton = view?.findViewById(R.id.button_create_apartment)
 
         createNewApartmentButton?.setOnClickListener {
-            val isValid = validateArguments()
-            if (isValid) {
-//                it.isEnabled = false
-                callService()
+            if (areArgumentsValid()) {
+                it.isEnabled = false
+                createFlatByService()
             } else {
+                toastOnFailure()
                 it.isEnabled = true
-                Toast.makeText(
-                    requireActivity(), "Something is invalid! Try again.",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
-
     }
 
-    private fun validateArguments(): Boolean {
+    private fun areArgumentsValid(): Boolean {
         if (flatNameView?.text.isNullOrBlank()) {
             return false
         }
@@ -60,28 +56,42 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
         return true
     }
 
-    private fun callService() {
-        val data = FlatPostModel(
-            flatNameView?.text.toString(),
-            flatAddressView?.text.toString(),
-            listOf(userViewModel.userId!!)
-        )
+    private fun createFlatByService() {
+        val data = dataFromViews()
         flatService.createNewFlat(data)
             .enqueue(object : Callback<FlatPostReturnModel> {
                 override fun onResponse(
                     call: Call<FlatPostReturnModel>,
                     response: Response<FlatPostReturnModel>
                 ) {
-                    println("Success")
+                    toastOnSuccess()
                     val toApartmentsFragment =
-                        CreateApartmentFragmentDirections.actionCreateApartmentFragmentToApartmentsFragment()
+                        CreateFlatFragmentDirections.actionCreateFlatFragmentToFlatsFragment()
                     findNavController().navigate(toApartmentsFragment)
                 }
 
                 override fun onFailure(call: Call<FlatPostReturnModel>, t: Throwable) {
-                    println("Failed")
-                    t.printStackTrace()
+                    toastOnFailure()
+                    createNewApartmentButton?.isEnabled = true
                 }
             })
+    }
+
+    private fun dataFromViews(): FlatPostModel {
+        return FlatPostModel(
+            flatNameView?.text.toString(),
+            flatAddressView?.text.toString(),
+            listOf(userViewModel.userId!!)
+        )
+    }
+
+    private fun toastOnSuccess() {
+        Toast.makeText(requireActivity(), "Flat has been created!", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun toastOnFailure() {
+        Toast.makeText(requireActivity(), "Something is invalid! Try again.", Toast.LENGTH_SHORT)
+            .show()
     }
 }

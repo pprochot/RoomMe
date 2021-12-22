@@ -5,9 +5,9 @@
 
     <group >
         <item
-            android:id="@id/apartmentsFragment"
+            android:id="@id/flatsFragment"
             android:icon="@drawable/ic_home"
-            android:title="Apartments" />
+            android:title="Flats" />
         <item
             android:id="@+id/item_statistics"
             android:icon="@drawable/ic_analytics"

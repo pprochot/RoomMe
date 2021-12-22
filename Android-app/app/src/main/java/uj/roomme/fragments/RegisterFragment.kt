@@ -22,6 +22,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     @Inject
     lateinit var userService: UserService
 
+    private var signUpButton: Button? = null
     private var nicknameView: TextInputEditText? = null
     private var firstPasswordView: TextInputEditText? = null
     private var secondPasswordView: TextInputEditText? = null
@@ -33,6 +34,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onStart() {
         super.onStart()
 
+        signUpButton = view?.findViewById(R.id.sign_up_button)
         nicknameView = view?.findViewById(R.id.nickname_inputedittext_registration)
         firstPasswordView = view?.findViewById(R.id.firstpassword_inputedittext_registration)
         secondPasswordView = view?.findViewById(R.id.secondpassword_inputedittext_registration)
@@ -41,23 +43,32 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         lastNameView = view?.findViewById(R.id.lastname_inputedittext_registration)
         phoneNumberView = view?.findViewById(R.id.phonenumber_inputedittext_registration)
 
-        val signUpButton = view?.findViewById<Button>(R.id.sign_up_button)
-
         signUpButton?.setOnClickListener {
             it.isEnabled = false
-            val isValid = validateInputs()
-            if (isValid) {
-                callService()
-//                navController.navigate(toMainActivity)
+            val requestData = dataFromViews()
+            if (areInputsValid()) {
+                createUserByService(requestData)
             } else {
+                toastOnFailure()
                 it.isEnabled = true
-                Toast.makeText(requireActivity(), "Something is invalid! Try again.", LENGTH_SHORT)
-                    .show()
             }
         }
     }
 
-    private fun validateInputs(): Boolean {
+    private fun dataFromViews(): UserPostModel {
+        return UserPostModel(
+            nicknameView?.text.toString(),
+            emailView?.text.toString(),
+            firstPasswordView?.text.toString(),
+            firstNameView?.text.toString(),
+            lastNameView?.text.toString(),
+            phoneNumberView?.text.toString()
+        )
+    }
+
+    // TODO move logic to validator
+    private fun areInputsValid(): Boolean {
+        // TODO create separate model for validation
         if (nicknameView?.text.isNullOrBlank()) {
             return false
         }
@@ -69,45 +80,40 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         if (emailView?.text.isNullOrBlank()) {
             return false
         }
-
-        return true;
+        return true
     }
 
-    private fun callService() {
+    private fun createUserByService(requestBody: UserPostModel) {
         // TODO Pass parameters, do not use text from views (unsafe)
-        userService?.createTestUser(
-            UserPostModel(
-                nicknameView?.text.toString(),
-                emailView?.text.toString(),
-                firstPasswordView?.text.toString(),
-                firstNameView?.text.toString(),
-                lastNameView?.text.toString(),
-                phoneNumberView?.text.toString()
-            )
-        )?.enqueue(object : Callback<UserPostReturnModel> {
+        userService.createTestUser(requestBody).enqueue(object : Callback<UserPostReturnModel> {
             override fun onResponse(
                 call: Call<UserPostReturnModel>,
                 response: Response<UserPostReturnModel>
             ) {
-                println("Received") // TODO send data in intent
-                //TODO is successful
-                val toMainActivity =
-                    RegisterFragmentDirections.actionRegisterFragmentToMainActivity(
-                        response.body()?.userId!!,
-                        nicknameView?.text.toString(),
-                        emailView?.text.toString()
-                    )
-                val navController = findNavController()
-                navController.navigate(toMainActivity)
-//                view?.findViewById<Button>(R.id.sign_up_button)?.isEnabled = true //TODO what do do in that case
+                if (response.isSuccessful) {
+                    val toMainActivity =
+                        RegisterFragmentDirections.actionRegisterFragmentToMainActivity(
+                            response.body()?.userId!!,
+                            requestBody.nickname,
+                            requestBody.email
+                        )
+                    val navController = findNavController()
+                    navController.navigate(toMainActivity)
+                } else {
+                    toastOnFailure()
+                    signUpButton?.isEnabled = true
+                }
             }
 
             override fun onFailure(call: Call<UserPostReturnModel>, t: Throwable) {
-                println("Failed") //TODO don't know
-                view?.findViewById<Button>(R.id.sign_up_button)?.isEnabled = true
-                Toast.makeText(requireActivity(), "Something is invalid! Try again.", LENGTH_SHORT)
-                    .show()
+                toastOnFailure()
+                signUpButton?.isEnabled = true
             }
         })
+    }
+
+    private fun toastOnFailure() {
+        Toast.makeText(requireActivity(), "Something is invalid! Try again.", LENGTH_SHORT)
+            .show()
     }
 }

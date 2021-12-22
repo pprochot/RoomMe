@@ -2,6 +2,7 @@ package uj.roomme.fragments
 
 import androidx.fragment.app.Fragment
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +19,7 @@ import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
+class FlatsFragment : Fragment(R.layout.fragment_flats) {
 
     @Inject
     lateinit var userService: UserService
@@ -30,10 +31,11 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
         super.onStart()
 
         recyclerView = view?.findViewById(R.id.rv_aparments)!!
-        callService()
-        val createNewApartmentButton = view?.findViewById<Button>(R.id.button_create_new_apartment)
+        getFlatsFromService()
+
+        val createNewApartmentButton = view?.findViewById<Button>(R.id.button_create_new_flat)
         val toCreateApartmentFragment =
-            ApartmentsFragmentDirections.actionApartmentsFragmentToCreateApartmentFragment()
+            FlatsFragmentDirections.actionFlatsFragmentToCreateFlatFragment()
         createNewApartmentButton?.setOnClickListener {
             findNavController().navigate(toCreateApartmentFragment)
         }
@@ -44,22 +46,28 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun callService() {
+    private fun getFlatsFromService() {
         userService.getFlats(userViewModel.userId!!)
             .enqueue(object : Callback<List<FlatNameModel>> {
                 override fun onResponse(
                     call: Call<List<FlatNameModel>>,
                     response: Response<List<FlatNameModel>>
                 ) {
-                    println("success")
-                    displayData(response.body()!!)
+                    if (response.isSuccessful) {
+                        displayData(response.body()!!)
+                    } else {
+                        toastOnFailure()
+                    }
                 }
 
                 override fun onFailure(call: Call<List<FlatNameModel>>, t: Throwable) {
-                    println("Fail")
-                    t.printStackTrace()
+                    toastOnFailure()
                 }
-
             })
+    }
+
+    private fun toastOnFailure() {
+        Toast.makeText(requireActivity(), "Something is invalid! Try again.", Toast.LENGTH_SHORT)
+            .show()
     }
 }

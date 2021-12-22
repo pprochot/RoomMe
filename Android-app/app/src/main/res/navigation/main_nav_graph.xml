@@ -11,29 +11,29 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_apartmentsFragment"
-            app:destination="@id/apartmentsFragment" />
+            android:id="@+id/action_homeFragment_to_flatsFragment"
+            app:destination="@id/flatsFragment" />
         <action
             android:id="@+id/action_homeFragment_to_userInfoFragment"
             app:destination="@id/userInfoFragment" />
     </fragment>
     <fragment
-        android:id="@+id/apartmentsFragment"
-        android:name="uj.roomme.fragments.ApartmentsFragment"
+        android:id="@+id/flatsFragment"
+        android:name="uj.roomme.fragments.FlatsFragment"
         android:label="fragment_apartments"
-        tools:layout="@layout/fragment_apartments" >
+        tools:layout="@layout/fragment_flats" >
         <action
-            android:id="@+id/action_apartmentsFragment_to_createApartmentFragment"
-            app:destination="@id/createApartmentFragment" />
+            android:id="@+id/action_flatsFragment_to_createFlatFragment"
+            app:destination="@id/createFlatFragment" />
     </fragment>
     <fragment
-        android:id="@+id/createApartmentFragment"
-        android:name="uj.roomme.fragments.CreateApartmentFragment"
+        android:id="@+id/createFlatFragment"
+        android:name="uj.roomme.fragments.CreateFlatFragment"
         android:label="fragment_create_apartment"
-        tools:layout="@layout/fragment_create_apartment" >
+        tools:layout="@layout/fragment_create_flat" >
         <action
-            android:id="@+id/action_createApartmentFragment_to_apartmentsFragment"
-            app:destination="@id/apartmentsFragment" />
+            android:id="@+id/action_createFlatFragment_to_flatsFragment"
+            app:destination="@id/flatsFragment" />
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
