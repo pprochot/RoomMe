@@ -1,26 +1,28 @@
-package uj.roomme
+package uj.roomme.fragments
 
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import uj.roomme.R
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.services.FlatService
-import uj.roomme.services.configuration.ServicesModule
 import uj.roomme.viewmodels.UserViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
 
-    private val flatService = ServicesModule().flatService()
+    @Inject
+    lateinit var flatService: FlatService
+
     private val userViewModel: UserViewModel by activityViewModels()
     private var flatNameView: TextInputEditText? = null
     private var flatAddressView: TextInputEditText? = null

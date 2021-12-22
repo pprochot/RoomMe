@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="uj.roomme.HomeFragment"
+        android:name="uj.roomme.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/apartmentsFragment"
-        android:name="uj.roomme.ApartmentsFragment"
+        android:name="uj.roomme.fragments.ApartmentsFragment"
         android:label="fragment_apartments"
         tools:layout="@layout/fragment_apartments" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/createApartmentFragment"
-        android:name="uj.roomme.CreateApartmentFragment"
+        android:name="uj.roomme.fragments.CreateApartmentFragment"
         android:label="fragment_create_apartment"
         tools:layout="@layout/fragment_create_apartment" >
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
-        android:name="uj.roomme.UserInfoFragment"
+        android:name="uj.roomme.fragments.UserInfoFragment"
         android:label="fragment_user_info"
         tools:layout="@layout/fragment_user_info" />
 </navigation>

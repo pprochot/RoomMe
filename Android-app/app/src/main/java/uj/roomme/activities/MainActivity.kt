@@ -1,4 +1,4 @@
-package uj.roomme.app
+package uj.roomme.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,9 +14,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.R
 import uj.roomme.viewmodels.UserViewModel
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout

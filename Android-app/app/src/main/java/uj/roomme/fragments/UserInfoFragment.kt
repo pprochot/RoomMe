@@ -1,12 +1,9 @@
-package uj.roomme
+package uj.roomme.fragments
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import uj.roomme.R
 import uj.roomme.viewmodels.UserViewModel
 
 class UserInfoFragment : Fragment(R.layout.fragment_user_info) {

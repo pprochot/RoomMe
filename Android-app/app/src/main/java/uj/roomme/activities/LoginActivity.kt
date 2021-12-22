@@ -1,15 +1,14 @@
-package uj.roomme.app
+package uj.roomme.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.R
-import uj.roomme.RegisterFragmentDirections
 
-class LoginActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class LoginActivity : AppCompatActivity(R.layout.login_activity) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_activity)
         supportActionBar?.title = "Sign up"
     }
 }

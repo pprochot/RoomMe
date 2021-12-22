@@ -1,4 +1,4 @@
-package uj.roomme
+package uj.roomme.fragments
 
 import androidx.fragment.app.Fragment
 import android.widget.Button
@@ -6,17 +6,22 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import uj.roomme.R
 import uj.roomme.domain.user.UserPostModel
 import uj.roomme.domain.user.UserPostReturnModel
 import uj.roomme.services.UserService
-import uj.roomme.services.configuration.ServicesModule
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
-    private val userService: UserService = ServicesModule().userService()
+    @Inject
+    lateinit var userService: UserService
+
     private var nicknameView: TextInputEditText? = null
     private var firstPasswordView: TextInputEditText? = null
     private var secondPasswordView: TextInputEditText? = null
@@ -37,8 +42,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         phoneNumberView = view?.findViewById(R.id.phonenumber_inputedittext_registration)
 
         val signUpButton = view?.findViewById<Button>(R.id.sign_up_button)
-//        val toMainActivity = RegisterFragmentDirections.actionRegisterFragmentToMainActivity()
-//        val navController = findNavController()
 
         signUpButton?.setOnClickListener {
             it.isEnabled = false
@@ -72,7 +75,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private fun callService() {
         // TODO Pass parameters, do not use text from views (unsafe)
-        userService.createTestUser(
+        userService?.createTestUser(
             UserPostModel(
                 nicknameView?.text.toString(),
                 emailView?.text.toString(),
@@ -81,18 +84,19 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 lastNameView?.text.toString(),
                 phoneNumberView?.text.toString()
             )
-        ).enqueue(object : Callback<UserPostReturnModel> {
+        )?.enqueue(object : Callback<UserPostReturnModel> {
             override fun onResponse(
                 call: Call<UserPostReturnModel>,
                 response: Response<UserPostReturnModel>
             ) {
                 println("Received") // TODO send data in intent
                 //TODO is successful
-                val toMainActivity = RegisterFragmentDirections.actionRegisterFragmentToMainActivity(
-                    response.body()?.userId!!,
-                    nicknameView?.text.toString(),
-                    emailView?.text.toString()
-                )
+                val toMainActivity =
+                    RegisterFragmentDirections.actionRegisterFragmentToMainActivity(
+                        response.body()?.userId!!,
+                        nicknameView?.text.toString(),
+                        emailView?.text.toString()
+                    )
                 val navController = findNavController()
                 navController.navigate(toMainActivity)
 //                view?.findViewById<Button>(R.id.sign_up_button)?.isEnabled = true //TODO what do do in that case

@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import uj.roomme.ApartmentsFragmentDirections
 import uj.roomme.R
 import uj.roomme.domain.flat.FlatNameModel
 

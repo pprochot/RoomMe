@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ApartmentsFragment"
+    tools:context=".fragments.ApartmentsFragment"
     android:layout_marginTop="?attr/actionBarSize">
 
     <androidx.recyclerview.widget.RecyclerView

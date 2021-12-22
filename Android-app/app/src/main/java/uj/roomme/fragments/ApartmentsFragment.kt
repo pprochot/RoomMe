@@ -1,26 +1,28 @@
-package uj.roomme
+package uj.roomme.fragments
 
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import uj.roomme.R
 import uj.roomme.adapters.FlatsAdapter
 import uj.roomme.domain.flat.FlatNameModel
 import uj.roomme.services.UserService
-import uj.roomme.services.configuration.ServicesModule
 import uj.roomme.viewmodels.UserViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
 
-    private val userService: UserService = ServicesModule().userService()
+    @Inject
+    lateinit var userService: UserService
+
     private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var recyclerView: RecyclerView
 
