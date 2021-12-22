@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20211221161905_set_commoncost_to_nullable_products_table")]
+    partial class set_commoncost_to_nullable_products_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -415,27 +417,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.ToTable("Receipts");
                 });
 
-            modelBuilder.Entity("RoomMe.SQLContext.Models.RentCost", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FlatId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.HasKey("UserId", "FlatId");
-
-                    b.HasIndex("FlatId");
-
-                    b.ToTable("RentCosts");
-                });
-
             modelBuilder.Entity("RoomMe.SQLContext.Models.ShoppingList", b =>
                 {
                     b.Property<int>("Id")
@@ -721,25 +702,6 @@ namespace RoomMe.SQLContext.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoomMe.SQLContext.Models.RentCost", b =>
-                {
-                    b.HasOne("RoomMe.SQLContext.Models.Flat", "Flat")
-                        .WithMany("RentCosts")
-                        .HasForeignKey("FlatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RoomMe.SQLContext.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Flat");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RoomMe.SQLContext.Models.ShoppingList", b =>
                 {
                     b.HasOne("RoomMe.SQLContext.Models.User", "Completor")
@@ -764,8 +726,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.Navigation("Houseworks");
 
                     b.Navigation("Notifications");
-
-                    b.Navigation("RentCosts");
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>

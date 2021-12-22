@@ -74,7 +74,8 @@ namespace RoomMe.API.Controllers
 
         //TODO: In future userId should be retrieved based on JWT Token
         [HttpPut("{flatId}/{userId}/rent", Name = nameof(SetFlatRentCost))]
-        public async Task<ActionResult<RentCostPostReturnModel>> SetFlatRentCost(int flatId, int userId, RentCostPutModel cost)
+        public async Task<ActionResult<RentCostPostReturnModel>> SetFlatRentCost(int flatId, int userId,
+            RentCostPutModel cost)
         {
             var flat = await _sqlContext.Flats
                 .Include(x => x.RentCosts)
@@ -82,7 +83,7 @@ namespace RoomMe.API.Controllers
                 .FirstOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null)
+            if (flat == null)
             {
                 _logger.LogError($"Not found flat for given id {flatId}");
                 return new BadRequestResult();
@@ -90,7 +91,7 @@ namespace RoomMe.API.Controllers
 
             var user = flat.Users.FirstOrDefault(x => x.Id == userId);
 
-            if(user == null)
+            if (user == null)
             {
                 _logger.LogError($"Not found user for given id {userId}");
                 return new BadRequestResult();
@@ -99,7 +100,7 @@ namespace RoomMe.API.Controllers
             var rentId = flat.RentCosts.FindIndex(x => x.UserId == userId);
             RentCost entity = null;
 
-            if(rentId == -1)
+            if (rentId == -1)
             {
                 entity = cost.ToRentCost(flatId, userId);
                 flat.RentCosts.Add(entity);
@@ -114,6 +115,34 @@ namespace RoomMe.API.Controllers
             await _sqlContext.SaveChangesAsync();
 
             return entity.ToRentCostPostReturnModel();
+        }
+
+        [HttpPost("{flatId}/shopping-list", Name = nameof(CreateNewShoppingList))]
+        public async Task<ActionResult<ShoppingListPostReturnModel>> CreateNewShoppingList(int flatId, ShoppingListPostModel list)
+        {
+            var entity = list.ToShoppingList(flatId);
+            await _sqlContext.AddAsync(entity);
+            await _sqlContext.SaveChangesAsync();
+
+            return entity.ToShoppingListPostReturnModel();
+        }
+
+        [HttpGet("{flatId}/shopping-lists", Name = nameof(GetShoppingLists))]
+        public async Task<ActionResult<IEnumerable<ShoppingListGetModel>>> GetShoppingLists(int flatId)
+        {
+            var lists = await _sqlContext.ShoppingLists
+                .Include(x => x.Products)
+                .ThenInclude(y => y.CommonCost)
+                .ThenInclude(z => z.User)
+                .Include(x => x.Products)
+                .ThenInclude(y => y.Author)
+                .Include(x => x.Completor)
+                .Where(x => x.FlatId == flatId)
+                .Select(x => x.ToShoppingListGetModel())
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return lists;
         }
     }
 }
