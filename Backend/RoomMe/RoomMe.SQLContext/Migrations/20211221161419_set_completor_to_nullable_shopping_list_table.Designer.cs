@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20211221161419_set_completor_to_nullable_shopping_list_table")]
+    partial class set_completor_to_nullable_shopping_list_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -364,7 +366,7 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<bool>("Bought")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("CommonCostId")
+                    b.Property<int>("CommonCostId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -387,8 +389,7 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CommonCostId")
-                        .IsUnique()
-                        .HasFilter("[CommonCostId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("ShoppingListId");
 
@@ -676,7 +677,8 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasOne("RoomMe.SQLContext.Models.CommonCost", "CommonCost")
                         .WithOne()
                         .HasForeignKey("RoomMe.SQLContext.Models.Product", "CommonCostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("RoomMe.SQLContext.Models.ShoppingList", "ShoppingList")
                         .WithMany("Products")
