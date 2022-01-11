@@ -55,5 +55,37 @@ namespace RoomMe.API.Converters
                 CreationDate = DateTime.Now
             };
         }
+
+        public static HouseworkStatusModel ToHouseworkStatusModel(this HouseworkStatus status)
+        {
+            return new HouseworkStatusModel()
+            {
+                Id = status.Id,
+                Name = status.Name
+            };
+        }
+
+        public static HouseworkFrequencyModel ToHouseworkFrequenciesModel(this HouseworkFrequency frequency)
+        {
+            return new HouseworkFrequencyModel()
+            {
+                Id = frequency.Id,
+                Name = frequency.Name,
+                Value = frequency.Value
+            };
+        }
+
+        public static HouseworkSettingsModel ToHouseworkSettingsModel(this HouseworkSettings settings)
+        {
+            return new HouseworkSettingsModel()
+            {
+                Id = settings.Id,
+                HouseworkId = settings.HouseworkId,
+                Housework = settings.Housework.ToHouseworkNameModel(),
+                FrequencyId = settings.FrequencyId,
+                Frequency = settings.Frequency.ToHouseworkFrequenciesModel(),
+                Day = settings.Day
+            };
+        }
     }
 }
