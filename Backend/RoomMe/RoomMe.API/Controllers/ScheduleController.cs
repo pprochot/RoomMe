@@ -83,5 +83,21 @@ namespace RoomMe.API.Controllers
 
             return scheduleEntity.ToSchedulePutReturnModel();
         }
+
+        [HttpGet("{scheduleId}/full", Name = nameof(GetScheduleFull))]
+        public async Task<ActionResult<ScheduleDateModel>> GetScheduleDate(int scheduleId)
+        {
+            var schedule = await _sqlContext.HouseworkSchedules
+                .FirstOrDefaultAsync(x => x.Id == scheduleId)
+                .ConfigureAwait(false);
+
+            if(schedule == null)
+            {
+                _logger.LogError($"Schedule not found for id {scheduleId}");
+                return new BadRequestResult();
+            }
+
+            return schedule.ToScheduleDateModel();
+        }
     }
 }

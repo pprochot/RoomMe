@@ -27,8 +27,8 @@ namespace RoomMe.API.Converters
                 Flat = housework.Flat.ToFlatNameModel(),
                 Author = housework.Author.ToUserNicknameModel(),
                 Description = housework.Description,
-                Users = housework.Users.Select(x => x.ToUserNicknameModel()).ToList()
-                //schedules
+                Users = housework.Users.Select(x => x.ToUserNicknameModel()).ToList(),
+                Schedules = housework.HouseworkSchedules.Select(x => x.ToScheduleDateModel()).ToList()
             };
         }
 
@@ -43,7 +43,7 @@ namespace RoomMe.API.Converters
                 Author = author,
                 Description = housework.Description,
                 Users = users
-                //schedules
+                //schedules if we want to add them at the same time
             };
         }
 

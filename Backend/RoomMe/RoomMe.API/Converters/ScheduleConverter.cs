@@ -58,5 +58,14 @@ namespace RoomMe.API.Converters
                 Id = schedule.Id
             };
         }
+
+        public static ScheduleDateModel ToScheduleDateModel(this HouseworkSchedule schedule)
+        {
+            return new ScheduleDateModel()
+            {
+                Id = schedule.Id,
+                Date = schedule.Date
+            };
+        }
     }
 }

@@ -13,6 +13,6 @@ namespace RoomMe.API.Models
         public UserNicknameModel Author { get; set; }
         public string Description { get; set; }
         public List<UserNicknameModel> Users { get; set; }
-        //schedules list
+        public List<ScheduleDateModel> Schedules { get; set; }
     }
 }
