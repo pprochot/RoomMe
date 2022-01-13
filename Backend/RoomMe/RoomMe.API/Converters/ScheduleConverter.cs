@@ -36,7 +36,7 @@ namespace RoomMe.API.Converters
         }
 
         public static HouseworkSchedule ToScheduleModel(this SchedulePutModel schedule, Housework housework, User user, 
-            HouseworkStatus status, HouseworkSettings settings)
+            HouseworkStatus status)
         {
             return new HouseworkSchedule()
             {
@@ -47,7 +47,6 @@ namespace RoomMe.API.Converters
                 Date = schedule.Date,
                 StatusId = schedule.StatusId,
                 HouseworkStatus = status,
-                HouseworkSettings = settings
             };
         }
 

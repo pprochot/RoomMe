@@ -69,15 +69,8 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var settings = await _sqlContext.HouseworkSettings.FindAsync(schedule.SettingsId).ConfigureAwait(false);
 
-            if (settings == null)
-            {
-                _logger.LogError($"Settings not found for id {schedule.StatusId}");
-                return new BadRequestResult();
-            }
-
-            var scheduleEntity = schedule.ToScheduleModel(housework,user, status, settings);
+            var scheduleEntity = schedule.ToScheduleModel(housework,user, status);
             await _sqlContext.HouseworkSchedules.AddAsync(scheduleEntity).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
@@ -99,5 +92,27 @@ namespace RoomMe.API.Controllers
 
             return schedule.ToScheduleDateModel();
         }
+
+        [HttpGet("{scheduleId}/name", Name = nameof(GetScheduleHouseworkName))]
+        public async Task<ActionResult<ScheduleHouseworkNameModel>> GetScheduleHouseworkName(int scheduleId)
+        {
+            var schedule = await _sqlContext.HouseworkSchedules
+                .FirstOrDefaultAsync(x => x.Id == scheduleId)
+                .ConfigureAwait(false);
+
+            if(schedule == null)
+            {
+                _logger.LogError($"Schedule not found for id {scheduleId}");
+                return new BadRequestResult();
+            }
+
+            return schedule.ToScheduleHouseworkNameModel();
+        }
+
+        //AddNewHouseworkSettings
+
+        //AddNewHouseworkFrequency
+
+        //HouseworkStatus
     }
 }
