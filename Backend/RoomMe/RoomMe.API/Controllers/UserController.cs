@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RoomMe.API.Converters;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
+using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,21 @@ namespace RoomMe.API.Controllers
             };
         }
 
+        [HttpGet("{userId}", Name = nameof(GetUserInfo))]
+        public async Task<ActionResult<UserGetModel>> GetUserInfo(int userId)
+        {
+            var user = await _sqlContext.Users
+                .FindAsync(userId);
+
+            if(user == null)
+            {
+                _logger.LogError($"User not found for id {userId}");
+                return new BadRequestResult();
+            }
+
+            return user.ToUserGetModel();
+        }
+
         [HttpGet("{userId}/flats", Name = nameof(GetFlats))]
         public async Task<ActionResult<IEnumerable<FlatNameModel>>> GetFlats(int userId)
         {
@@ -68,6 +84,54 @@ namespace RoomMe.API.Controllers
             }
 
             return user.Flats.ToFlatNameModelList();
+        }
+
+        [HttpPost("{userId}/friend/{friendId}", Name = nameof(AddFriend))]
+        public async Task<ActionResult<DateTime>> AddFriend(int userId, int friendId)
+        {
+            var user = await _sqlContext.Users
+                .FindAsync(userId)
+                .ConfigureAwait(false);
+
+            if (user == null)
+            {
+                _logger.LogError($"User not found for id {userId}");
+                return new BadRequestResult();
+            }
+
+            var friend = await _sqlContext.Users
+                .FindAsync(friendId)
+                .ConfigureAwait(false);
+
+            if (friend == null)
+            {
+                _logger.LogError($"User not found for id {friendId}");
+                return new BadRequestResult();
+            }
+
+            await _sqlContext.UserFriends.AddAsync(new UserFriend() { UserId = userId, FriendId = friendId }).ConfigureAwait(false);
+            await _sqlContext.UserFriends.AddAsync(new UserFriend() { UserId = friendId, FriendId = userId }).ConfigureAwait(false);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return DateTime.Now;
+        }
+
+        [HttpGet("{userId}/friends", Name = nameof(GetFriends))]
+        public async Task<ActionResult<IEnumerable<UserFriendModel>>> GetFriends(int userId)
+        {
+            var user = await _sqlContext.Users
+                .Include(x => x.Friends)
+                .ThenInclude(y => y.Friend)
+                .FirstOrDefaultAsync(x => x.Id == userId)
+                .ConfigureAwait(false);
+
+            if(user == null)
+            {
+                _logger.LogError($"User not found for id {userId}");
+                return new BadRequestResult();
+            }
+
+            return user.Friends.ToUserFriendListModel();
         }
     }
 }
