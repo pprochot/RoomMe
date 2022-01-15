@@ -10,8 +10,8 @@ using RoomMe.SQLContext;
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20220115165334_add_column_guid_to_receipts")]
-    partial class add_column_guid_to_receipts
+    [Migration("20220115175351_add_columns_to_receipts_table")]
+    partial class add_columns_to_receipts_table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -407,8 +407,14 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");

@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class ShoppingListCompletionPatchModel
+    public class ReceiptFileModel
     {
         public string fileName { get; set; }
         public string Extension { get; set; }
-        public byte[] fileContent { get; set; }
+        public string fileContent { get; set; }
         public string MimeType { get; set; }
     }
 }

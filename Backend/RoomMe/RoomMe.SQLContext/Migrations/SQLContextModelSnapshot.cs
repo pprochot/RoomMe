@@ -405,8 +405,14 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");

@@ -7,6 +7,7 @@ using RoomMe.SQLContext;
 using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -200,7 +201,7 @@ namespace RoomMe.API.Controllers
             return DateTime.Now;
         }
 
-        [HttpPatch("{flatId}/shopping-lists/{listId}/products/bought", Name = nameof(SetProductsAsBought))]
+        [HttpPatch("{flatId}/shopping-lists/{listId}/products/", Name = nameof(SetProductsAsBought))]
         public async Task<ActionResult<ProductPatchReturnModel>> SetProductsAsBought(int flatId, int listId, List<ProductPatchModel> products)
         {
             var list = await _sqlContext.ShoppingLists
@@ -229,7 +230,7 @@ namespace RoomMe.API.Controllers
 
                 boughtProducts.Add(productEntity);
 
-                //TODO: In future userId should be recieved based on JWT Token
+                //TODO: In future userId should be recieved from JWT Token
                 productEntity.SetToBoughtState(product, flatId, 1);
             }
 
@@ -237,6 +238,56 @@ namespace RoomMe.API.Controllers
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
             return boughtProducts.ToProductPatchReturnModel();
+        }
+
+        [HttpPatch("{flatId}/shopping-lists/{listId}/completion", Name = nameof(SetShoppingListAsCompleted))]
+        public async Task<ActionResult<ShoppingListCompletionPatchReturnModel>> SetShoppingListAsCompleted (int flatId, int listId, IEnumerable<ReceiptFileModel> receiptFiles)
+        {
+            var list = await _sqlContext.ShoppingLists
+                .Include(x => x.Products)
+                .Include(x => x.Receipts)
+                .Where(x => x.FlatId == flatId)
+                .SingleOrDefaultAsync(x => x.Id == listId)
+                .ConfigureAwait(false);
+
+            if (list == null)
+            {
+                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
+                return new BadRequestResult();
+            }
+
+            if (list.Products.Any(x => !x.Bought))
+            {
+                _logger.LogError($"When setting shopping list as completed every product must be bought. ListId: {listId}");
+                return new BadRequestResult();
+            }
+
+            var guids = new List<Guid>();
+
+            list.CompletionDate = DateTime.Now;
+            //TODO: In future userId should be recieved from JWT Token
+            list.CompletorId = 1;
+
+            foreach(var receiptFile in receiptFiles)
+            {
+                //TODO: Change this basic path
+                Guid guid = Guid.NewGuid();
+                string path = "/receipts/" + guid.ToString() + "." + receiptFile.Extension;
+
+                await File.WriteAllBytesAsync(path, Convert.FromBase64String(receiptFile.fileContent)).ConfigureAwait(false);
+
+                guids.Add(guid);
+                list.Receipts.Add(receiptFile.ToReceipt(listId, path, guid));
+            }
+
+            _sqlContext.ShoppingLists.Update(list);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return new ShoppingListCompletionPatchReturnModel()
+            {
+                TimeStamp = DateTime.Now,
+                FileGuids = guids
+            };
         }
     }
 }
