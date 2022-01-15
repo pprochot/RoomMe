@@ -9,6 +9,7 @@ namespace RoomMe.SQLContext.Models
     public class Receipt
     {
         public int Id { get; set; }
+        public Guid Guid { get; set; }
         public int ShoppingListId { get; set; }
         public string Path { get; set; }
     }

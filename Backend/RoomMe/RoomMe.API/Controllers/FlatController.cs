@@ -117,7 +117,7 @@ namespace RoomMe.API.Controllers
             return entity.ToRentCostPostReturnModel();
         }
 
-        [HttpPost("{flatId}/shopping-list", Name = nameof(CreateNewShoppingList))]
+        [HttpPost("{flatId}/shopping-lists", Name = nameof(CreateNewShoppingList))]
         public async Task<ActionResult<ShoppingListPostReturnModel>> CreateNewShoppingList(int flatId, ShoppingListPostModel list)
         {
             var entity = list.ToShoppingList(flatId);
@@ -143,6 +143,100 @@ namespace RoomMe.API.Controllers
                 .ConfigureAwait(false);
 
             return lists;
+        }
+
+        [HttpPost("{flatId}/shopping-lists/{listId}/products", Name = nameof(AddShoppingListProducts))]
+        public async Task<ActionResult<ProductListPostReturnModel>> AddShoppingListProducts(int flatId, int listId, IEnumerable<ProductPostModel> products)
+        {
+            var list = await _sqlContext.ShoppingLists
+                .Include(x => x.Products)
+                .Where(x => x.FlatId == flatId)
+                .Where(x => x.Id == listId)
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
+
+            if(list == null)
+            {
+                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
+                return new BadRequestResult();
+            }
+
+            List<Product> addedProducts = new();
+
+            foreach(var product in products)
+            {
+                var tempProduct = product.ToProduct();
+                list.Products.Add(tempProduct);
+                addedProducts.Add(tempProduct);
+            }
+
+            _sqlContext.ShoppingLists.Update(list);
+
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return addedProducts.ToProductListPostReturnModel();
+        }
+        
+        [HttpDelete("{flatId}/shopping-lists/{listId}/products", Name = nameof(RemoveProductsFromShoppingList))]
+        public async Task<ActionResult<DateTime>> RemoveProductsFromShoppingList(int flatId, int listId, IEnumerable<int> productsIds)
+        {
+            var list = await _sqlContext.ShoppingLists
+                .Include(x => x.Products)
+                .Where(x => x.FlatId == flatId)
+                .FirstOrDefaultAsync(x => x.Id == listId)
+                .ConfigureAwait(false);
+
+            if(list == null)
+            {
+                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
+                return new BadRequestResult();
+            }
+
+            var deletedProducts = list.Products.Where(x => productsIds.Any(y => y == x.Id)).ToList();
+
+            _sqlContext.Products.RemoveRange(deletedProducts);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return DateTime.Now;
+        }
+
+        [HttpPatch("{flatId}/shopping-lists/{listId}/products/bought", Name = nameof(SetProductsAsBought))]
+        public async Task<ActionResult<ProductPatchReturnModel>> SetProductsAsBought(int flatId, int listId, List<ProductPatchModel> products)
+        {
+            var list = await _sqlContext.ShoppingLists
+                .Include(x => x.Products)
+                .Where(x => x.FlatId == flatId)
+                .SingleOrDefaultAsync(x => x.Id == listId)
+                .ConfigureAwait(false);
+
+            if(list == null)
+            {
+                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
+                return new BadRequestResult();
+            }
+
+            var boughtProducts = new List<Product>();
+
+            foreach(var product in products)
+            {
+                var productEntity = list.Products.SingleOrDefault(x => x.Id == product.Id);
+
+                if(productEntity == null || productEntity.Bought)
+                {
+                    _logger.LogError($"Error occured when setting product as bought. ProductId: {product.Id}");
+                    return new BadRequestResult();
+                }
+
+                boughtProducts.Add(productEntity);
+
+                //TODO: In future userId should be recieved based on JWT Token
+                productEntity.SetToBoughtState(product, flatId, 1);
+            }
+
+            _sqlContext.Update(list);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return boughtProducts.ToProductPatchReturnModel();
         }
     }
 }
