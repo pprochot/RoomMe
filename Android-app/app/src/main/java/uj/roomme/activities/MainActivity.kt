@@ -2,6 +2,7 @@ package uj.roomme.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -19,7 +20,7 @@ import uj.roomme.R
 import uj.roomme.viewmodels.UserViewModel
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navController: NavController
@@ -29,14 +30,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val userViewModel: UserViewModel by viewModels()
-        userViewModel.userId = args.userId
-        userViewModel.userNickname = args.userNickname
-        userViewModel.userEmail = args.userEmail
-        println(userViewModel.userId)
+        setUpViewModel()
 
+
+        //TODO move
         drawerLayout = findViewById(R.id.drawer_layout)
         navController = findNavController(R.id.nav_host_fragment_container_main_activity)
 
@@ -48,6 +46,15 @@ class MainActivity : AppCompatActivity() {
         // TODO change in menu
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
+//        val nicknameText = navView.findViewById<TextView>(R.id.text_nav_nickname)
+//        nicknameText.text = args.userNickname
+    }
+
+    private fun setUpViewModel() {
+        val userViewModel: UserViewModel by viewModels()
+        userViewModel.userId = args.userId
+        userViewModel.userNickname = args.userNickname
+        userViewModel.userEmail = args.userEmail
     }
 
     override fun onSupportNavigateUp(): Boolean {
