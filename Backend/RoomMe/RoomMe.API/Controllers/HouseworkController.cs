@@ -35,7 +35,7 @@ namespace RoomMe.API.Controllers
                             .FirstOrDefaultAsync(x => x.Id == houseworkId)
                             .ConfigureAwait(false);
 
-            if(housework == null)
+            if (housework == null)
             {
                 _logger.LogError($"Housework not found for id {houseworkId}");
                 return new BadRequestResult();
@@ -45,77 +45,92 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpPut("", Name = nameof(CreateNewHousework))]
-        public async Task<ActionResult<HouseworkPutReturnModel>> CreateNewHousework(HouseworkPutModel housework)
+        public async Task<ActionResult<HouseworkPutReturnModel>> CreateNewHousework(HouseworkPutModel housework, HouseworkSettingsPutModel settings,
+            int frequencyId)
         {
-            List<User> users = new();
 
-            /*if(housework.Users.Count == 0)
+            foreach (var user in housework.Users)
             {
-                _logger.LogError($"Tried to create housework without users");
-                return new BadRequestResult();
-            }*/
+                var isUser = await _sqlContext.Users.AnyAsync(x => x.Id == user.Id).ConfigureAwait(false);
 
-            foreach(var userId in housework.Users)
-            {
-                var entity = await _sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
-
-                if(entity == null)
+                if (isUser == false)
                 {
-                    _logger.LogError($"User not found for id {userId}");
+                    _logger.LogError($"User not found for id {user.Id}");
                     return new BadRequestResult();
                 }
-
-                users.Add(entity);
             }
 
-            var author = await _sqlContext.Users.FindAsync(housework.AuthorId).ConfigureAwait(false);
+            var isAuthor = await _sqlContext.Users.AnyAsync(x => x.Id == housework.AuthorId).ConfigureAwait(false);
 
-            if(author == null)
+            if (isAuthor == false)
             {
                 _logger.LogError($"User not found for id {housework.AuthorId}");
                 return new BadRequestResult();
             }
 
-            var flat = await _sqlContext.Flats.FindAsync(housework.FlatId).ConfigureAwait(false);
+            var isFlat = await _sqlContext.Flats.AnyAsync(x => x.Id == housework.FlatId).ConfigureAwait(false);
 
-            if(flat == null)
+            if (isFlat == false)
             {
                 _logger.LogError($"Flat not found for id {housework.FlatId}");
                 return new BadRequestResult();
             }
 
-            author.Houseworks.Add(housework.ToHouseworkModel(author, flat, users));
-            flat.Houseworks.Add(housework.ToHouseworkModel(author, flat, users));
-
-            _sqlContext.Update(author);
-            _sqlContext.Update(flat);
-
-            foreach(var entity in users)
-            {
-                entity.Houseworks.Add(housework.ToHouseworkModel(author, flat, users));
-                _sqlContext.Update(entity);
-            }
-
-            var houseworkEntity = housework.ToHouseworkModel(author, flat, users);
+            var houseworkEntity = housework.ToHouseworkModel();
             await _sqlContext.Houseworks.AddAsync(houseworkEntity).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            return houseworkEntity.ToHouseworkPutReturnModel();
-        }
+            settings.HouseworkId = houseworkEntity.Id;
 
-        [HttpGet("{houseworkId}/name", Name = nameof(GetHouseworkName))]
-        public async Task<ActionResult<HouseworkNameModel>> GetHouseworkName(int houseworkId)
-        {
-            var housework = await _sqlContext.Houseworks
-                .FirstOrDefaultAsync(x => x.Id == houseworkId)
-                .ConfigureAwait(false);
-            if(housework == null)
+            var isFrequency = await _sqlContext.HouseworkFrequencies.AnyAsync(x => x.Id == frequencyId).ConfigureAwait(false);
+
+            if(isFrequency == false)
             {
-                _logger.LogError($"Housework not found for id {houseworkId}");
+                _logger.LogError($"Frequency not found for id {frequencyId}");
                 return new BadRequestResult();
             }
 
-            return housework.ToHouseworkNameModel();
+            settings.FrequencyId = frequencyId;
+
+            var settingsEntity = settings.ToHouseworkSettings();
+            await _sqlContext.HouseworkSettings.AddAsync(settingsEntity).ConfigureAwait(false);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return houseworkEntity.ToHouseworkPutReturnModel(settingsEntity.Id);
         }
+
+        [HttpGet("{houseworkId}/settings", Name = nameof(GetHouseworkSettings))]
+        public async Task<ActionResult<HouseworkSettingsModel>> GetHouseworkSettings(int settingsId)
+        {
+            var settings = await _sqlContext.HouseworkSettings.FindAsync(settingsId).ConfigureAwait(false);
+
+            if(settings == null)
+            {
+                _logger.LogError($"Settings not found for id {settingsId}");
+                return new BadRequestResult();
+            }
+
+            return settings.ToHouseworkSettingsModel();
+        }
+
+        [HttpGet("{houseworkId}/{settingsId}/frequency", Name = nameof(GetSettingsFrequency))]
+        public async Task<ActionResult<HouseworkFrequencyModel>> GetSettingsFrequency(int settingsId)
+        {
+            var settings = await _sqlContext.HouseworkSettings
+                .Include(x => x.Frequency)
+                .FirstOrDefaultAsync(y => y.Id == settingsId)
+                .ConfigureAwait(false);
+
+            if(settings == null)
+            {
+                _logger.LogError($"Housework not found for id {settingsId}");
+                return new BadRequestResult();
+            }
+
+            return settings.Frequency.ToHouseworkFrequencyModel();
+        }
+
+        //Houseworks from the given period of time
+
     }
 }

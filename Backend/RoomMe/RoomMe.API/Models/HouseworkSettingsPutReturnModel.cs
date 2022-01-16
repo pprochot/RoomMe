@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class HouseworkNameModel
+    public class HouseworkSettingsPutReturnModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int HouseworkId { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

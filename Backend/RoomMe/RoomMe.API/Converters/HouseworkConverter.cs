@@ -9,14 +9,6 @@ namespace RoomMe.API.Converters
 {
     public static class HouseworkConverter
     {
-        public static HouseworkNameModel ToHouseworkNameModel(this Housework housework)
-        {
-            return new HouseworkNameModel()
-            {
-                Id = housework.Id,
-                Name = housework.Name
-            };
-        }
 
         public static HouseworkFullGetModel ToHouseworkFullModel(this Housework housework)
         {
@@ -32,26 +24,23 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static Housework ToHouseworkModel(this HouseworkPutModel housework, User author, Flat flat, List<User> users)
+        public static Housework ToHouseworkModel(this HouseworkPutModel housework)
         {
             return new Housework()
             {
                 Name = housework.Name,
                 FlatId = housework.FlatId,
-                Flat = flat,
                 AuthorId = housework.AuthorId,
-                Author = author,
                 Description = housework.Description,
-                Users = users
-                //schedules if we want to add them at the same time
             };
         }
 
-        public static HouseworkPutReturnModel ToHouseworkPutReturnModel(this Housework housework)
+        public static HouseworkPutReturnModel ToHouseworkPutReturnModel(this Housework housework, int settingsId)
         {
             return new HouseworkPutReturnModel()
             {
                 Id = housework.Id,
+                SettingsId = settingsId,
                 CreationDate = DateTime.Now
             };
         }
@@ -65,7 +54,19 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static HouseworkFrequencyModel ToHouseworkFrequenciesModel(this HouseworkFrequency frequency)
+        public static HouseworkSettingsModel ToHouseworkSettingsModel(this HouseworkSettings settings)
+        {
+            return new HouseworkSettingsModel()
+            {
+                Id = settings.Id,
+                FrequencyId = settings.FrequencyId,
+                Frequency = settings.Frequency.ToHouseworkFrequencyModel(),
+                Day = settings.Day
+            };
+        }
+
+
+        public static HouseworkFrequencyModel ToHouseworkFrequencyModel(this HouseworkFrequency frequency)
         {
             return new HouseworkFrequencyModel()
             {
@@ -75,16 +76,22 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static HouseworkSettingsModel ToHouseworkSettingsModel(this HouseworkSettings settings)
+        public static HouseworkFrequency ToHouseworkFrequency(this HouseworkFrequencyPutModel frequency)
         {
-            return new HouseworkSettingsModel()
+            return new HouseworkFrequency()
             {
-                Id = settings.Id,
+                Name = frequency.Name,
+                Value = frequency.Value
+            };
+        }
+
+        public static HouseworkSettings ToHouseworkSettings(this HouseworkSettingsPutModel settings)
+        {
+            return new HouseworkSettings()
+            {
                 HouseworkId = settings.HouseworkId,
-                Housework = settings.Housework.ToHouseworkNameModel(),
                 FrequencyId = settings.FrequencyId,
-                Frequency = settings.Frequency.ToHouseworkFrequenciesModel(),
-                Day = settings.Day
+                Day = settings.Day,
             };
         }
     }

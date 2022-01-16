@@ -8,5 +8,6 @@ namespace RoomMe.API.Models
     public class SchedulePutReturnModel
     {
         public int Id { get; set; }
+        public DateTime TimeStamp { get; set; }
     }
 }

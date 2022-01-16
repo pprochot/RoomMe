@@ -10,6 +10,7 @@ namespace RoomMe.API.Models
     public class HouseworkPutReturnModel : ControllerBase
     {
         public int Id { get; set; }
+        public int SettingsId { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

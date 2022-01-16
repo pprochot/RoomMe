@@ -8,8 +8,6 @@ namespace RoomMe.API.Models
     public class HouseworkSettingsModel
     {
         public int Id { get; set; }
-        public int HouseworkId { get; set; }
-        public HouseworkNameModel Housework { get; set; }
         public int FrequencyId { get; set; }
         public HouseworkFrequencyModel Frequency { get; set; }
         public int Day { get; set; }

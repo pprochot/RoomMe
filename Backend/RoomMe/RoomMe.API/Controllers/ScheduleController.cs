@@ -28,8 +28,8 @@ namespace RoomMe.API.Controllers
         public async Task<ActionResult<ScheduleFullGetModel>> GetScheduleFull(int scheduleId)
         {
             var schedule = await _sqlContext.HouseworkSchedules
-                .Include(x => x.StatusId)
-                .Include(y => y.HouseworkSettings.Id)
+                .Include(x => x.HouseworkStatus)
+                .Include(y => y.HouseworkSettings)
                 .FirstOrDefaultAsync(x => x.Id == scheduleId)
                 .ConfigureAwait(false);
 
@@ -53,31 +53,22 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var user = await _sqlContext.Users.FindAsync(schedule.UserId).ConfigureAwait(false);
+            var isUser = await _sqlContext.Users.AnyAsync(x => x.Id == schedule.UserId).ConfigureAwait(false);
 
-            if(user == null)
+            if(isUser == false)
             {
                 _logger.LogError($"User not found for id {schedule.UserId}");
                 return new BadRequestResult();
             }
 
-            var status = await _sqlContext.HouseworkStatuses.FindAsync(schedule.StatusId).ConfigureAwait(false);
-
-            if(status == null)
-            {
-                _logger.LogError($"Status not found for id {schedule.StatusId}");
-                return new BadRequestResult();
-            }
-
-
-            var scheduleEntity = schedule.ToScheduleModel(housework,user, status);
+            var scheduleEntity = schedule.ToScheduleModel(housework);
             await _sqlContext.HouseworkSchedules.AddAsync(scheduleEntity).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
             return scheduleEntity.ToSchedulePutReturnModel();
         }
 
-        [HttpGet("{scheduleId}/full", Name = nameof(GetScheduleFull))]
+        [HttpGet("{scheduleId}/date", Name = nameof(GetScheduleFull))]
         public async Task<ActionResult<ScheduleDateModel>> GetScheduleDate(int scheduleId)
         {
             var schedule = await _sqlContext.HouseworkSchedules
@@ -92,27 +83,6 @@ namespace RoomMe.API.Controllers
 
             return schedule.ToScheduleDateModel();
         }
-
-        [HttpGet("{scheduleId}/name", Name = nameof(GetScheduleHouseworkName))]
-        public async Task<ActionResult<ScheduleHouseworkNameModel>> GetScheduleHouseworkName(int scheduleId)
-        {
-            var schedule = await _sqlContext.HouseworkSchedules
-                .FirstOrDefaultAsync(x => x.Id == scheduleId)
-                .ConfigureAwait(false);
-
-            if(schedule == null)
-            {
-                _logger.LogError($"Schedule not found for id {scheduleId}");
-                return new BadRequestResult();
-            }
-
-            return schedule.ToScheduleHouseworkNameModel();
-        }
-
-        //AddNewHouseworkSettings
-
-        //AddNewHouseworkFrequency
-
-        //HouseworkStatus
+        //GetHouseworkFrequency
     }
 }

@@ -10,6 +10,5 @@ namespace RoomMe.API.Models
         public int HouseworkId { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }
-        public int StatusId { get; set; }
     }
 }
