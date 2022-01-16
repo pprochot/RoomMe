@@ -1,5 +1,6 @@
 package uj.roomme.fragments
 
+import android.view.View
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.Toast
@@ -7,6 +8,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,6 +33,9 @@ class FlatsFragment : Fragment(R.layout.fragment_flats) {
     override fun onStart() {
         super.onStart()
 
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
+            ?.visibility = View.GONE
+
         recyclerView = view?.findViewById(R.id.rv_aparments)!!
         getFlatsFromService()
 
@@ -39,6 +45,13 @@ class FlatsFragment : Fragment(R.layout.fragment_flats) {
         createNewApartmentButton?.setOnClickListener {
             findNavController().navigate(toCreateApartmentFragment)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
+            ?.visibility = View.VISIBLE
     }
 
     private fun displayData(body: List<FlatNameModel>) {

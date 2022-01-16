@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -46,8 +47,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         // TODO change in menu
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 //        val nicknameText = navView.findViewById<TextView>(R.id.text_nav_nickname)
 //        nicknameText.text = args.userNickname
+//        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+//        supportActionBar?.setCustomView(R.layout.appbar_login)
+
     }
 
     private fun setUpViewModel() {

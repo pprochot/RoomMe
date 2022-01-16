@@ -9,7 +9,7 @@
             android:icon="@drawable/ic_person"
             android:title="User info" />
         <item
-            android:id="@id/flatsFragment"
+            android:id="@+id/none"
             android:icon="@drawable/ic_friends"
             android:title="Friends" />
         <item
