@@ -3,30 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="30dp"
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="30dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".fragments.RegisterFragment">
-
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="15dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Sign Up"-->
-<!--            android:textSize="20sp"/>-->
+        tools:context=".fragments.SignUpFragment">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nickname_inputlayout_registration"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:hint="Nickname"
             app:counterEnabled="true"
             app:counterMaxLength="20"
@@ -50,9 +43,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:hint="Email"
             app:endIconMode="clear_text"
             app:helperText="Required*"
@@ -73,9 +64,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:hint="Password"
             app:endIconMode="password_toggle"
             app:helperText="Required*"
@@ -96,9 +85,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:hint="Enter password again"
             app:endIconMode="password_toggle"
             app:helperText="Required*"
@@ -119,9 +106,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:hint="First name"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -140,9 +125,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:hint="Last name"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,9 +144,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:hint="Phone number"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"

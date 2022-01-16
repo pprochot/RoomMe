@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.LoginActivity"
+    android:orientation="vertical">
 
     <fragment
         android:id="@+id/nav_host_fragment_container_login_activity"

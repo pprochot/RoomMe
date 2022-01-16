@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_nav_graph"
-    app:startDestination="@id/registerFragment">
+    app:startDestination="@id/signInFragment">
 
     <fragment
-        android:id="@+id/registerFragment"
-        android:name="uj.roomme.fragments.RegisterFragment"
-        android:label="RegisterFragment"
-        tools:layout="@layout/fragment_register">
+        android:id="@+id/signUpFragment"
+        android:name="uj.roomme.fragments.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/fragment_sign_up">
         <action
-            android:id="@+id/action_registerFragment_to_mainActivity"
+            android:id="@+id/action_signUpFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
     </fragment>
     <activity
@@ -29,4 +29,28 @@
             android:name="userEmail"
             app:argType="string" />
     </activity>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="uj.roomme.fragments.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="uj.roomme.fragments.ForgotPasswordFragment"
+        android:label="ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password">
+        <action
+            android:id="@+id/action_forgotPasswordFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
 </navigation>

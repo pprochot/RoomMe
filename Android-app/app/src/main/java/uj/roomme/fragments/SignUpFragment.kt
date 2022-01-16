@@ -17,7 +17,7 @@ import uj.roomme.services.UserService
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment(R.layout.fragment_register) {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     @Inject
     lateinit var userService: UserService
@@ -92,7 +92,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             ) {
                 if (response.isSuccessful) {
                     val toMainActivity =
-                        RegisterFragmentDirections.actionRegisterFragmentToMainActivity(
+                        SignUpFragmentDirections.actionSignUpFragmentToMainActivity(
                             response.body()?.userId!!,
                             requestBody.nickname,
                             requestBody.email
