@@ -69,7 +69,7 @@ namespace RoomMe.API.Controllers
             return scheduleEntity.ToSchedulePutReturnModel();
         }
 
-        [HttpGet("{scheduleId}/date", Name = nameof(GetScheduleFull))]
+        [HttpGet("{scheduleId}/date", Name = nameof(GetScheduleDate))]
         public async Task<ActionResult<ScheduleDateModel>> GetScheduleDate(int scheduleId)
         {
             var schedule = await _sqlContext.HouseworkSchedules

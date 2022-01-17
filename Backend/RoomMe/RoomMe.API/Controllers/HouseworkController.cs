@@ -45,7 +45,7 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpPut("", Name = nameof(CreateNewHousework))]
-        public async Task<ActionResult<HouseworkPutReturnModel>> CreateNewHousework(HouseworkPutModel housework, HouseworkSettingsPutModel settings,
+        public async Task<ActionResult<HouseworkPutReturnModel>> CreateNewHousework(HouseworkPutModel housework, int Day,
             int frequencyId)
         {
 
@@ -80,8 +80,6 @@ namespace RoomMe.API.Controllers
             await _sqlContext.Houseworks.AddAsync(houseworkEntity).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            settings.HouseworkId = houseworkEntity.Id;
-
             var isFrequency = await _sqlContext.HouseworkFrequencies.AnyAsync(x => x.Id == frequencyId).ConfigureAwait(false);
 
             if(isFrequency == false)
@@ -90,7 +88,12 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            settings.FrequencyId = frequencyId;
+            HouseworkSettingsPutModel settings = new HouseworkSettingsPutModel()
+            {
+                HouseworkId = houseworkEntity.Id,
+                FrequencyId = frequencyId,
+                Day = Day
+            };
 
             var settingsEntity = settings.ToHouseworkSettings();
             await _sqlContext.HouseworkSettings.AddAsync(settingsEntity).ConfigureAwait(false);
