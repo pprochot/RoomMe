@@ -23,5 +23,6 @@ namespace RoomMe.SQLContext.Models
         public List<PrivateCost> PrivateCosts { get; set; }
         public List<Product> Products { get; set; }
         public List<ShoppingList> ShoppingLists { get; set; }
+        public List<UserFriend> Friends { get; set; }
     }
 }
