@@ -130,7 +130,21 @@ namespace RoomMe.API.Controllers
             return settings.Frequency.ToHouseworkFrequencyModel();
         }
 
-        //Houseworks from the given period of time
+        [HttpGet("houseworks", Name = nameof(GetFullHouseworkByDate))]
+        public async Task<ActionResult<List<HouseworkFullGetModel>>> GetFullHouseworkByDate(FromToDateModel dates)
+        {
+            List<HouseworkFullGetModel> houseworkModels = new List<HouseworkFullGetModel>();
 
+            var houseworks = await _sqlContext.HouseworkSchedules
+                .Where(x => x.Date >= dates.From && x.Date <= dates.To)
+                .Include(y => y.Housework)
+                .Select(x => x.Housework)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            houseworkModels = houseworks.Select(x => x.ToHouseworkFullModel()).ToList();
+
+            return houseworkModels;
+        }
     }
 }

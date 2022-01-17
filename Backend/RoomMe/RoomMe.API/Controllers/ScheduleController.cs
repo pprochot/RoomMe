@@ -32,6 +32,7 @@ namespace RoomMe.API.Controllers
                 .Include(y => y.HouseworkSettings)
                 .FirstOrDefaultAsync(x => x.Id == scheduleId)
                 .ConfigureAwait(false);
+                
 
             if(schedule == null)
             {
@@ -83,6 +84,5 @@ namespace RoomMe.API.Controllers
 
             return schedule.ToScheduleDateModel();
         }
-        //GetHouseworkFrequency
     }
 }
