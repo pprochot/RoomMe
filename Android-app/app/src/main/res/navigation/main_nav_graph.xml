@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="uj.roomme.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home_selected_apartment" >
         <action
             android:id="@+id/action_homeFragment_to_flatsFragment"
             app:destination="@id/flatsFragment" />
