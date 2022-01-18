@@ -1,47 +1,54 @@
-package uj.roomme.activities
+package uj.roomme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import uj.roomme.R
+import uj.roomme.drawerfeatures.BottomNavigationViewController
+import uj.roomme.drawerfeatures.DrawerController
 import uj.roomme.viewmodels.UserViewModel
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import uj.roomme.fragments.SignInFragment
+
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity :
+    AppCompatActivity(R.layout.activity_main),
+    DrawerController,
+    BottomNavigationViewController {
 
+    private lateinit var bottomNavView: BottomNavigationView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    private val args: MainActivityArgs by navArgs()
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setUpViewModel()
 
-
+        bottomNavView = findViewById(R.id.bottom_nav_bar)
         //TODO move
         drawerLayout = findViewById(R.id.drawer_layout)
         navController = findNavController(R.id.nav_host_fragment_container_main_activity)
 
         val navView = findViewById<NavigationView>(R.id.nav_view)
         navView.setupWithNavController(navController)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         // TODO change in menu
@@ -57,9 +64,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun setUpViewModel() {
         val userViewModel: UserViewModel by viewModels()
-        userViewModel.userId = args.userId
-        userViewModel.userNickname = args.userNickname
-        userViewModel.userEmail = args.userEmail
+//        userViewModel.userId = args.userId
+//        userViewModel.userNickname = args.userNickname
+//        userViewModel.userEmail = args.userEmail
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -72,5 +79,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun lockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        toolbar.navigationIcon = null
+    }
+
+    override fun unlockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
+    override fun lockNavigationView() {
+        bottomNavView.visibility = View.GONE
+    }
+
+    override fun unlockNavigationView() {
+        bottomNavView.visibility = View.VISIBLE
     }
 }

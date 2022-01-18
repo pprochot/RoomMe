@@ -2,18 +2,18 @@ package uj.roomme.fragments
 
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uj.roomme.R
+import uj.roomme.abstractfragments.NoBarsFragment
 
-class SignInFragment : Fragment(R.layout.fragment_sign_in) {
+class SignInFragment : NoBarsFragment(R.layout.fragment_sign_in) {
 
     companion object {
         val toSignUpFragment = SignInFragmentDirections.actionSignInFragmentToSignUpFragment()
         val toForgotPasswordFragment =
             SignInFragmentDirections.actionSignInFragmentToForgotPasswordFragment()
         val toMainActivity =
-            SignInFragmentDirections.actionSignInFragmentToMainActivity(1, "none", "none")
+            SignInFragmentDirections.actionSignInFragmentToMainNavGraph()
     }
 
     override fun onStart() {
