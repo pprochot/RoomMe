@@ -11,6 +11,8 @@ namespace RoomMe.API.Models
         public int FlatId { get; set; }
         public int AuthorId { get; set; }
         public string Description { get; set; }
-        public List<UserNicknameModel> Users { get; set; }
+        public List<int> Users { get; set; }
+        public int FrequencyId { get; set; }
+        public int Day { get; set; }
     }
 }

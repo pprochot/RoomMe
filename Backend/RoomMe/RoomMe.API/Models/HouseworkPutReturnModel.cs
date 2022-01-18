@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class HouseworkPutReturnModel : ControllerBase
+    public class HouseworkPutReturnModel
     {
         public int Id { get; set; }
         public int SettingsId { get; set; }

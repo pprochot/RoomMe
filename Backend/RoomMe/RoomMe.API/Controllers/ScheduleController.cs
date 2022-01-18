@@ -56,7 +56,7 @@ namespace RoomMe.API.Controllers
 
             var isUser = await _sqlContext.Users.AnyAsync(x => x.Id == schedule.UserId).ConfigureAwait(false);
 
-            if(isUser == false)
+            if(!isUser)
             {
                 _logger.LogError($"User not found for id {schedule.UserId}");
                 return new BadRequestResult();
