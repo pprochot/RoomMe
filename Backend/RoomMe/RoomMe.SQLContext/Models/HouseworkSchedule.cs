@@ -16,6 +16,5 @@ namespace RoomMe.SQLContext.Models
         public int StatusId { get; set; }
         public HouseworkStatus HouseworkStatus { get; set; }
         public DateTime Date { get; set; }
-        public HouseworkSettings HouseworkSettings { get; set; }
     }
 }

@@ -9,7 +9,6 @@ namespace RoomMe.API.Converters
 {
     public static class HouseworkConverter
     {
-
         public static HouseworkFullGetModel ToHouseworkFullModel(this Housework housework)
         {
             return new HouseworkFullGetModel
@@ -30,7 +29,8 @@ namespace RoomMe.API.Converters
             {
                 Name = housework.Name,
                 FlatId = housework.FlatId,
-                AuthorId = housework.AuthorId,
+                //TODO: When JWT authorization is implemented this should be received through the token
+                AuthorId = 1,
                 Description = housework.Description,
             };
         }
@@ -59,7 +59,6 @@ namespace RoomMe.API.Converters
             return new HouseworkSettingsModel()
             {
                 Id = settings.Id,
-                FrequencyId = settings.FrequencyId,
                 Frequency = settings.Frequency.ToHouseworkFrequencyModel(),
                 Day = settings.Day
             };
@@ -76,23 +75,26 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static HouseworkFrequency ToHouseworkFrequency(this HouseworkFrequencyPutModel frequency)
+        public static HouseworkModel ToHouseworkModel(this Housework housework)
         {
-            return new HouseworkFrequency()
+            return new HouseworkModel()
             {
-                Name = frequency.Name,
-                Value = frequency.Value
+                Id = housework.Id,
+                Name = housework.Name,
+                Description = housework.Description
             };
         }
 
-        public static HouseworkSettings ToHouseworkSettings(this HouseworkSettingsPutModel settings)
+        public static void UpdateHousework(this Housework houseworkEntity, HouseworkPutModel housework, List<User> users)
         {
-            return new HouseworkSettings()
-            {
-                HouseworkId = settings.HouseworkId,
-                FrequencyId = settings.FrequencyId,
-                Day = settings.Day,
-            };
+            //TODO: receive id through JWT token
+            houseworkEntity.AuthorId = 1;
+            houseworkEntity.Name = housework.Name;
+            houseworkEntity.Description = housework.Description;
+            houseworkEntity.FlatId = housework.FlatId;
+            houseworkEntity.Users = users;
+            houseworkEntity.HouseworkSettings.FrequencyId = housework.FrequencyId;
+            houseworkEntity.HouseworkSettings.Day = housework.Day;
         }
     }
 }

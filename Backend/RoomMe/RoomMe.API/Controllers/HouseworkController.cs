@@ -47,24 +47,20 @@ namespace RoomMe.API.Controllers
         [HttpPut("", Name = nameof(PutHousework))]
         public async Task<ActionResult<HouseworkPutReturnModel>> PutHousework(HouseworkPutModel housework)
         {
+            var users = await _sqlContext.Users
+                .Where(x => housework.Users.Contains(x.Id))
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             foreach (var userId in housework.Users)
             {
-                var existsUser = await _sqlContext.Users.AnyAsync(x => x.Id == userId).ConfigureAwait(false);
+                var existsUser = users.Any(x => x.Id == userId); 
 
                 if (!existsUser)
                 {
                     _logger.LogError($"User not found for id {userId}");
                     return new BadRequestResult();
                 }
-            }
-
-            var existsAuthor = await _sqlContext.Users.AnyAsync(x => x.Id == housework.AuthorId).ConfigureAwait(false);
-
-            if (!existsAuthor)
-            {
-                _logger.LogError($"User not found for id {housework.AuthorId}");
-                return new BadRequestResult();
             }
 
             var existsFlat = await _sqlContext.Flats.AnyAsync(x => x.Id == housework.FlatId).ConfigureAwait(false);
@@ -83,21 +79,41 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var houseworkEntity = housework.ToHouseworkModel();
-            await _sqlContext.Houseworks.AddAsync(houseworkEntity).ConfigureAwait(false);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+            var houseworkEntity = await _sqlContext.Houseworks
+                .Include(x => x.HouseworkSettings)
+                .FirstOrDefaultAsync(x => x.Id == housework.Id)
+                .ConfigureAwait(false);
 
-            HouseworkSettings settings = new()
+            int settingsId = -1;
+
+            if (houseworkEntity == null)
             {
-                HouseworkId = houseworkEntity.Id,
-                FrequencyId = housework.FrequencyId,
-                Day = housework.Day
-            };
+                houseworkEntity = housework.ToHouseworkModel();
+                await _sqlContext.Houseworks.AddAsync(houseworkEntity).ConfigureAwait(false);
+                await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            await _sqlContext.HouseworkSettings.AddAsync(settings).ConfigureAwait(false);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+                HouseworkSettings settings = new()
+                {
+                    HouseworkId = houseworkEntity.Id,
+                    FrequencyId = housework.FrequencyId,
+                    Day = housework.Day
+                };
 
-            return houseworkEntity.ToHouseworkPutReturnModel(settings.Id);
+                await _sqlContext.HouseworkSettings.AddAsync(settings).ConfigureAwait(false);
+                await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+                settingsId = settings.Id;
+            }
+            else
+            {
+                houseworkEntity.UpdateHousework(housework, users);
+                _sqlContext.Houseworks.Update(houseworkEntity);
+                await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+                settingsId = houseworkEntity.HouseworkSettings.Id;
+            }
+
+            return houseworkEntity.ToHouseworkPutReturnModel(settingsId);
         }
 
         [HttpGet("{houseworkId}/settings", Name = nameof(GetHouseworkSettings))]

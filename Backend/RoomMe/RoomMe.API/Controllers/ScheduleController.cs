@@ -29,7 +29,8 @@ namespace RoomMe.API.Controllers
         {
             var schedule = await _sqlContext.HouseworkSchedules
                 .Include(x => x.HouseworkStatus)
-                .Include(y => y.HouseworkSettings)
+                .Include(x => x.Housework)
+                .ThenInclude(y => y.HouseworkSettings)
                 .FirstOrDefaultAsync(x => x.Id == scheduleId)
                 .ConfigureAwait(false);
                 
@@ -43,7 +44,7 @@ namespace RoomMe.API.Controllers
             return schedule.ToScheduleFullGetModel();
         }
 
-        [HttpPut("", Name = nameof(CreateNewSchedule))]
+        [HttpPost("", Name = nameof(CreateNewSchedule))]
         public async Task<ActionResult<SchedulePutReturnModel>> CreateNewSchedule(SchedulePutModel schedule)
         {
             var housework = await _sqlContext.Houseworks.FindAsync(schedule.HouseworkId).ConfigureAwait(false);

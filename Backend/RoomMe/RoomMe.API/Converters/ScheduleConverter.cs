@@ -14,11 +14,11 @@ namespace RoomMe.API.Converters
             return new ScheduleFullGetModel()
             {
                 Id = schedule.Id,
-                HouseworkId = schedule.Housework.Id,
+                Housework = schedule.Housework.ToHouseworkModel(),
                 User = schedule.User.ToUserNicknameModel(),
                 Date = schedule.Date,
                 Status = schedule.HouseworkStatus.ToHouseworkStatusModel(),
-                Settings = schedule.HouseworkSettings.ToHouseworkSettingsModel()
+                Settings = schedule.Housework.HouseworkSettings.ToHouseworkSettingsModel()
             };
         }
 
