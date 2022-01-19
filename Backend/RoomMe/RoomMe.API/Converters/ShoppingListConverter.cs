@@ -97,7 +97,6 @@ namespace RoomMe.API.Converters
                 Name = list.Name,
                 Description = list.Description,
                 CreationDate = DateTime.Now,
-                Products = list.Products.Select(x => x.ToProduct()).ToList()
             };
         }
 
