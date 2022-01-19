@@ -3,7 +3,6 @@ using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RoomMe.API.Converters
 {
@@ -53,6 +52,43 @@ namespace RoomMe.API.Converters
             };
         }
 
+        public static ProductListPostReturnModel ToProductListPostReturnModel(this IEnumerable<Product> products)
+        {
+            return new ProductListPostReturnModel()
+            {
+                ProductIds = products.Select(x => x.Id).ToList(),
+                CreationDate = DateTime.Now
+            };
+        }
+
+        public static ProductPatchReturnModel ToProductPatchReturnModel(this IEnumerable<Product> products)
+        {
+            return new ProductPatchReturnModel()
+            {
+                TimeStamp = DateTime.Now,
+                CommonCostIds = products.Select(x => x.Id).ToList()
+            };
+        }
+
+        public static CommonCost CreateCommonCost(this ProductPatchModel product, int flatId, int userId)
+        {
+            return new CommonCost()
+            {
+                FlatId = flatId,
+                UserId = userId,
+                Value = product.Value,
+                Description = product.Description,
+                IsDivided = product.IsDivided,
+                Date = DateTime.Now
+            };
+        }
+
+        public static void SetToBoughtState(this Product entity, ProductPatchModel product, int flatId, int userId)
+        {
+            entity.Bought = true;
+            entity.CommonCost = product.CreateCommonCost(flatId, userId);
+        }
+
         public static ShoppingList ToShoppingList(this ShoppingListPostModel list, int flatId)
         {
             return new ShoppingList()
@@ -61,7 +97,6 @@ namespace RoomMe.API.Converters
                 Name = list.Name,
                 Description = list.Description,
                 CreationDate = DateTime.Now,
-                Products = list.Products.Select(x => x.ToProduct()).ToList()
             };
         }
 
@@ -87,6 +122,18 @@ namespace RoomMe.API.Converters
                 CreationDate = list.CreationDate,
                 CompletionDate = list.CompletionDate,
                 Products = list.Products.Select(x => x.ToProductModel()).ToList()
+            };
+        }
+
+        public static Receipt ToReceipt(this ReceiptFileModel fileModel, int listId, string path, Guid guid)
+        {
+            return new Receipt()
+            {
+                ShoppingListId = listId,
+                Path = path,
+                Name = fileModel.fileName,
+                Extension = fileModel.Extension,
+                Guid = guid
             };
         }
     }
