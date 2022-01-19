@@ -19,9 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.drawerfeatures.BottomNavigationViewController
 import uj.roomme.drawerfeatures.DrawerController
 import uj.roomme.viewmodels.UserViewModel
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import uj.roomme.fragments.SignInFragment
+import androidx.navigation.ui.NavigationUI
+
+import androidx.navigation.Navigation
 
 
 @AndroidEntryPoint
@@ -52,13 +52,17 @@ class MainActivity :
         setSupportActionBar(toolbar)
 
         // TODO change in menu
-        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+        appBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.shoppingListsFragment, R.id.signInFragment, R.id.homeFragment))
+            .setOpenableLayout(drawerLayout)
+            .build()
+//        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 //        val nicknameText = navView.findViewById<TextView>(R.id.text_nav_nickname)
 //        nicknameText.text = args.userNickname
 //        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
 //        supportActionBar?.setCustomView(R.layout.appbar_login)
+        bottomNavView.setupWithNavController(navController)
 
     }
 

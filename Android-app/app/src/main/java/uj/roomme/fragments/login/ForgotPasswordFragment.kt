@@ -1,4 +1,4 @@
-package uj.roomme.fragments
+package uj.roomme.fragments.login
 
 import uj.roomme.R
 import uj.roomme.abstractfragments.NoBarsFragment

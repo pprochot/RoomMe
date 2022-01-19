@@ -1,4 +1,4 @@
-package uj.roomme.fragments
+package uj.roomme.fragments.login
 
 import android.widget.Button
 import android.widget.Toast

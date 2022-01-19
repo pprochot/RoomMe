@@ -5,11 +5,11 @@
 
     <group >
         <item
-            android:id="@+id/lists"
+            android:id="@id/product_list_nav_graph"
             android:icon="@drawable/ic_list"
             android:title="List" />
         <item
-            android:id="@+id/houseworksFragment"
+            android:id="@id/shoppingListsFragment"
             android:icon="@drawable/ic_task"
             android:title="HouseWorks" />
         <item
