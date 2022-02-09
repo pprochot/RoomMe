@@ -18,8 +18,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import uj.roomme.drawerfeatures.BottomNavigationViewController
-import uj.roomme.drawerfeatures.DrawerController
 import uj.roomme.hiders.BottomNavigationViewHider
 import uj.roomme.hiders.ToolbarOptionsHider
 import uj.roomme.navigation.DrawerLayoutMenuNavigation
@@ -28,10 +26,7 @@ import uj.roomme.viewmodels.UserViewModel
 
 
 @AndroidEntryPoint
-class MainActivity :
-    AppCompatActivity(R.layout.activity_main),
-    DrawerController,
-    BottomNavigationViewController {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     companion object {
         val topLevelDestinations = setOf(
@@ -98,27 +93,5 @@ class MainActivity :
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun lockDrawer() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        toolbar.navigationIcon = null
-    }
-
-    override fun unlockDrawer() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    }
-
-    override fun lockNavigationView() {
-        bottomNavView.visibility = View.GONE
-    }
-
-    override fun unlockNavigationView() {
-        bottomNavView.visibility = View.VISIBLE
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return super.onOptionsItemSelected(item)
     }
 }
