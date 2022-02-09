@@ -2,6 +2,7 @@ package uj.roomme.fragments
 
 import android.widget.Button
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
@@ -10,7 +11,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.R
-import uj.roomme.abstractfragments.NoBottomNavBarFragment
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.services.FlatService
@@ -19,7 +19,7 @@ import javax.inject.Inject
 import uj.roomme.fragments.CreateFlatFragmentDirections as Directions
 
 @AndroidEntryPoint
-class CreateFlatFragment : NoBottomNavBarFragment(R.layout.fragment_create_flat) {
+class CreateFlatFragment : Fragment(R.layout.fragment_create_flat) {
 
     @Inject
     lateinit var flatService: FlatService

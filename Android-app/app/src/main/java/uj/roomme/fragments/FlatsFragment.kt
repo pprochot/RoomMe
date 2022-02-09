@@ -15,7 +15,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.R
-import uj.roomme.abstractfragments.NoBottomNavBarFragment
 import uj.roomme.adapters.FlatsAdapter
 import uj.roomme.domain.flat.FlatNameModel
 import uj.roomme.services.UserService
@@ -24,7 +23,7 @@ import javax.inject.Inject
 import uj.roomme.fragments.FlatsFragmentDirections as Directions
 
 @AndroidEntryPoint
-class FlatsFragment : NoBottomNavBarFragment(R.layout.fragment_flats) {
+class FlatsFragment : Fragment(R.layout.fragment_flats) {
 
     @Inject
     lateinit var userService: UserService

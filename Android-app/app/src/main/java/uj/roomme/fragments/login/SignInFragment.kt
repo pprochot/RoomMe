@@ -2,14 +2,14 @@ package uj.roomme.fragments.login
 
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import uj.roomme.R
-import uj.roomme.abstractfragments.NoBarsFragment
 import uj.roomme.viewmodels.UserViewModel
 import uj.roomme.fragments.login.SignInFragmentDirections as Directions
 
-class SignInFragment : NoBarsFragment(R.layout.fragment_sign_in) {
+class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     override fun onStart() {
         super.onStart()

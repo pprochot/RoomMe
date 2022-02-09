@@ -19,18 +19,14 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.Fragments.PopupOverlay">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/buttonLogOut"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end">
+                android:src="@drawable/ic_logout"
+                android:contentDescription="Button to log out from application"
+                android:layout_gravity="end"/>
 
-                <ImageButton
-                    android:id="@+id/toolbar_overflow_menu_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_logout"
-                    android:contentDescription="Button to log out from application" />
-            </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -1,14 +1,14 @@
 package uj.roomme.fragments
 
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import org.w3c.dom.Text
 import uj.roomme.R
-import uj.roomme.abstractfragments.NoBottomNavBarFragment
 import uj.roomme.viewmodels.UserViewModel
 
-class UserInfoFragment : NoBottomNavBarFragment(R.layout.fragment_user_info) {
+class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
 
     override fun onStart() {
         super.onStart()
