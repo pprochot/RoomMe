@@ -3,6 +3,9 @@ package uj.roomme.fragments.login
 import android.widget.Button
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +17,7 @@ import uj.roomme.abstractfragments.NoBarsFragment
 import uj.roomme.domain.user.UserPostModel
 import uj.roomme.domain.user.UserPostReturnModel
 import uj.roomme.services.UserService
+import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -91,14 +95,14 @@ class SignUpFragment : NoBarsFragment(R.layout.fragment_sign_up) {
                 response: Response<UserPostReturnModel>
             ) {
                 if (response.isSuccessful) {
-                    val toMainActivity =
-                        SignUpFragmentDirections.actionSignUpFragmentToMainNavGraph(
-//                            response.body()?.userId!!,
-//                            requestBody.nickname,
-//                            requestBody.email
-                        )
+                    val toMainNavGraph = SignUpFragmentDirections.actionSignUpFragmentToMainNavGraph()
+                    val userViewModel: UserViewModel by activityViewModels()
+                    userViewModel.userId = response.body()?.userId!!
+                    userViewModel.userEmail = requestBody.email
+                    userViewModel.userNickname = requestBody.email
+                    println("User id: " + response.body()?.userId!!)
                     val navController = findNavController()
-                    navController.navigate(toMainActivity)
+                    navController.navigate(toMainNavGraph)
                 } else {
                     toastOnFailure()
                     signUpButton?.isEnabled = true

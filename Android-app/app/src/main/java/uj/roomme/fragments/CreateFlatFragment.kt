@@ -1,6 +1,5 @@
 package uj.roomme.fragments
 
-import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -11,6 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.R
+import uj.roomme.abstractfragments.NoBottomNavBarFragment
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.services.FlatService
@@ -18,7 +18,7 @@ import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateFlatFragment : Fragment(R.layout.fragment_create_flat) {
+class CreateFlatFragment : NoBottomNavBarFragment(R.layout.fragment_create_flat) {
 
     @Inject
     lateinit var flatService: FlatService

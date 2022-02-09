@@ -15,6 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.R
+import uj.roomme.abstractfragments.NoBottomNavBarFragment
 import uj.roomme.adapters.FlatsAdapter
 import uj.roomme.domain.flat.FlatNameModel
 import uj.roomme.services.UserService
@@ -22,7 +23,7 @@ import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FlatsFragment : Fragment(R.layout.fragment_flats) {
+class FlatsFragment : NoBottomNavBarFragment(R.layout.fragment_flats) {
 
     @Inject
     lateinit var userService: UserService
@@ -33,9 +34,6 @@ class FlatsFragment : Fragment(R.layout.fragment_flats) {
     override fun onStart() {
         super.onStart()
 
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
-            ?.visibility = View.GONE
-
         recyclerView = view?.findViewById(R.id.rv_aparments)!!
         getFlatsFromService()
 
@@ -45,13 +43,6 @@ class FlatsFragment : Fragment(R.layout.fragment_flats) {
         createNewApartmentButton?.setOnClickListener {
             findNavController().navigate(toCreateApartmentFragment)
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
-            ?.visibility = View.VISIBLE
     }
 
     private fun displayData(body: List<FlatNameModel>) {

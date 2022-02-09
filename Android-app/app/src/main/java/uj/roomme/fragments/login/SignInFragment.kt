@@ -2,9 +2,12 @@ package uj.roomme.fragments.login
 
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import uj.roomme.R
 import uj.roomme.abstractfragments.NoBarsFragment
+import uj.roomme.viewmodels.UserViewModel
 
 class SignInFragment : NoBarsFragment(R.layout.fragment_sign_in) {
 
@@ -31,6 +34,13 @@ class SignInFragment : NoBarsFragment(R.layout.fragment_sign_in) {
             navController.navigate(toSignUpFragment)
         }
         signInButton?.setOnClickListener {
+            val userViewModel: UserViewModel by activityViewModels()
+            userViewModel.userId = 21
+            userViewModel.userEmail = "email"
+            userViewModel.userNickname = "nick"
+            userViewModel.firstName = "firstname"
+            userViewModel.secondName = "secondname"
+            userViewModel.phoneNumber = "123412341"
             navController.navigate(toMainActivity)
         }
     }

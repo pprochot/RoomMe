@@ -27,6 +27,6 @@ class ProductsAdapter(private val context: Context) :
     }
 
     override fun getItemCount(): Int {
-        return 12
+        return 3
     }
 }
