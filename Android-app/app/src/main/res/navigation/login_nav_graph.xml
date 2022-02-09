@@ -24,7 +24,7 @@
             app:destination="@id/destForgotPasswordFragment" />
         <action
             android:id="@+id/actionSignInToHome"
-            app:destination="@id/homeNavGraph"
+            app:destination="@id/mainNavGraph"
             app:popUpTo="@id/loginNavGraph"
             app:popUpToInclusive="true"/>
     </fragment>
@@ -35,7 +35,7 @@
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/actionSignUpToHome"
-            app:destination="@id/homeNavGraph"
+            app:destination="@id/mainNavGraph"
             app:popUpTo="@id/loginNavGraph"
             app:popUpToInclusive="true" />
     </fragment>
@@ -51,5 +51,5 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
-    <include app:graph="@navigation/home_nav_graph" />
+    <include app:graph="@navigation/main_nav_graph" />
 </navigation>

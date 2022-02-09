@@ -11,5 +11,5 @@
             android:id="@+id/action_homeFragment2_to_product_list_nav_graph"
             app:destination="@id/product_list_nav_graph" />
     </fragment>
-    <include app:graph="@navigation/product_list_nav_graph" />
+    <include app:graph="@navigation/shopping_list_nav_graph" />
 </navigation>

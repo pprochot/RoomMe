@@ -7,13 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.R
 import uj.roomme.adapters.ProductsAdapter
+import uj.roomme.fragments.shoppinglists.ProductsFragmentDirections as Directions
 
 class ProductsFragment : Fragment(R.layout.fragment_products) {
-
-    companion object {
-        val toCreateNewProductFragment =
-            ProductsFragmentDirections.actionProductsFragmentToNewProductFragment()
-    }
 
     override fun onStart() {
         super.onStart()
@@ -21,7 +17,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
         val addNewProductButton = view?.findViewById<Button>(R.id.button_add_new_product)
         val navController = findNavController()
         addNewProductButton?.setOnClickListener {
-            navController.navigate(toCreateNewProductFragment)
+            navController.navigate(Directions.actionProductsToNewProduct())
         }
 
         view?.findViewById<Button>(R.id.button_close_list)?.isClickable = false

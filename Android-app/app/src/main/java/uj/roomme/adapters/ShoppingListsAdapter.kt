@@ -9,7 +9,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.R
 import uj.roomme.domain.flat.FlatNameModel
-import uj.roomme.fragments.shoppinglists.ShoppingListsFragmentDirections
+import uj.roomme.fragments.shoppinglists.ShoppingListsFragmentDirections as Directions
 
 class ShoppingListsAdapter(private val context: Context) :
     RecyclerView.Adapter<ShoppingListsAdapter.ViewHolder>() {
@@ -18,10 +18,8 @@ class ShoppingListsAdapter(private val context: Context) :
         val nameView: TextView = itemView.findViewById(R.id.text_shopping_list_name)
 
         init {
-            val toProductsAdapter =
-                ShoppingListsFragmentDirections.actionShoppingListsFragmentToProductsFragment()
             itemView.setOnClickListener {
-                it.findNavController().navigate(toProductsAdapter)
+                it.findNavController().navigate(Directions.actionShoppingListsToProducts())
             }
         }
     }

@@ -6,60 +6,41 @@
     app:startDestination="@id/destHomeFragment">
 
     <action
-        android:id="@+id/actionGlobalToHome"
-        app:destination="@id/destHomeFragment" />
+        android:id="@+id/actionGlobalToShoppingLists"
+        app:destination="@id/product_list_nav_graph" />
     <action
-        android:id="@+id/actionGlobalToUserInfo"
-        app:destination="@id/destUserInfoFragment" />
+        android:id="@+id/actionGlobalToHouseWorks"
+        app:destination="@id/destHouseWorksFragment" />
     <action
-        android:id="@+id/actionGlobalToFriends"
-        app:destination="@id/destFriendsFragments" />
+        android:id="@+id/actionGlobalToRoommates"
+        app:destination="@id/destRoommatesFragment" />
     <action
-        android:id="@+id/actionGlobalToApartments"
-        app:destination="@id/destApartmentsFragment" />
+        android:id="@+id/actionGlobalToStatistics"
+        app:destination="@id/destStatisticsFragment" />
 
     <fragment
         android:id="@+id/destHomeFragment"
         android:name="uj.roomme.fragments.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home_selected_apartment" >
-        <action
-            android:id="@+id/actionHomeToApartments"
-            app:destination="@id/destApartmentsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_product_list_nav_graph2"
-            app:destination="@id/product_list_nav_graph" />
     </fragment>
-    <fragment
-        android:id="@+id/destApartmentsFragment"
-        android:name="uj.roomme.fragments.FlatsFragment"
-        android:label="Apartments"
-        tools:layout="@layout/fragment_flats" >
-        <action
-            android:id="@+id/actionApartmentsToCreateApartment"
-            app:destination="@id/destCreateApartmentFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/destCreateApartmentFragment"
-        android:name="uj.roomme.fragments.CreateFlatFragment"
-        android:label="Create apartment"
-        tools:layout="@layout/fragment_create_flat" >
-        <action
-            android:id="@+id/actionCreateFlatToApartments"
-            app:destination="@id/destApartmentsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/destUserInfoFragment"
-        android:name="uj.roomme.fragments.UserInfoFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_user_info" />
 
     <fragment
-        android:id="@+id/destFriendsFragments"
-        android:name="uj.roomme.fragments.FriendsFragment"
-        android:label="Friends"
-        tools:layout="@layout/fragment_friends"/>
+        android:id="@+id/destHouseWorksFragment"
+        android:name="uj.roomme.fragments.home.HouseWorksFragment"
+        android:label="House works"
+        tools:layout="@layout/fragment_houseworks"/>
+    <fragment
+        android:id="@+id/destRoommatesFragment"
+        android:name="uj.roomme.fragments.home.RoommatesFragment"
+        android:label="Roommates"
+        tools:layout="@layout/fragment_roommates"/>
+    <fragment
+        android:id="@+id/destStatisticsFragment"
+        android:name="uj.roomme.fragments.home.StatisticsFragment"
+        android:label="Statistics"
+        tools:layout="@layout/fragment_statistics"/>
 
-    <include app:graph="@navigation/product_list_nav_graph" />
+    <include app:graph="@navigation/shopping_list_nav_graph" />
 
 </navigation>

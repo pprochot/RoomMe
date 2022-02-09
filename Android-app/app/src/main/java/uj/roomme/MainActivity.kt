@@ -2,8 +2,6 @@ package uj.roomme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import android.view.View
 import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -30,8 +28,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     companion object {
         val topLevelDestinations = setOf(
-            R.id.shoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment,
-            R.id.destUserInfoFragment, R.id.destFriendsFragments, R.id.destApartmentsFragment
+            R.id.destShoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment,
+            R.id.destUserInfoFragment, R.id.destFriendsFragments, R.id.destApartmentsFragment,
+            R.id.destHouseWorksFragment, R.id.destRoommatesFragment, R.id.destStatisticsFragment
         )
     }
 
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         bottomNavView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener(ToolbarOptionsHider(drawerLayout, toolbar))
         navController.addOnDestinationChangedListener(BottomNavigationViewHider(bottomNavView))
-        bottomNavView.setOnItemSelectedListener(NavBottomViewMenuNavigation())
+        bottomNavView.setOnItemSelectedListener(NavBottomViewMenuNavigation(navController))
         navView?.setNavigationItemSelectedListener(DrawerLayoutMenuNavigation(navController, drawerLayout))
     }
 

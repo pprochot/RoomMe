@@ -9,13 +9,9 @@ import uj.roomme.R
 import uj.roomme.adapters.FlatsAdapter
 import uj.roomme.adapters.ProductsAdapter
 import uj.roomme.adapters.ShoppingListsAdapter
+import uj.roomme.fragments.shoppinglists.ShoppingListsFragmentDirections as Directions
 
 class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
-
-    companion object {
-        val toNewListFragment =
-            ShoppingListsFragmentDirections.actionShoppingListsFragmentToNewShoppingListFragment()
-    }
 
     override fun onStart() {
         super.onStart()
@@ -23,7 +19,7 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
         val button = view?.findViewById<Button>(R.id.button_shoppinglists_create_new_list)
         val navController = findNavController()
         button?.setOnClickListener {
-            navController.navigate(toNewListFragment)
+            navController.navigate(Directions.actionShoppingListsToNewShoppingList())
         }
 
         val recyclerView = view?.findViewById<RecyclerView>(R.id.rv_shopping_lists)

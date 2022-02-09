@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainNavGraph"
+    app:startDestination="@id/homeNavGraph">
+
+    <action
+        android:id="@+id/actionGlobalToUserInfo"
+        app:destination="@id/destUserInfoFragment" />
+    <action
+        android:id="@+id/actionGlobalToFriends"
+        app:destination="@id/destFriendsFragments" />
+    <action
+        android:id="@+id/actionGlobalToApartments"
+        app:destination="@id/destApartmentsFragment" />
+
+    <fragment
+        android:id="@+id/destApartmentsFragment"
+        android:name="uj.roomme.fragments.FlatsFragment"
+        android:label="Apartments"
+        tools:layout="@layout/fragment_flats" >
+        <action
+            android:id="@+id/actionApartmentsToCreateApartment"
+            app:destination="@id/destCreateApartmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/destCreateApartmentFragment"
+        android:name="uj.roomme.fragments.CreateFlatFragment"
+        android:label="Create apartment"
+        tools:layout="@layout/fragment_create_flat" >
+        <action
+            android:id="@+id/actionCreateFlatToApartments"
+            app:destination="@id/destApartmentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/destUserInfoFragment"
+        android:name="uj.roomme.fragments.UserInfoFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_user_info" />
+
+    <fragment
+        android:id="@+id/destFriendsFragments"
+        android:name="uj.roomme.fragments.FriendsFragment"
+        android:label="Friends"
+        tools:layout="@layout/fragment_friends"/>
+
+    <include app:graph="@navigation/home_nav_graph" />
+</navigation>

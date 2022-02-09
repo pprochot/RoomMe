@@ -11,17 +11,25 @@ class DrawerLayoutMenuNavigation(private val navController: NavController, priva
     NavigationView.OnNavigationItemSelectedListener {
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if (navController.currentDestination?.id != R.id.destHomeFragment)
-            navController.popBackStack()
+        val currentDestinationId = navController.currentDestination?.id
+        if (currentDestinationId == item.itemId) {
+            closeDrawerIfOpen()
+            return false
+        }
+        navController.popBackStack(R.id.destHomeFragment, false)
         when (item.itemId) {
-            R.id.destHomeFragment -> navController.navigate(R.id.actionGlobalToHome)
             R.id.destUserInfoFragment -> navController.navigate(R.id.actionGlobalToUserInfo)
             R.id.destFriendsFragments -> navController.navigate(R.id.actionGlobalToFriends)
             R.id.destApartmentsFragment -> navController.navigate(R.id.actionGlobalToApartments)
         }
+
+        closeDrawerIfOpen()
+        return true
+    }
+
+    private fun closeDrawerIfOpen() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        return true
     }
 }

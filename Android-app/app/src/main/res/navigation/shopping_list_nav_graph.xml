@@ -3,45 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/product_list_nav_graph"
-    app:startDestination="@id/shoppingListsFragment">
+    app:startDestination="@id/destShoppingListsFragment">
 
     <fragment
-        android:id="@+id/shoppingListsFragment"
+        android:id="@+id/destShoppingListsFragment"
         android:name="uj.roomme.fragments.shoppinglists.ShoppingListsFragment"
-        android:label="ShoppingListsFragment"
+        android:label="Shopping lists"
         tools:layout="@layout/fragment_shoppinglists">
         <action
-            android:id="@+id/action_shoppingListsFragment_to_newShoppingListFragment"
-            app:destination="@id/newShoppingListFragment" />
+            android:id="@+id/actionShoppingListsToNewShoppingList"
+            app:destination="@id/destNewShoppingListFragment" />
         <action
-            android:id="@+id/action_shoppingListsFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
+            android:id="@+id/actionShoppingListsToProducts"
+            app:destination="@id/destProductsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/newProductFragment"
+        android:id="@+id/destNewProductFragment"
         android:name="uj.roomme.fragments.shoppinglists.NewProductFragment"
-        android:label="NewProductFragment"
+        android:label="New product"
         tools:layout="@layout/fragment_newproduct">
         <action
-            android:id="@+id/action_newProductFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
+            android:id="@+id/actionNewProductToProducts"
+            app:destination="@id/destProductsFragment"
+            app:popUpTo="@id/destProductsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/newShoppingListFragment"
+        android:id="@+id/destNewShoppingListFragment"
         android:name="uj.roomme.fragments.shoppinglists.NewShoppingListFragment"
         android:label="NewShoppingListFragment"
         tools:layout="@layout/fragment_newshoppinglist">
         <action
-            android:id="@+id/action_newShoppingListFragment_to_shoppingListsFragment"
-            app:destination="@id/shoppingListsFragment" />
+            android:id="@+id/actionNewShoppingListToShoppingLists"
+            app:destination="@id/destShoppingListsFragment"
+            app:popUpTo="@id/destShoppingListsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/productsFragment"
+        android:id="@+id/destProductsFragment"
         android:name="uj.roomme.fragments.shoppinglists.ProductsFragment"
         android:label="ProductsFragment"
         tools:layout="@layout/fragment_products">
         <action
-            android:id="@+id/action_productsFragment_to_newProductFragment"
-            app:destination="@id/newProductFragment" />
+            android:id="@+id/actionProductsToNewProduct"
+            app:destination="@id/destNewProductFragment" />
     </fragment>
 </navigation>
