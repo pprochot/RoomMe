@@ -52,7 +52,7 @@ class MainActivity :
         setSupportActionBar(toolbar)
 
         // TODO change in menu
-        appBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.shoppingListsFragment, R.id.signInFragment, R.id.homeFragment))
+        appBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.shoppingListsFragment, R.id.destSignInFragment, R.id.homeFragment, R.id.userInfoFragment))
             .setOpenableLayout(drawerLayout)
             .build()
 //        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
@@ -63,7 +63,6 @@ class MainActivity :
 //        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
 //        supportActionBar?.setCustomView(R.layout.appbar_login)
         bottomNavView.setupWithNavController(navController)
-
     }
 
     private fun setUpViewModel() {

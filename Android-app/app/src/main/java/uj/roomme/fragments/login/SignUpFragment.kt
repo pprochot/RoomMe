@@ -19,6 +19,7 @@ import uj.roomme.domain.user.UserPostReturnModel
 import uj.roomme.services.UserService
 import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
+import uj.roomme.fragments.login.SignUpFragmentDirections as Directions
 
 @AndroidEntryPoint
 class SignUpFragment : NoBarsFragment(R.layout.fragment_sign_up) {
@@ -95,7 +96,7 @@ class SignUpFragment : NoBarsFragment(R.layout.fragment_sign_up) {
                 response: Response<UserPostReturnModel>
             ) {
                 if (response.isSuccessful) {
-                    val toMainNavGraph = SignUpFragmentDirections.actionSignUpFragmentToMainNavGraph()
+                    val toMainNavGraph = Directions.actionSignUpToHome()
                     val userViewModel: UserViewModel by activityViewModels()
                     userViewModel.userId = response.body()?.userId!!
                     userViewModel.userEmail = requestBody.email
