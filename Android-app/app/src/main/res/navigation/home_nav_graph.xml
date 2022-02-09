@@ -5,6 +5,19 @@
     android:id="@+id/homeNavGraph"
     app:startDestination="@id/destHomeFragment">
 
+    <action
+        android:id="@+id/actionGlobalToHome"
+        app:destination="@id/destHomeFragment" />
+    <action
+        android:id="@+id/actionGlobalToUserInfo"
+        app:destination="@id/destUserInfoFragment" />
+    <action
+        android:id="@+id/actionGlobalToFriends"
+        app:destination="@id/destFriendsFragments" />
+    <action
+        android:id="@+id/actionGlobalToApartments"
+        app:destination="@id/destApartmentsFragment" />
+
     <fragment
         android:id="@+id/destHomeFragment"
         android:name="uj.roomme.fragments.HomeFragment"
@@ -13,9 +26,6 @@
         <action
             android:id="@+id/actionHomeToApartments"
             app:destination="@id/destApartmentsFragment" />
-        <action
-            android:id="@+id/actionHomeToUserInfo"
-            app:destination="@id/destUserInfoFragment" />
         <action
             android:id="@+id/action_homeFragment_to_product_list_nav_graph2"
             app:destination="@id/product_list_nav_graph" />
@@ -44,5 +54,12 @@
         android:label="Profile"
         tools:layout="@layout/fragment_user_info" />
 
+    <fragment
+        android:id="@+id/destFriendsFragments"
+        android:name="uj.roomme.fragments.FriendsFragment"
+        android:label="Friends"
+        tools:layout="@layout/fragment_friends"/>
+
     <include app:graph="@navigation/product_list_nav_graph" />
+
 </navigation>

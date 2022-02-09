@@ -2,6 +2,7 @@ package uj.roomme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import androidx.activity.viewModels
@@ -21,6 +22,8 @@ import uj.roomme.drawerfeatures.BottomNavigationViewController
 import uj.roomme.drawerfeatures.DrawerController
 import uj.roomme.hiders.BottomNavigationViewHider
 import uj.roomme.hiders.ToolbarOptionsHider
+import uj.roomme.navigation.DrawerLayoutMenuNavigation
+import uj.roomme.navigation.NavBottomViewMenuNavigation
 import uj.roomme.viewmodels.UserViewModel
 
 
@@ -31,8 +34,10 @@ class MainActivity :
     BottomNavigationViewController {
 
     companion object {
-        val topLevelDestinations =
-            setOf(R.id.shoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment, R.id.destUserInfoFragment)
+        val topLevelDestinations = setOf(
+            R.id.shoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment,
+            R.id.destUserInfoFragment, R.id.destFriendsFragments, R.id.destApartmentsFragment
+        )
     }
 
     private lateinit var bottomNavView: BottomNavigationView
@@ -56,7 +61,7 @@ class MainActivity :
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         toolbar.findViewById<ImageButton>(R.id.buttonLogOut).setOnClickListener {
-            navController.navigate(R.id.actionLogOut)
+            navController.navigate(R.id.actionGlobalLogOut)
         }
 
         // TODO change in menu
@@ -72,6 +77,8 @@ class MainActivity :
         bottomNavView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener(ToolbarOptionsHider(drawerLayout, toolbar))
         navController.addOnDestinationChangedListener(BottomNavigationViewHider(bottomNavView))
+        bottomNavView.setOnItemSelectedListener(NavBottomViewMenuNavigation())
+        navView?.setNavigationItemSelectedListener(DrawerLayoutMenuNavigation(navController, drawerLayout))
     }
 
     private fun setUpViewModel() {
@@ -108,5 +115,10 @@ class MainActivity :
 
     override fun unlockNavigationView() {
         bottomNavView.visibility = View.VISIBLE
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return super.onOptionsItemSelected(item)
     }
 }

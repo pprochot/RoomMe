@@ -6,7 +6,7 @@
     app:startDestination="@id/destSignInFragment">
 
     <action
-        android:id="@+id/actionLogOut"
+        android:id="@+id/actionGlobalLogOut"
         app:destination="@id/destSignInFragment"
         app:popUpTo="@id/loginNavGraph"
         app:popUpToInclusive="true"/>
