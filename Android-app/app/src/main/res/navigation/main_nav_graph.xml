@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="uj.roomme.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home_selected_apartment" >
+        <action
+            android:id="@+id/action_homeFragment_to_flatsFragment"
+            app:destination="@id/flatsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_product_list_nav_graph2"
+            app:destination="@id/product_list_nav_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/flatsFragment"
+        android:name="uj.roomme.fragments.FlatsFragment"
+        android:label="fragment_apartments"
+        tools:layout="@layout/fragment_flats" >
+        <action
+            android:id="@+id/action_flatsFragment_to_createFlatFragment"
+            app:destination="@id/createFlatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFlatFragment"
+        android:name="uj.roomme.fragments.CreateFlatFragment"
+        android:label="fragment_create_apartment"
+        tools:layout="@layout/fragment_create_flat" >
+        <action
+            android:id="@+id/action_createFlatFragment_to_flatsFragment"
+            app:destination="@id/flatsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="uj.roomme.fragments.UserInfoFragment"
+        android:label="fragment_user_info"
+        tools:layout="@layout/fragment_user_info" />
+    <include app:graph="@navigation/product_list_nav_graph" />
+</navigation>

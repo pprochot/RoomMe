@@ -185,7 +185,7 @@ namespace RoomMe.API.Controllers
                 .Include(x => x.Products)
                 .Where(x => x.FlatId == flatId)
                 .FirstOrDefaultAsync(x => x.Id == listId)
-                .ConfigureAwait(false);
+                .ConfigureAwait(false); 
 
             if(list == null)
             {
