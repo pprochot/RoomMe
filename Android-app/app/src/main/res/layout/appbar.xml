@@ -19,14 +19,14 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.Fragments.PopupOverlay">
 
-            <TextView
-                android:id="@+id/toolbar_title"
+            <ImageButton
+                android:id="@+id/buttonLogOut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="RoomMe"
-                android:textSize="30dp"
-                android:textStyle="bold|italic"/>
+                android:src="@drawable/ic_logout"
+                android:contentDescription="Button to log out from application"
+                android:layout_gravity="end"/>
+
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

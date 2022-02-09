@@ -4,6 +4,7 @@ import android.widget.Button
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,15 +14,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.R
-import uj.roomme.abstractfragments.NoBarsFragment
 import uj.roomme.domain.user.UserPostModel
 import uj.roomme.domain.user.UserPostReturnModel
 import uj.roomme.services.UserService
 import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
+import uj.roomme.fragments.login.SignUpFragmentDirections as Directions
 
 @AndroidEntryPoint
-class SignUpFragment : NoBarsFragment(R.layout.fragment_sign_up) {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     @Inject
     lateinit var userService: UserService
@@ -95,7 +96,7 @@ class SignUpFragment : NoBarsFragment(R.layout.fragment_sign_up) {
                 response: Response<UserPostReturnModel>
             ) {
                 if (response.isSuccessful) {
-                    val toMainNavGraph = SignUpFragmentDirections.actionSignUpFragmentToMainNavGraph()
+                    val toMainNavGraph = Directions.actionSignUpToHome()
                     val userViewModel: UserViewModel by activityViewModels()
                     userViewModel.userId = response.body()?.userId!!
                     userViewModel.userEmail = requestBody.email

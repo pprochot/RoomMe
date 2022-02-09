@@ -3,18 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group >
+    <group>
         <item
-            android:id="@id/userInfoFragment"
+            android:id="@id/destHomeFragment"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
+            android:id="@id/destUserInfoFragment"
             android:icon="@drawable/ic_person"
             android:title="User info" />
         <item
-            android:id="@+id/none"
+            android:id="@id/destFriendsFragments"
             android:icon="@drawable/ic_friends"
             android:title="Friends" />
         <item
-            android:id="@id/flatsFragment"
-            android:icon="@drawable/ic_home"
-            android:title="Flats" />
+            android:id="@id/destApartmentsFragment"
+            android:icon="@drawable/ic_apartments"
+            android:title="Apartments" />
     </group>
 </menu>

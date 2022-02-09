@@ -2,41 +2,54 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login_nav_graph"
-    app:startDestination="@id/signInFragment">
+    android:id="@+id/loginNavGraph"
+    app:startDestination="@id/destSignInFragment">
+
+    <action
+        android:id="@+id/actionGlobalLogOut"
+        app:destination="@id/destSignInFragment"
+        app:popUpTo="@id/loginNavGraph"
+        app:popUpToInclusive="true"/>
 
     <fragment
-        android:id="@+id/signUpFragment"
-        android:name="uj.roomme.fragments.login.SignUpFragment"
-        android:label="SignUpFragment"
-        tools:layout="@layout/fragment_sign_up">
-        <action
-            android:id="@+id/action_signUpFragment_to_main_nav_graph"
-            app:destination="@id/main_nav_graph" />
-    </fragment>
-    <fragment
-        android:id="@+id/signInFragment"
+        android:id="@+id/destSignInFragment"
         android:name="uj.roomme.fragments.login.SignInFragment"
-        android:label="SignInFragment"
+        android:label="Sign in"
         tools:layout="@layout/fragment_sign_in">
         <action
-            android:id="@+id/action_signInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            android:id="@+id/actionSignInToSignUp"
+            app:destination="@id/destSignUpFragment" />
         <action
-            android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
-            app:destination="@id/forgotPasswordFragment" />
+            android:id="@+id/actionSignInToForgotPassword"
+            app:destination="@id/destForgotPasswordFragment" />
         <action
-            android:id="@+id/action_signInFragment_to_main_nav_graph"
-            app:destination="@id/main_nav_graph" />
+            android:id="@+id/actionSignInToHome"
+            app:destination="@id/mainNavGraph"
+            app:popUpTo="@id/loginNavGraph"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
-        android:id="@+id/forgotPasswordFragment"
+        android:id="@+id/destSignUpFragment"
+        android:name="uj.roomme.fragments.login.SignUpFragment"
+        android:label="Sign up"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/actionSignUpToHome"
+            app:destination="@id/mainNavGraph"
+            app:popUpTo="@id/loginNavGraph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/destForgotPasswordFragment"
         android:name="uj.roomme.fragments.login.ForgotPasswordFragment"
-        android:label="ForgotPasswordFragment"
+        android:label="Restore password"
         tools:layout="@layout/fragment_forgot_password">
         <action
-            android:id="@+id/action_forgotPasswordFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
+            android:id="@+id/actionForgotPasswordToSignInFragment"
+            app:destination="@id/destSignInFragment"
+            app:popUpTo="@id/destSignInFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
+
     <include app:graph="@navigation/main_nav_graph" />
 </navigation>

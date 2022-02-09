@@ -2,7 +2,7 @@ package uj.roomme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -16,19 +16,23 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import uj.roomme.drawerfeatures.BottomNavigationViewController
-import uj.roomme.drawerfeatures.DrawerController
+import uj.roomme.hiders.BottomNavigationViewHider
+import uj.roomme.hiders.ToolbarOptionsHider
+import uj.roomme.navigation.DrawerLayoutMenuNavigation
+import uj.roomme.navigation.NavBottomViewMenuNavigation
 import uj.roomme.viewmodels.UserViewModel
-import androidx.navigation.ui.NavigationUI
-
-import androidx.navigation.Navigation
 
 
 @AndroidEntryPoint
-class MainActivity :
-    AppCompatActivity(R.layout.activity_main),
-    DrawerController,
-    BottomNavigationViewController {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    companion object {
+        val topLevelDestinations = setOf(
+            R.id.destShoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment,
+            R.id.destUserInfoFragment, R.id.destFriendsFragments, R.id.destApartmentsFragment,
+            R.id.destHouseWorksFragment, R.id.destRoommatesFragment, R.id.destStatisticsFragment
+        )
+    }
 
     private lateinit var bottomNavView: BottomNavigationView
     private lateinit var drawerLayout: DrawerLayout
@@ -50,20 +54,25 @@ class MainActivity :
         navView.setupWithNavController(navController)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        toolbar.findViewById<ImageButton>(R.id.buttonLogOut).setOnClickListener {
+            navController.navigate(R.id.actionGlobalLogOut)
+        }
 
         // TODO change in menu
-        appBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.shoppingListsFragment, R.id.signInFragment, R.id.homeFragment))
+        appBarConfiguration = AppBarConfiguration.Builder(topLevelDestinations)
             .setOpenableLayout(drawerLayout)
             .build()
 //        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 //        val nicknameText = navView.findViewById<TextView>(R.id.text_nav_nickname)
 //        nicknameText.text = args.userNickname
 //        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
 //        supportActionBar?.setCustomView(R.layout.appbar_login)
         bottomNavView.setupWithNavController(navController)
-
+        navController.addOnDestinationChangedListener(ToolbarOptionsHider(drawerLayout, toolbar))
+        navController.addOnDestinationChangedListener(BottomNavigationViewHider(bottomNavView))
+        bottomNavView.setOnItemSelectedListener(NavBottomViewMenuNavigation(navController))
+        navView?.setNavigationItemSelectedListener(DrawerLayoutMenuNavigation(navController, drawerLayout))
     }
 
     private fun setUpViewModel() {
@@ -83,22 +92,5 @@ class MainActivity :
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun lockDrawer() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        toolbar.navigationIcon = null
-    }
-
-    override fun unlockDrawer() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    }
-
-    override fun lockNavigationView() {
-        bottomNavView.visibility = View.GONE
-    }
-
-    override fun unlockNavigationView() {
-        bottomNavView.visibility = View.VISIBLE
     }
 }

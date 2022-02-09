@@ -2,22 +2,14 @@ package uj.roomme.fragments.login
 
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import uj.roomme.R
-import uj.roomme.abstractfragments.NoBarsFragment
 import uj.roomme.viewmodels.UserViewModel
+import uj.roomme.fragments.login.SignInFragmentDirections as Directions
 
-class SignInFragment : NoBarsFragment(R.layout.fragment_sign_in) {
-
-    companion object {
-        val toSignUpFragment = SignInFragmentDirections.actionSignInFragmentToSignUpFragment()
-        val toForgotPasswordFragment =
-            SignInFragmentDirections.actionSignInFragmentToForgotPasswordFragment()
-        val toMainActivity =
-            SignInFragmentDirections.actionSignInFragmentToMainNavGraph()
-    }
+class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     override fun onStart() {
         super.onStart()
@@ -28,10 +20,10 @@ class SignInFragment : NoBarsFragment(R.layout.fragment_sign_in) {
         val navController = findNavController()
 
         forgotPasswordText?.setOnClickListener {
-            navController.navigate(toForgotPasswordFragment)
+            navController.navigate(Directions.actionSignInToForgotPassword())
         }
         noAccountText?.setOnClickListener {
-            navController.navigate(toSignUpFragment)
+            navController.navigate(Directions.actionSignInToSignUp())
         }
         signInButton?.setOnClickListener {
             val userViewModel: UserViewModel by activityViewModels()
@@ -41,7 +33,7 @@ class SignInFragment : NoBarsFragment(R.layout.fragment_sign_in) {
             userViewModel.firstName = "firstname"
             userViewModel.secondName = "secondname"
             userViewModel.phoneNumber = "123412341"
-            navController.navigate(toMainActivity)
+            navController.navigate(Directions.actionSignInToHome())
         }
     }
 }
