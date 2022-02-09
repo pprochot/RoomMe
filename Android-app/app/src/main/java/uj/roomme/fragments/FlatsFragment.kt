@@ -21,6 +21,7 @@ import uj.roomme.domain.flat.FlatNameModel
 import uj.roomme.services.UserService
 import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
+import uj.roomme.fragments.FlatsFragmentDirections as Directions
 
 @AndroidEntryPoint
 class FlatsFragment : NoBottomNavBarFragment(R.layout.fragment_flats) {
@@ -38,10 +39,8 @@ class FlatsFragment : NoBottomNavBarFragment(R.layout.fragment_flats) {
         getFlatsFromService()
 
         val createNewApartmentButton = view?.findViewById<Button>(R.id.button_create_new_flat)
-        val toCreateApartmentFragment =
-            FlatsFragmentDirections.actionFlatsFragmentToCreateFlatFragment()
         createNewApartmentButton?.setOnClickListener {
-            findNavController().navigate(toCreateApartmentFragment)
+            findNavController().navigate(Directions.actionApartmentsToCreateApartment())
         }
     }
 

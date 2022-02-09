@@ -5,6 +5,12 @@
     android:id="@+id/loginNavGraph"
     app:startDestination="@id/destSignInFragment">
 
+    <action
+        android:id="@+id/actionLogOut"
+        app:destination="@id/destSignInFragment"
+        app:popUpTo="@id/loginNavGraph"
+        app:popUpToInclusive="true"/>
+
     <fragment
         android:id="@+id/destSignInFragment"
         android:name="uj.roomme.fragments.login.SignInFragment"
@@ -18,7 +24,7 @@
             app:destination="@id/destForgotPasswordFragment" />
         <action
             android:id="@+id/actionSignInToHome"
-            app:destination="@id/main_nav_graph"
+            app:destination="@id/homeNavGraph"
             app:popUpTo="@id/loginNavGraph"
             app:popUpToInclusive="true"/>
     </fragment>
@@ -29,7 +35,7 @@
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/actionSignUpToHome"
-            app:destination="@id/main_nav_graph"
+            app:destination="@id/homeNavGraph"
             app:popUpTo="@id/loginNavGraph"
             app:popUpToInclusive="true" />
     </fragment>
@@ -45,5 +51,5 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
-    <include app:graph="@navigation/main_nav_graph" />
+    <include app:graph="@navigation/home_nav_graph" />
 </navigation>

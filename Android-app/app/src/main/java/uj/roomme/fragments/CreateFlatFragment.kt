@@ -16,6 +16,7 @@ import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.services.FlatService
 import uj.roomme.viewmodels.UserViewModel
 import javax.inject.Inject
+import uj.roomme.fragments.CreateFlatFragmentDirections as Directions
 
 @AndroidEntryPoint
 class CreateFlatFragment : NoBottomNavBarFragment(R.layout.fragment_create_flat) {
@@ -65,9 +66,7 @@ class CreateFlatFragment : NoBottomNavBarFragment(R.layout.fragment_create_flat)
                     response: Response<FlatPostReturnModel>
                 ) {
                     toastOnSuccess()
-                    val toApartmentsFragment =
-                        CreateFlatFragmentDirections.actionCreateFlatFragmentToFlatsFragment()
-                    findNavController().navigate(toApartmentsFragment)
+                    findNavController().navigate(Directions.actionCreateFlatToApartments())
                 }
 
                 override fun onFailure(call: Call<FlatPostReturnModel>, t: Throwable) {

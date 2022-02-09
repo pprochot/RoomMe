@@ -5,7 +5,7 @@
 
     <group >
         <item
-            android:id="@id/userInfoFragment"
+            android:id="@id/destUserInfoFragment"
             android:icon="@drawable/ic_person"
             android:title="User info" />
         <item
@@ -13,7 +13,7 @@
             android:icon="@drawable/ic_friends"
             android:title="Friends" />
         <item
-            android:id="@id/flatsFragment"
+            android:id="@id/destApartmentsFragment"
             android:icon="@drawable/ic_home"
             android:title="Flats" />
     </group>

@@ -1,8 +1,10 @@
 package uj.roomme
 
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -19,9 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.drawerfeatures.BottomNavigationViewController
 import uj.roomme.drawerfeatures.DrawerController
 import uj.roomme.viewmodels.UserViewModel
-import androidx.navigation.ui.NavigationUI
-
-import androidx.navigation.Navigation
 
 
 @AndroidEntryPoint
@@ -50,14 +49,16 @@ class MainActivity :
         navView.setupWithNavController(navController)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        toolbar.findViewById<ImageButton>(R.id.toolbar_overflow_menu_button).setOnClickListener {
+            navController.navigate(R.id.actionLogOut)
+        }
 
         // TODO change in menu
-        appBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.shoppingListsFragment, R.id.destSignInFragment, R.id.homeFragment, R.id.userInfoFragment))
+        appBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.shoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment, R.id.destUserInfoFragment))
             .setOpenableLayout(drawerLayout)
             .build()
 //        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 //        val nicknameText = navView.findViewById<TextView>(R.id.text_nav_nickname)
 //        nicknameText.text = args.userNickname
 //        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
