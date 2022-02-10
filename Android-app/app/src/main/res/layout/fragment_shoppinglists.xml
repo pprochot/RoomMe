@@ -9,12 +9,12 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_shopping_lists"
+            android:id="@+id/rvShoppingLists"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/button_shoppinglists_create_new_list"
+            android:id="@+id/buttonShoppingListsCreateNewList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Create new list"

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp">
@@ -21,7 +20,7 @@
             android:paddingBottom="5dp">
 
             <ImageView
-                android:id="@+id/rv_apartments_image"
+                android:id="@+id/rvApartmentsImage"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -30,16 +29,15 @@
                 app:srcCompat="@drawable/ic_home" />
 
             <TextView
-                android:id="@+id/rv_apartments_name"
+                android:id="@+id/rvApartmentsName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="Apartment name"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/rv_apartments_image"
+                app:layout_constraintStart_toEndOf="@+id/rvApartmentsImage"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

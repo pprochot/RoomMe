@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/destSignInFragment"
-        android:name="uj.roomme.fragments.login.SignInFragment"
+        android:name="uj.roomme.app.fragments.login.SignInFragment"
         android:label="Sign in"
         tools:layout="@layout/fragment_sign_in">
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/destSignUpFragment"
-        android:name="uj.roomme.fragments.login.SignUpFragment"
+        android:name="uj.roomme.app.fragments.login.SignUpFragment"
         android:label="Sign up"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/destForgotPasswordFragment"
-        android:name="uj.roomme.fragments.login.ForgotPasswordFragment"
+        android:name="uj.roomme.app.fragments.login.ForgotPasswordFragment"
         android:label="Restore password"
         tools:layout="@layout/fragment_forgot_password">
         <action

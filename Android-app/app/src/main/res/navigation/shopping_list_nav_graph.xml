@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/destShoppingListsFragment"
-        android:name="uj.roomme.fragments.shoppinglists.ShoppingListsFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.ShoppingListsFragment"
         android:label="Shopping lists"
         tools:layout="@layout/fragment_shoppinglists">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/destNewProductFragment"
-        android:name="uj.roomme.fragments.shoppinglists.NewProductFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.NewProductFragment"
         android:label="New product"
         tools:layout="@layout/fragment_newproduct">
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/destNewShoppingListFragment"
-        android:name="uj.roomme.fragments.shoppinglists.NewShoppingListFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.NewShoppingListFragment"
         android:label="NewShoppingListFragment"
         tools:layout="@layout/fragment_newshoppinglist">
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/destProductsFragment"
-        android:name="uj.roomme.fragments.shoppinglists.ProductsFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.ProductsFragment"
         android:label="ProductsFragment"
         tools:layout="@layout/fragment_products">
         <action

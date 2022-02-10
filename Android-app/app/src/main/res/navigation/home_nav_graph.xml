@@ -20,24 +20,24 @@
 
     <fragment
         android:id="@+id/destHomeFragment"
-        android:name="uj.roomme.fragments.HomeFragment"
+        android:name="uj.roomme.app.fragments.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home_selected_apartment" >
     </fragment>
 
     <fragment
         android:id="@+id/destHouseWorksFragment"
-        android:name="uj.roomme.fragments.home.HouseWorksFragment"
+        android:name="uj.roomme.app.fragments.home.HouseWorksFragment"
         android:label="House works"
         tools:layout="@layout/fragment_houseworks"/>
     <fragment
         android:id="@+id/destRoommatesFragment"
-        android:name="uj.roomme.fragments.home.RoommatesFragment"
+        android:name="uj.roomme.app.fragments.home.RoommatesFragment"
         android:label="Roommates"
         tools:layout="@layout/fragment_roommates"/>
     <fragment
         android:id="@+id/destStatisticsFragment"
-        android:name="uj.roomme.fragments.home.StatisticsFragment"
+        android:name="uj.roomme.app.fragments.home.StatisticsFragment"
         android:label="Statistics"
         tools:layout="@layout/fragment_statistics"/>
 
