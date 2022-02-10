@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/destApartmentsFragment"
-        android:name="uj.roomme.fragments.apartments.ApartmentsFragment"
+        android:name="uj.roomme.app.fragments.apartments.ApartmentsFragment"
         android:label="Apartments"
         tools:layout="@layout/fragment_apartments" >
         <action
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/destCreateApartmentFragment"
-        android:name="uj.roomme.fragments.apartments.CreateApartmentFragment"
+        android:name="uj.roomme.app.fragments.apartments.CreateApartmentFragment"
         android:label="Create apartment"
         tools:layout="@layout/fragment_create_apartment" >
         <action
@@ -35,13 +35,13 @@
     </fragment>
     <fragment
         android:id="@+id/destUserInfoFragment"
-        android:name="uj.roomme.fragments.ProfileFragment"
+        android:name="uj.roomme.app.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/destFriendsFragments"
-        android:name="uj.roomme.fragments.friends.FriendsFragment"
+        android:name="uj.roomme.app.fragments.friends.FriendsFragment"
         android:label="Friends"
         tools:layout="@layout/fragment_friends"/>
 

@@ -5,7 +5,7 @@
     app:startDestination="@id/homeFragment2">
     <fragment
         android:id="@+id/homeFragment2"
-        android:name="uj.roomme.fragments.home.HomeFragment"
+        android:name="uj.roomme.app.fragments.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment2_to_product_list_nav_graph"
