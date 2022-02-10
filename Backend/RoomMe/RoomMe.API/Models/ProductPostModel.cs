@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class ProductPostModel
+    public class  ProductPostModel
     {
         public string Name { get; set; }
         public string Description { get; set; }
