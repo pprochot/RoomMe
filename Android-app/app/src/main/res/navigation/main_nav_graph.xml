@@ -6,8 +6,8 @@
     app:startDestination="@id/homeNavGraph">
 
     <action
-        android:id="@+id/actionGlobalToUserInfo"
-        app:destination="@id/destUserInfoFragment" />
+        android:id="@+id/actionGlobalToProfile"
+        app:destination="@id/destProfileFragment" />
     <action
         android:id="@+id/actionGlobalToFriends"
         app:destination="@id/destFriendsFragments" />

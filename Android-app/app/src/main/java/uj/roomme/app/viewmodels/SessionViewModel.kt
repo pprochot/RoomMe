@@ -1,6 +1,7 @@
 package uj.roomme.app.viewmodels
 
 import androidx.lifecycle.ViewModel
+import uj.roomme.domain.user.UserPostReturnModel
 
 class SessionViewModel : ViewModel() {
 
@@ -11,4 +12,8 @@ class SessionViewModel : ViewModel() {
     var secondName: String? = null
     var phoneNumber: String? = null
     var mainFlatId: Int? = null
+
+    fun saveDataFrom(userPostReturnModel: UserPostReturnModel) {
+
+    }
 }
