@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/destHomeFragment"
-        android:name="uj.roomme.fragments.HomeFragment"
+        android:name="uj.roomme.fragments.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home_selected_apartment" >
     </fragment>

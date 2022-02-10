@@ -2,7 +2,7 @@ package uj.roomme.viewmodels
 
 import androidx.lifecycle.ViewModel
 
-class UserViewModel : ViewModel() {
+class SessionViewModel : ViewModel() {
 
     var userId: Int? = null
     var userNickname: String? = null

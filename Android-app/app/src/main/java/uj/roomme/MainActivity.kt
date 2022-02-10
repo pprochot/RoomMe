@@ -1,9 +1,9 @@
 package uj.roomme
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -20,8 +20,7 @@ import uj.roomme.hiders.BottomNavigationViewHider
 import uj.roomme.hiders.ToolbarOptionsHider
 import uj.roomme.navigation.DrawerLayoutMenuNavigation
 import uj.roomme.navigation.NavBottomViewMenuNavigation
-import uj.roomme.viewmodels.UserViewModel
-
+import uj.roomme.viewmodels.SessionViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -34,52 +33,48 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         )
     }
 
-    private lateinit var bottomNavView: BottomNavigationView
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+
     private lateinit var toolbar: Toolbar
+    private lateinit var navView: NavigationView
+    private lateinit var bottomNavView: BottomNavigationView
+
+    private val sessionViewModel: SessionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setUpViewModel()
-
-        bottomNavView = findViewById(R.id.bottom_nav_bar)
-        //TODO move
         drawerLayout = findViewById(R.id.drawer_layout)
         navController = findNavController(R.id.nav_host_fragment_container_main_activity)
 
-        val navView = findViewById<NavigationView>(R.id.nav_view)
-        navView.setupWithNavController(navController)
         toolbar = findViewById(R.id.toolbar)
+        bottomNavView = findViewById(R.id.bottom_nav_bar)
+        navView = findViewById(R.id.nav_view)
+
+        appBarConfiguration = AppBarConfiguration.Builder(topLevelDestinations)
+            .setOpenableLayout(drawerLayout)
+            .build()
+
+        setUpToolbarAndDrawerLayout()
+        setUpBottomNavView()
+    }
+
+    private fun setUpToolbarAndDrawerLayout() {
         setSupportActionBar(toolbar)
         toolbar.findViewById<ImageButton>(R.id.buttonLogOut).setOnClickListener {
             navController.navigate(R.id.actionGlobalLogOut)
         }
-
-        // TODO change in menu
-        appBarConfiguration = AppBarConfiguration.Builder(topLevelDestinations)
-            .setOpenableLayout(drawerLayout)
-            .build()
-//        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
-//        val nicknameText = navView.findViewById<TextView>(R.id.text_nav_nickname)
-//        nicknameText.text = args.userNickname
-//        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-//        supportActionBar?.setCustomView(R.layout.appbar_login)
-        bottomNavView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener(ToolbarOptionsHider(drawerLayout, toolbar))
-        navController.addOnDestinationChangedListener(BottomNavigationViewHider(bottomNavView))
-        bottomNavView.setOnItemSelectedListener(NavBottomViewMenuNavigation(navController))
-        navView?.setNavigationItemSelectedListener(DrawerLayoutMenuNavigation(navController, drawerLayout))
+        navView.setNavigationItemSelectedListener(DrawerLayoutMenuNavigation(navController, drawerLayout))
     }
 
-    private fun setUpViewModel() {
-        val userViewModel: UserViewModel by viewModels()
-//        userViewModel.userId = args.userId
-//        userViewModel.userNickname = args.userNickname
-//        userViewModel.userEmail = args.userEmail
+    private fun setUpBottomNavView() {
+        bottomNavView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener(BottomNavigationViewHider(bottomNavView))
+        bottomNavView.setOnItemSelectedListener(NavBottomViewMenuNavigation(navController))
     }
 
     override fun onSupportNavigateUp(): Boolean {

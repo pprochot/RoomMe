@@ -1,4 +1,4 @@
-package uj.roomme.fragments
+package uj.roomme.fragments.apartments
 
 import android.widget.Button
 import android.widget.Toast
@@ -14,17 +14,17 @@ import uj.roomme.R
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.services.FlatService
-import uj.roomme.viewmodels.UserViewModel
+import uj.roomme.viewmodels.SessionViewModel
 import javax.inject.Inject
-import uj.roomme.fragments.CreateFlatFragmentDirections as Directions
+import uj.roomme.fragments.apartments.CreateApartmentFragmentDirections as Directions
 
 @AndroidEntryPoint
-class CreateFlatFragment : Fragment(R.layout.fragment_create_flat) {
+class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
 
     @Inject
     lateinit var flatService: FlatService
 
-    private val userViewModel: UserViewModel by activityViewModels()
+    private val sessionViewModel: SessionViewModel by activityViewModels()
     private var createNewApartmentButton: Button? = null
     private var flatNameView: TextInputEditText? = null
     private var flatAddressView: TextInputEditText? = null
@@ -80,17 +80,19 @@ class CreateFlatFragment : Fragment(R.layout.fragment_create_flat) {
         return FlatPostModel(
             flatNameView?.text.toString(),
             flatAddressView?.text.toString(),
-            listOf(userViewModel.userId!!)
+            listOf(sessionViewModel.userId!!)
         )
     }
 
     private fun toastOnSuccess() {
-        Toast.makeText(requireActivity(), "Flat has been created!", Toast.LENGTH_SHORT)
-            .show()
+        if (activity != null) {
+            Toast.makeText(activity, "Flat has been created!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun toastOnFailure() {
-        Toast.makeText(requireActivity(), "Something is invalid! Try again.", Toast.LENGTH_SHORT)
-            .show()
+        if (activity != null) {
+            Toast.makeText(activity, "Something is invalid! Try again.", Toast.LENGTH_SHORT).show()
+        }
     }
 }

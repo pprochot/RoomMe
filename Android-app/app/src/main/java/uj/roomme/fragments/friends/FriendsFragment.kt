@@ -1,4 +1,4 @@
-package uj.roomme.fragments
+package uj.roomme.fragments.friends
 
 import androidx.fragment.app.Fragment
 import uj.roomme.R

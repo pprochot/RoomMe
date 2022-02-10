@@ -3,10 +3,8 @@ package uj.roomme.fragments.login
 import android.widget.Button
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +15,7 @@ import uj.roomme.R
 import uj.roomme.domain.user.UserPostModel
 import uj.roomme.domain.user.UserPostReturnModel
 import uj.roomme.services.UserService
-import uj.roomme.viewmodels.UserViewModel
+import uj.roomme.viewmodels.SessionViewModel
 import javax.inject.Inject
 import uj.roomme.fragments.login.SignUpFragmentDirections as Directions
 
@@ -97,10 +95,10 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             ) {
                 if (response.isSuccessful) {
                     val toMainNavGraph = Directions.actionSignUpToHome()
-                    val userViewModel: UserViewModel by activityViewModels()
-                    userViewModel.userId = response.body()?.userId!!
-                    userViewModel.userEmail = requestBody.email
-                    userViewModel.userNickname = requestBody.email
+                    val sessionViewModel: SessionViewModel by activityViewModels()
+                    sessionViewModel.userId = response.body()?.userId!!
+                    sessionViewModel.userEmail = requestBody.email
+                    sessionViewModel.userNickname = requestBody.email
                     println("User id: " + response.body()?.userId!!)
                     val navController = findNavController()
                     navController.navigate(toMainNavGraph)

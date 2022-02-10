@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import uj.roomme.R
-import uj.roomme.viewmodels.UserViewModel
+import uj.roomme.viewmodels.SessionViewModel
 import uj.roomme.fragments.login.SignInFragmentDirections as Directions
 
 class SignInFragment : Fragment(R.layout.fragment_sign_in) {
@@ -26,13 +26,13 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             navController.navigate(Directions.actionSignInToSignUp())
         }
         signInButton?.setOnClickListener {
-            val userViewModel: UserViewModel by activityViewModels()
-            userViewModel.userId = 21
-            userViewModel.userEmail = "email"
-            userViewModel.userNickname = "nick"
-            userViewModel.firstName = "firstname"
-            userViewModel.secondName = "secondname"
-            userViewModel.phoneNumber = "123412341"
+            val sessionViewModel: SessionViewModel by activityViewModels()
+            sessionViewModel.userId = 21
+            sessionViewModel.userEmail = "email"
+            sessionViewModel.userNickname = "nick"
+            sessionViewModel.firstName = "firstname"
+            sessionViewModel.secondName = "secondname"
+            sessionViewModel.phoneNumber = "123412341"
             navController.navigate(Directions.actionSignInToHome())
         }
     }

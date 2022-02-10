@@ -1,6 +1,5 @@
-package uj.roomme.fragments
+package uj.roomme.fragments.apartments
 
-import android.view.View
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.Toast
@@ -8,8 +7,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,18 +15,18 @@ import uj.roomme.R
 import uj.roomme.adapters.FlatsAdapter
 import uj.roomme.domain.flat.FlatNameModel
 import uj.roomme.services.UserService
-import uj.roomme.viewmodels.UserViewModel
+import uj.roomme.viewmodels.SessionViewModel
 import javax.inject.Inject
-import uj.roomme.fragments.FlatsFragmentDirections as Directions
+import uj.roomme.fragments.apartments.ApartmentsFragmentDirections as Directions
 
 @AndroidEntryPoint
-class FlatsFragment : Fragment(R.layout.fragment_flats) {
+class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
 
     @Inject
     lateinit var userService: UserService
 
-    private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var recyclerView: RecyclerView
+    private val sessionViewModel: SessionViewModel by activityViewModels()
 
     override fun onStart() {
         super.onStart()
@@ -49,7 +46,7 @@ class FlatsFragment : Fragment(R.layout.fragment_flats) {
     }
 
     private fun getFlatsFromService() {
-        userService.getFlats(userViewModel.userId!!)
+        userService.getFlats(sessionViewModel.userId!!)
             .enqueue(object : Callback<List<FlatNameModel>> {
                 override fun onResponse(
                     call: Call<List<FlatNameModel>>,
@@ -69,7 +66,8 @@ class FlatsFragment : Fragment(R.layout.fragment_flats) {
     }
 
     private fun toastOnFailure() {
-        Toast.makeText(requireActivity(), "Something is invalid! Try again.", Toast.LENGTH_SHORT)
-            .show()
+        if (activity != null) {
+            Toast.makeText(activity, "Something is invalid! Try again.", Toast.LENGTH_SHORT).show()
+        }
     }
 }
