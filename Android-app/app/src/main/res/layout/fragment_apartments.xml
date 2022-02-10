@@ -4,18 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".app.fragments.apartments.ApartmentsFragment"
+    tools:context=".fragments.apartments.ApartmentsFragment"
     android:layout_marginTop="?attr/actionBarSize">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_aparments"
+        android:id="@+id/rvApartments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundGravity="center"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_create_new_flat"
+        android:id="@+id/buttonCreateNewApartment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create new flat"

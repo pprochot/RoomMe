@@ -14,7 +14,7 @@ class ShoppingListsAdapter(private val context: Context) :
     RecyclerView.Adapter<ShoppingListsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameView: TextView = itemView.findViewById(R.id.text_shopping_list_name)
+        val nameView: TextView = itemView.findViewById(R.id.textShoppingListName)
 
         init {
             itemView.setOnClickListener {

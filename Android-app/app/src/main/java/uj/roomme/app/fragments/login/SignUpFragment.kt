@@ -37,14 +37,14 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     override fun onStart() {
         super.onStart()
 
-        signUpButton = view?.findViewById(R.id.sign_up_button)
-        nicknameView = view?.findViewById(R.id.nickname_inputedittext_registration)
-        firstPasswordView = view?.findViewById(R.id.firstpassword_inputedittext_registration)
-        secondPasswordView = view?.findViewById(R.id.secondpassword_inputedittext_registration)
-        emailView = view?.findViewById(R.id.email_inputedittext_registration)
-        firstNameView = view?.findViewById(R.id.firstname_inputedittext_registration)
-        lastNameView = view?.findViewById(R.id.lastname_inputedittext_registration)
-        phoneNumberView = view?.findViewById(R.id.phonenumber_inputedittext_registration)
+        signUpButton = view?.findViewById(R.id.signUpButton)
+        nicknameView = view?.findViewById(R.id.inputEditTextSignUpNickname)
+        firstPasswordView = view?.findViewById(R.id.inputEditTextSignUpFirstPassword)
+        secondPasswordView = view?.findViewById(R.id.inputEditTextSignUpSecondPassword)
+        emailView = view?.findViewById(R.id.emailInputEditTextRegistration)
+        firstNameView = view?.findViewById(R.id.inputEditTextSignUpFirstname)
+        lastNameView = view?.findViewById(R.id.inputEditTextSignUpLastname)
+        phoneNumberView = view?.findViewById(R.id.inputEditTextSignUpPhoneNumber)
 
         signUpButton?.setOnClickListener {
             it.isEnabled = false

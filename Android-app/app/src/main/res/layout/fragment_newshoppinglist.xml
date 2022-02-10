@@ -9,7 +9,7 @@
     android:layout_marginEnd="30dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textinputlayout_newshoppinglist_name"
+        android:id="@+id/textInputLayoutNewShoppingListName"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         app:startIconDrawable="@drawable/ic_person">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textinputedittext_newproduct_name"
+            android:id="@+id/textInputEditTextNewProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -32,7 +32,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textinputlayout_newshoppinglist_description"
+        android:id="@+id/textInputLayoutNewShoppingListDescription"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         app:startIconDrawable="@drawable/ic_person">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textinputedittext_newshoppinglist_description"
+            android:id="@+id/textInputEditTextNewShoppingListDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -53,12 +53,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button_create_new_shopping_list"
+        android:id="@+id/buttonCreateNewShoppingList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_gravity="center"
         android:text="Create new shopping list" />
-
 
 </LinearLayout>

@@ -34,7 +34,7 @@
             app:destination="@id/destApartmentsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/destUserInfoFragment"
+        android:id="@+id/destProfileFragment"
         android:name="uj.roomme.app.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />

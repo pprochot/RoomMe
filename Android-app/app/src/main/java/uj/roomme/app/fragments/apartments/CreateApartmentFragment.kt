@@ -32,9 +32,9 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
     override fun onStart() {
         super.onStart()
 
-        flatNameView = view?.findViewById(R.id.textinputedit_flat_name)
-        flatAddressView = view?.findViewById(R.id.textinputedit_flat_address)
-        createNewApartmentButton = view?.findViewById(R.id.button_create_apartment)
+        flatNameView = view?.findViewById(R.id.textInputEditApartmentName)
+        flatAddressView = view?.findViewById(R.id.textInputEditApartmentAddress)
+        createNewApartmentButton = view?.findViewById(R.id.buttonCreateApartment)
 
         createNewApartmentButton?.setOnClickListener {
             if (areArgumentsValid()) {

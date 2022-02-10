@@ -14,15 +14,15 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
     override fun onStart() {
         super.onStart()
 
-        val addNewProductButton = view?.findViewById<Button>(R.id.button_add_new_product)
+        val addNewProductButton = view?.findViewById<Button>(R.id.buttonAddNewProduct)
         val navController = findNavController()
         addNewProductButton?.setOnClickListener {
             navController.navigate(Directions.actionProductsToNewProduct())
         }
 
-        view?.findViewById<Button>(R.id.button_close_list)?.isClickable = false
+        view?.findViewById<Button>(R.id.buttonCloseList)?.isClickable = false
 
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.rv_product_list)
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.rvProductList)
         recyclerView?.adapter = ProductsAdapter(requireContext())
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
     }

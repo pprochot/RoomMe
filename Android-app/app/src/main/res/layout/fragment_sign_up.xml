@@ -15,7 +15,7 @@
         tools:context=".app.fragments.login.SignUpFragment">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nickname_inputlayout_registration"
+            android:id="@+id/inputLayoutSignUpNickname"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             app:startIconDrawable="@drawable/ic_person">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nickname_inputedittext_registration"
+                android:id="@+id/inputEditTextSignUpNickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -54,7 +54,7 @@
             app:startIconDrawable="@drawable/ic_email">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email_inputedittext_registration"
+                android:id="@+id/emailInputEditTextRegistration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />
@@ -75,7 +75,7 @@
             app:startIconDrawable="@drawable/ic_password">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/firstpassword_inputedittext_registration"
+                android:id="@+id/inputEditTextSignUpFirstPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -96,7 +96,7 @@
             app:startIconDrawable="@drawable/ic_password">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/secondpassword_inputedittext_registration"
+                android:id="@+id/inputEditTextSignUpSecondPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -115,7 +115,7 @@
             app:startIconDrawable="@drawable/ic_person">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/firstname_inputedittext_registration"
+                android:id="@+id/inputEditTextSignUpFirstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />
@@ -134,7 +134,7 @@
             app:startIconDrawable="@drawable/ic_person">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lastname_inputedittext_registration"
+                android:id="@+id/inputEditTextSignUpLastname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />
@@ -153,14 +153,14 @@
             app:startIconDrawable="@drawable/ic_phone">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phonenumber_inputedittext_registration"
+                android:id="@+id/inputEditTextSignUpPhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/sign_up_button"
+            android:id="@+id/signUpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"

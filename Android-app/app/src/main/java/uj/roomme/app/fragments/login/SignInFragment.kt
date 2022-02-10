@@ -14,9 +14,9 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     override fun onStart() {
         super.onStart()
 
-        val signInButton = view?.findViewById<Button>(R.id.button_sign_in)
-        val forgotPasswordText = view?.findViewById<TextView>(R.id.text_forgot_password)
-        val noAccountText = view?.findViewById<TextView>(R.id.text_no_account)
+        val signInButton = view?.findViewById<Button>(R.id.buttonSignIn)
+        val forgotPasswordText = view?.findViewById<TextView>(R.id.textForgotPassword)
+        val noAccountText = view?.findViewById<TextView>(R.id.textNoAccount)
         val navController = findNavController()
 
         forgotPasswordText?.setOnClickListener {

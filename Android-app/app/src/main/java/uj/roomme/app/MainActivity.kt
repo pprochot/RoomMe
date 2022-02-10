@@ -47,11 +47,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         drawerLayout = findViewById(R.id.drawer_layout)
-        navController = findNavController(R.id.nav_host_fragment_container_main_activity)
+        navController = findNavController(R.id.navHostFragmentContainer)
 
         toolbar = findViewById(R.id.toolbar)
-        bottomNavView = findViewById(R.id.bottom_nav_bar)
-        navView = findViewById(R.id.nav_view)
+        bottomNavView = findViewById(R.id.bottomNavBar)
+        navView = findViewById(R.id.navView)
 
         appBarConfiguration = AppBarConfiguration.Builder(topLevelDestinations)
             .setOpenableLayout(drawerLayout)

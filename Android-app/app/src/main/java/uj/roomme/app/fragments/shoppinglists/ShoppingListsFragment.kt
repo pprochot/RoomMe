@@ -14,13 +14,13 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
     override fun onStart() {
         super.onStart()
 
-        val button = view?.findViewById<Button>(R.id.button_shoppinglists_create_new_list)
+        val button = view?.findViewById<Button>(R.id.buttonShoppingListsCreateNewList)
         val navController = findNavController()
         button?.setOnClickListener {
             navController.navigate(Directions.actionShoppingListsToNewShoppingList())
         }
 
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.rv_shopping_lists)
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.rvShoppingLists)
         recyclerView?.adapter = ShoppingListsAdapter(requireContext())
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
     }

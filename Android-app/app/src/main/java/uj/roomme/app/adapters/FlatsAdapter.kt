@@ -13,7 +13,7 @@ class FlatsAdapter(private val context: Context, private val flats: List<FlatNam
     RecyclerView.Adapter<FlatsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameView: TextView = itemView.findViewById(R.id.rv_apartments_name)
+        val nameView: TextView = itemView.findViewById(R.id.rvApartmentsName)
 
         init {
 //            val toFlatInfo =

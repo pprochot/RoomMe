@@ -10,7 +10,7 @@ class NewShoppingListFragment : Fragment(R.layout.fragment_newshoppinglist) {
 
     override fun onStart() {
         super.onStart()
-        val button = view?.findViewById<Button>(R.id.button_create_new_shopping_list)
+        val button = view?.findViewById<Button>(R.id.buttonCreateNewShoppingList)
         val navController = findNavController()
         button?.setOnClickListener {
             navController.navigate(Directions.actionNewShoppingListToShoppingLists())

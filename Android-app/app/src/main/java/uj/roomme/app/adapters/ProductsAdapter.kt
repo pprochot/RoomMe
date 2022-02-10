@@ -12,7 +12,7 @@ class ProductsAdapter(private val context: Context) :
     RecyclerView.Adapter<ProductsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameView: TextView = itemView.findViewById(R.id.text_product_name)
+        val nameView: TextView = itemView.findViewById(R.id.textProductName)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

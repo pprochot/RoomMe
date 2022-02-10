@@ -31,10 +31,10 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
     override fun onStart() {
         super.onStart()
 
-        recyclerView = view?.findViewById(R.id.rv_aparments)!!
+        recyclerView = view?.findViewById(R.id.rvApartments)!!
         getFlatsFromService()
 
-        val createNewApartmentButton = view?.findViewById<Button>(R.id.button_create_new_flat)
+        val createNewApartmentButton = view?.findViewById<Button>(R.id.buttonCreateNewApartment)
         createNewApartmentButton?.setOnClickListener {
             findNavController().navigate(Directions.actionApartmentsToCreateApartment())
         }
