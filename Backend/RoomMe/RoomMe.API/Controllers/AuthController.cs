@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RoomMe.API.Authorization;
 using RoomMe.API.Converters;
+using RoomMe.API.Helpers;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
 using RoomMe.SQLContext.Models;
@@ -25,11 +26,11 @@ namespace RoomMe.API.Controllers
         private readonly SqlContext _sqlContext;
         private readonly AppSettings _appSettings;
 
-        public AuthController(ILogger<AuthController> logger, SqlContext sqlContext, AppSettings appSettings)
+        public AuthController(ILogger<AuthController> logger, SqlContext sqlContext, IOptions<AppSettings> appSettings)
         {
             _logger = logger;
             _sqlContext = sqlContext;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("login", Name = nameof(LoginUser))]

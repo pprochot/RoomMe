@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RoomMe.API.Authorization
+namespace RoomMe.API.Helpers
 {
     public class AppSettings
     {

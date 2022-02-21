@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoomMe.API.Authorization;
 using RoomMe.API.Converters;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
