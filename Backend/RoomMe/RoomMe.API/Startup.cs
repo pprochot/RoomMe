@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RoomMe.API.Authorization;
 using RoomMe.SQLContext;
 
 namespace RoomMeAPI
@@ -29,15 +30,19 @@ namespace RoomMeAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RoomMeAPI", Version = "v1" });
             });
+
             services.AddDbContext<SqlContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("MSSQL")
                 )
             );
+
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +62,7 @@ namespace RoomMeAPI
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseMiddleware<AuthorizeMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
