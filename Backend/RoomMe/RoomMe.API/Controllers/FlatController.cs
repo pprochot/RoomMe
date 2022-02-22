@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RoomMe.API.Authorization;
 using RoomMe.API.Converters;
+using RoomMe.API.Helpers;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
 using RoomMe.SQLContext.Models;
@@ -14,17 +16,20 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Controllers
 {
-    [Authorize]
+    [JWTAuthorize]
     [ApiController]
     [Route("[controller]")]
     public class FlatController
     {
         private readonly ILogger<FlatController> _logger;
         private readonly SqlContext _sqlContext;
-        public FlatController(ILogger<FlatController> logger, SqlContext sqlContext)
+        private readonly ISessionHelper _sessionHelper;
+
+        public FlatController(ILogger<FlatController> logger, SqlContext sqlContext, ISessionHelper sessionHelper)
         {
             _logger = logger;
             _sqlContext = sqlContext;
+            _sessionHelper = sessionHelper;
         }
 
         [HttpGet("{flatId}/full", Name = nameof(GetFlatFull))]
@@ -168,7 +173,7 @@ namespace RoomMe.API.Controllers
 
             foreach(var product in products)
             {
-                var tempProduct = product.ToProduct();
+                var tempProduct = product.ToProduct(_sessionHelper.UserId());
                 list.Products.Add(tempProduct);
                 addedProducts.Add(tempProduct);
             }
@@ -232,8 +237,7 @@ namespace RoomMe.API.Controllers
 
                 boughtProducts.Add(productEntity);
 
-                //TODO: In future userId should be recieved from JWT Token
-                productEntity.SetToBoughtState(product, flatId, 1);
+                productEntity.SetToBoughtState(product, flatId, _sessionHelper.UserId());
             }
 
             _sqlContext.Update(list);
@@ -267,8 +271,7 @@ namespace RoomMe.API.Controllers
             var guids = new List<Guid>();
 
             list.CompletionDate = DateTime.Now;
-            //TODO: In future userId should be recieved from JWT Token
-            list.CompletorId = 1;
+            list.CompletorId = _sessionHelper.UserId();
 
             foreach(var receiptFile in receiptFiles)
             {

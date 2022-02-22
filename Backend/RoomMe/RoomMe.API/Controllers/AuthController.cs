@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RoomMe.API.Authorization;
 using RoomMe.API.Converters;
 using RoomMe.API.Helpers;
 using RoomMe.API.Models;

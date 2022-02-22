@@ -21,7 +21,7 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static Product ToProduct(this ProductPostModel product)
+        public static Product ToProduct(this ProductPostModel product, int authorId)
         {
             return new Product()
             {
