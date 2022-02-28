@@ -25,8 +25,7 @@ namespace RoomMe.API.Converters
         {
             return new Product()
             {
-                //TODO: this value should be received from JWT token
-                AuthorId = 1,
+                AuthorId = authorId,
                 Name = product.Name,
                 CommonCostId = null,
                 Description = product.Description,
@@ -65,7 +64,7 @@ namespace RoomMe.API.Converters
         {
             return new ProductPatchReturnModel()
             {
-                TimeStamp = DateTime.Now,
+                TimeStamp = DateTime.UtcNow,
                 CommonCostIds = products.Select(x => x.Id).ToList()
             };
         }
@@ -79,7 +78,7 @@ namespace RoomMe.API.Converters
                 Value = product.Value,
                 Description = product.Description,
                 IsDivided = product.IsDivided,
-                Date = DateTime.Now
+                Date = DateTime.UtcNow
             };
         }
 
@@ -96,7 +95,7 @@ namespace RoomMe.API.Converters
                 FlatId = flatId,
                 Name = list.Name,
                 Description = list.Description,
-                CreationDate = DateTime.Now,
+                CreationDate = DateTime.UtcNow,
             };
         }
 
@@ -105,7 +104,7 @@ namespace RoomMe.API.Converters
             return new ShoppingListPostReturnModel()
             {
                 Id = list.Id,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 

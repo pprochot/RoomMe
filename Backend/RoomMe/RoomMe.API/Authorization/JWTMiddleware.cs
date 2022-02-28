@@ -22,41 +22,17 @@ namespace RoomMe.API.Authorization
             _appSettings = appSettings.Value;
         }
 
-        public async Task Invoke(HttpContext context, SqlContext sqlContext)
+        public async Task Invoke(HttpContext context, SqlContext sqlContext, IJWTUtils jwtUtils)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userId = jwtUtils.ValidateJwtToken(token);
 
-            if (token != null)
-                await AttachUserToContext(context, sqlContext, token).ConfigureAwait(false);
-
-            await _next(context);
-        }
-
-        private async Task AttachUserToContext(HttpContext context, SqlContext sqlContext, string token)
-        {
-            try
+            if(userId != null)
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero,
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                }, out SecurityToken validatedToken);
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-
-                // attach user to context on successful jwt validation
                 context.Items["User"] = await sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
             }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+
+            await _next(context);
         }
     }
 }

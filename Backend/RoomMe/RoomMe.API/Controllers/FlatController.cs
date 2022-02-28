@@ -280,7 +280,7 @@ namespace RoomMe.API.Controllers
                 string path = "/receipts/" + guid.ToString() + "." + receiptFile.Extension;
 
                 await File.WriteAllBytesAsync(path, Convert.FromBase64String(receiptFile.fileContent)).ConfigureAwait(false);
-
+               
                 guids.Add(guid);
                 list.Receipts.Add(receiptFile.ToReceipt(listId, path, guid));
             }

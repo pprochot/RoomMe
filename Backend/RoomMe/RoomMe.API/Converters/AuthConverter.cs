@@ -9,7 +9,7 @@ namespace RoomMe.API.Converters
 {
     public static class AuthConverter
     {
-        public static LoginReturnModel ToLoginReturnModel(this User user, string token)
+        public static LoginReturnModel ToLoginReturnModel(this User user, string token, string refreshToken)
         {
             return new LoginReturnModel
             {
@@ -19,7 +19,8 @@ namespace RoomMe.API.Converters
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 PhoneNumber = user.PhoneNumber,
-                Token = token
+                Token = token,
+                RefreshToken = refreshToken
             };
         }
     }

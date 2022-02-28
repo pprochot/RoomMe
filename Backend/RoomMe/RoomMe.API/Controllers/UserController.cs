@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using RoomMe.API.Authorization;
 using RoomMe.API.Converters;
 using RoomMe.API.Models;
+using RoomMe.API.Validators;
 using RoomMe.SQLContext;
 using RoomMe.SQLContext.Models;
 using System;
@@ -17,7 +18,7 @@ namespace RoomMe.API.Controllers
     [JWTAuthorize]
     [ApiController]
     [Route("[controller]")]
-    public class UserController
+    public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
         private readonly SqlContext _sqlContext;
@@ -28,33 +29,39 @@ namespace RoomMe.API.Controllers
             _sqlContext = sqlContext;
         }
 
-        [HttpPost("test", Name = nameof(CreateTestUser))]
-        public async Task<ActionResult<UserPostReturnModel>> CreateTestUser(UserPostModel user)
+        [AllowAnonymous]
+        [HttpPost("sign-up", Name = nameof(SignUpUser))]
+        public async Task<ActionResult<SignUpReturnModel>> SignUpUser(SignUpUserModel user)
         {
             var entity = await _sqlContext.Users
-                .FirstOrDefaultAsync(x => x.Email == user.Email)
+                .AnyAsync(x => x.Email == user.Email)
                 .ConfigureAwait(false);
 
-            if (entity != null)
+            if (entity)
             {
-                return new UserPostReturnModel()
+                return new SignUpReturnModel()
                 {
                     Result = false,
-                    ErrorCode = Helpers.ErrorCodes.UserPost.EmailAlreadyInDB,
+                    ErrorCode = Helpers.ErrorCodes.SignUpErrors.EmailAlreadyInDB,
                     UserId = null
                 };
             }
 
-            entity = user.ToUser();
-            await _sqlContext.Users.AddAsync(entity).ConfigureAwait(false);
+            if(!user.IsValid())
+            {
+                return new BadRequestResult();
+            }
+
+            var newEntity = user.ToUser();
+            await _sqlContext.Users.AddAsync(newEntity).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            return new UserPostReturnModel()
+            return new SignUpReturnModel()
             {
                 Result = true,
                 ErrorCode = null,
-                UserId = entity.Id
-            };
+                UserId = newEntity.Id
+            };           
         }
 
         [HttpGet("{userId}", Name = nameof(GetUserInfo))]

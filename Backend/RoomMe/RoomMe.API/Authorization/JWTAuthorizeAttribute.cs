@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using RoomMe.SQLContext.Models;
@@ -14,10 +15,14 @@ namespace RoomMe.API.Authorization
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            if(context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any())
+            {
+                return;
+            }
+
             var user = (User)context.HttpContext.Items["User"];
             if (user == null)
             {
-                // not logged in
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
         }
