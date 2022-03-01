@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class SignUpReturnModel
+    public class ApiResult<T>
     {
-        public int? UserId { get; set; }
+        public bool Result { get; set; }
+        public ErrorCodes? ErrorCode { get; set; }
+        public T Value { get; set; }
     }
 }

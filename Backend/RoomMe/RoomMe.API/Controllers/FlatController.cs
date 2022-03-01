@@ -19,7 +19,7 @@ namespace RoomMe.API.Controllers
     [JWTAuthorize]
     [ApiController]
     [Route("[controller]")]
-    public class FlatController
+    public class FlatController : ControllerBase
     {
         private readonly ILogger<FlatController> _logger;
         private readonly SqlContext _sqlContext;
@@ -40,7 +40,7 @@ namespace RoomMe.API.Controllers
                 .FirstOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if (flat == null)
+            if (flat == null || !IsLoggedUserInFlat(flat))
             {
                 _logger.LogError($"Flat not found for id {flatId}");
                 return new BadRequestResult();
@@ -57,6 +57,12 @@ namespace RoomMe.API.Controllers
             if (flat.Users.Count == 0)
             {
                 _logger.LogError("Tried to create flat without users");
+                return new BadRequestResult();
+            }
+
+            if (!flat.Users.Any(id => id == _sessionHelper.UserId))
+            {
+                _logger.LogError("Tried to create flat from different account");
                 return new BadRequestResult();
             }
 
@@ -80,10 +86,62 @@ namespace RoomMe.API.Controllers
             return flatEntity.ToFlatPostReturnModel();
         }
 
-        //TODO: In future userId should be retrieved based on JWT Token
-        [HttpPut("{flatId}/{userId}/rent", Name = nameof(SetFlatRentCost))]
-        public async Task<ActionResult<RentCostPostReturnModel>> SetFlatRentCost(int flatId, int userId,
-            RentCostPutModel cost)
+        [HttpPost("{flatId}/user/{userId}", Name = nameof(AddUserToFlat))]
+        public async Task<ActionResult> AddUserToFlat(int flatId, int userId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .SingleOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !IsLoggedUserInFlat(flat) || flat.Users.Any(x => x.Id == userId))
+            {
+                return new BadRequestResult();
+            }
+
+            var user = await _sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
+
+            if(user == null)
+            {
+                return new BadRequestResult();
+            }
+
+            flat.Users.Add(user);
+
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return Ok();
+        }
+
+        [HttpDelete("{flatId}/user/{userId}", Name = nameof(RemoveUserFromFlat))]
+        public async Task<ActionResult> RemoveUserFromFlat(int flatId, int userId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .SingleOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !IsLoggedUserInFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var user = await _sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
+
+            if(user == null)
+            {
+                return new BadRequestResult();
+            }
+
+            flat.Users.Remove(user);
+
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return Ok();
+        }
+
+        [HttpPut("{flatId}/rent", Name = nameof(SetFlatRentCost))]
+        public async Task<ActionResult<RentCostPostReturnModel>> SetFlatRentCost(int flatId, RentCostPutModel cost)
         {
             var flat = await _sqlContext.Flats
                 .Include(x => x.RentCosts)
@@ -97,6 +155,7 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
+            var userId = _sessionHelper.UserId;
             var user = flat.Users.FirstOrDefault(x => x.Id == userId);
 
             if (user == null)
@@ -128,6 +187,16 @@ namespace RoomMe.API.Controllers
         [HttpPost("{flatId}/shopping-lists", Name = nameof(CreateNewShoppingList))]
         public async Task<ActionResult<ShoppingListPostReturnModel>> CreateNewShoppingList(int flatId, ShoppingListPostModel list)
         {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .SingleOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || IsLoggedUserInFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
             var entity = list.ToShoppingList(flatId);
             await _sqlContext.AddAsync(entity);
             await _sqlContext.SaveChangesAsync();
@@ -173,7 +242,7 @@ namespace RoomMe.API.Controllers
 
             foreach(var product in products)
             {
-                var tempProduct = product.ToProduct(_sessionHelper.UserId());
+                var tempProduct = product.ToProduct(_sessionHelper.UserId);
                 list.Products.Add(tempProduct);
                 addedProducts.Add(tempProduct);
             }
@@ -237,7 +306,7 @@ namespace RoomMe.API.Controllers
 
                 boughtProducts.Add(productEntity);
 
-                productEntity.SetToBoughtState(product, flatId, _sessionHelper.UserId());
+                productEntity.SetToBoughtState(product, flatId, _sessionHelper.UserId);
             }
 
             _sqlContext.Update(list);
@@ -271,15 +340,15 @@ namespace RoomMe.API.Controllers
             var guids = new List<Guid>();
 
             list.CompletionDate = DateTime.Now;
-            list.CompletorId = _sessionHelper.UserId();
+            list.CompletorId = _sessionHelper.UserId;
 
             foreach(var receiptFile in receiptFiles)
             {
                 //TODO: Change this basic path
                 Guid guid = Guid.NewGuid();
-                string path = "/receipts/" + guid.ToString() + "." + receiptFile.Extension;
+                string path = Consts.FilePath + guid.ToString() + "." + receiptFile.Extension;
 
-                await File.WriteAllBytesAsync(path, Convert.FromBase64String(receiptFile.fileContent)).ConfigureAwait(false);
+                await System.IO.File.WriteAllBytesAsync(path, Convert.FromBase64String(receiptFile.fileContent)).ConfigureAwait(false);
                
                 guids.Add(guid);
                 list.Receipts.Add(receiptFile.ToReceipt(listId, path, guid));
@@ -293,6 +362,11 @@ namespace RoomMe.API.Controllers
                 TimeStamp = DateTime.Now,
                 FileGuids = guids
             };
+        }
+
+        private bool IsLoggedUserInFlat(Flat flat)
+        {
+            return flat.Users.Any(x => x.Id == _sessionHelper.UserId);
         }
     }
 }

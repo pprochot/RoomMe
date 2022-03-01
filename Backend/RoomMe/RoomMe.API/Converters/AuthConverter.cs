@@ -9,9 +9,9 @@ namespace RoomMe.API.Converters
 {
     public static class AuthConverter
     {
-        public static LoginReturnModel ToLoginReturnModel(this User user, string token, string refreshToken)
+        public static SignInReturnModel ToLoginReturnModel(this User user, string token, string refreshToken)
         {
-            return new LoginReturnModel
+            return new SignInReturnModel
             {
                 Id = user.Id,
                 Nickname = user.Nickname,

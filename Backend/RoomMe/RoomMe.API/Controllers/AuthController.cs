@@ -14,6 +14,8 @@ using BCryptNet = BCrypt.Net;
 using System;
 using RoomMe.SQLContext.Models;
 using RoomMe.API.Extensions;
+using RoomMe.API.Validators;
+using RoomMe.API.Helpers;
 
 namespace RoomMe.API.Controllers
 {
@@ -36,8 +38,43 @@ namespace RoomMe.API.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("sign-up", Name = nameof(SignUpUser))]
+        public async Task<ActionResult<ApiResult<SignUpReturnModel>>> SignUpUser(SignUpUserModel user)
+        {
+            var entity = await _sqlContext.Users
+                .AnyAsync(x => x.Email == user.Email)
+                .ConfigureAwait(false);
+
+            if (entity)
+            {
+                return new ApiResult<SignUpReturnModel>()
+                {
+                    Result = false,
+                    ErrorCode = ErrorCodes.EmailAlreadyInDB,
+                    Value = null
+                };
+            }
+
+            if (!user.IsValid())
+            {
+                return new BadRequestResult();
+            }
+
+            var newEntity = user.ToUser();
+            await _sqlContext.Users.AddAsync(newEntity).ConfigureAwait(false);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return new ApiResult<SignUpReturnModel>()
+            {
+                Result = true,
+                ErrorCode = null,
+                Value = new SignUpReturnModel() { UserId = newEntity.Id }
+            };
+        }
+
+        [AllowAnonymous]
         [HttpPost("sign-in", Name = nameof(SignInUser))]
-        public async Task<ActionResult<LoginReturnModel>> SignInUser(SignInModel model)
+        public async Task<ActionResult<ApiResult<SignInReturnModel>>> SignInUser(SignInModel model)
         {
             var user = await _sqlContext.Users
                 .Include(x => x.RefreshTokens)
@@ -47,7 +84,12 @@ namespace RoomMe.API.Controllers
 
             if(user == null || !BCryptNet.BCrypt.EnhancedVerify(model.Password, user.Password))
             {
-                return new BadRequestResult();
+                return new ApiResult<SignInReturnModel>()
+                {
+                    Result = false,
+                    ErrorCode = ErrorCodes.WrongEmailOrPassword,
+                    Value = null
+                };
             }
 
             var token = _jwtUtils.GenerateJwtToken(user);
@@ -56,15 +98,21 @@ namespace RoomMe.API.Controllers
             user.RefreshTokens.Add(refreshToken);
 
             RemoveOldRefreshTokens(user);
+            SetTokenCookie(refreshToken.Token);
 
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            return user.ToLoginReturnModel(token, refreshToken.Token);
+            return new ApiResult<SignInReturnModel>()
+            {
+                Result = true,
+                ErrorCode = null,
+                Value = user.ToLoginReturnModel(token, refreshToken.Token)
+            };
         }
 
         [AllowAnonymous]
         [HttpPost("refresh-token", Name = nameof(RefreshUserToken))]
-        public async Task<ActionResult<LoginReturnModel>> RefreshUserToken()
+        public async Task<ActionResult<SignInReturnModel>> RefreshUserToken()
         {
             var token = Request.Cookies["refreshToken"];
 

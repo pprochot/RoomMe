@@ -21,9 +21,6 @@ namespace RoomMe.API.Helpers
 
         public User Session => (User)_httpContextAccessor.HttpContext.Items["User"];
 
-        int ISessionHelper.UserId()
-        {
-            return Session.Id;
-        }
+        public int UserId => Session.Id;
     }
 }

@@ -8,7 +8,7 @@ namespace RoomMe.API.Helpers
 {
     public interface ISessionHelper
     {
-        public int UserId();
+        public int UserId { get; }
         public User Session { get; }
     }
 }

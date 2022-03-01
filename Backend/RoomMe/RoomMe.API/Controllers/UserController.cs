@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RoomMe.API.Authorization;
 using RoomMe.API.Converters;
+using RoomMe.API.Helpers;
 using RoomMe.API.Models;
 using RoomMe.API.Validators;
 using RoomMe.SQLContext;
@@ -22,46 +23,24 @@ namespace RoomMe.API.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly SqlContext _sqlContext;
+        private readonly ISessionHelper _sessionHelper;
 
-        public UserController(ILogger<UserController> logger, SqlContext sqlContext)
+        public UserController(ILogger<UserController> logger, SqlContext sqlContext, ISessionHelper sessionHelper)
         {
             _logger = logger;
             _sqlContext = sqlContext;
+            _sessionHelper = sessionHelper;
         }
 
-        [AllowAnonymous]
-        [HttpPost("sign-up", Name = nameof(SignUpUser))]
-        public async Task<ActionResult<SignUpReturnModel>> SignUpUser(SignUpUserModel user)
+        [HttpGet("list", Name = nameof(GetUsers))]
+        public async Task<IEnumerable<UserShortModel>> GetUsers(string phrase)
         {
-            var entity = await _sqlContext.Users
-                .AnyAsync(x => x.Email == user.Email)
+            var users = await _sqlContext.Users
+                .Where(x => x.Nickname.StartsWith(phrase) || x.Firstname.StartsWith(phrase) || x.Lastname.StartsWith(phrase))
+                .ToListAsync()
                 .ConfigureAwait(false);
 
-            if (entity)
-            {
-                return new SignUpReturnModel()
-                {
-                    Result = false,
-                    ErrorCode = Helpers.ErrorCodes.SignUpErrors.EmailAlreadyInDB,
-                    UserId = null
-                };
-            }
-
-            if(!user.IsValid())
-            {
-                return new BadRequestResult();
-            }
-
-            var newEntity = user.ToUser();
-            await _sqlContext.Users.AddAsync(newEntity).ConfigureAwait(false);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return new SignUpReturnModel()
-            {
-                Result = true,
-                ErrorCode = null,
-                UserId = newEntity.Id
-            };           
+            return users.ToUserShortListModel();
         }
 
         [HttpGet("{userId}", Name = nameof(GetUserInfo))]
@@ -96,9 +75,11 @@ namespace RoomMe.API.Controllers
             return user.Flats.ToFlatNameModelList();
         }
 
-        [HttpPost("{userId}/friend/{friendId}", Name = nameof(AddFriend))]
-        public async Task<ActionResult<DateTime>> AddFriend(int userId, int friendId)
+        [HttpPost("friends/{friendId}", Name = nameof(AddFriend))]
+        public async Task<ActionResult<DateTime>> AddFriend(int friendId)
         {
+            var userId = _sessionHelper.UserId;
+
             var user = await _sqlContext.Users
                 .FindAsync(userId)
                 .ConfigureAwait(false);
@@ -127,7 +108,7 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpGet("{userId}/friends", Name = nameof(GetFriends))]
-        public async Task<ActionResult<IEnumerable<UserFriendModel>>> GetFriends(int userId)
+        public async Task<ActionResult<IEnumerable<UserShortModel>>> GetFriends(int userId)
         {
             var user = await _sqlContext.Users
                 .Include(x => x.Friends)
@@ -141,7 +122,7 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            return user.Friends.ToUserFriendListModel();
+            return user.Friends.ToUserShortListModel();
         }
     }
 }

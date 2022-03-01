@@ -78,7 +78,9 @@ namespace RoomMeAPI
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddScoped<ISessionHelper, SessionHelper>();
+            services.AddScoped<IJWTUtils, JWTUtils>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

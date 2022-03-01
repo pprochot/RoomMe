@@ -11,5 +11,7 @@ namespace RoomMe.API.Helpers
         public const int MinNickLength = 4;
         public const int MinPasswordLength = 6;
         public const int MaxPasswordLength = 24;
+
+        public const string FilePath = "/receipts/";
     }
 }
