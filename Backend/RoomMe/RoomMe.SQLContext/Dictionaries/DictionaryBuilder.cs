@@ -12,6 +12,7 @@ namespace RoomMe.SQLContext.Dictionaries
         public static void AddDictionaries(ModelBuilder modelBuilder)
         {
             HouseworkStatusesDictionary.AddRecords(modelBuilder);
+            HouseworkFrequencyDictionary.AddRecords(modelBuilder);
         }
     }
 }
