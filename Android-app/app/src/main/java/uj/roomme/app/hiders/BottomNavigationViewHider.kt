@@ -14,7 +14,7 @@ class BottomNavigationViewHider(private val bottomNavView: BottomNavigationView)
         private val destinationsWithoutBottomNavView = setOf(
             R.id.destSignInFragment, R.id.destSignUpFragment, R.id.destForgotPasswordFragment,
             R.id.destProfileFragment, R.id.destApartmentsFragment, R.id.destCreateApartmentFragment,
-            R.id.destFriendsFragments
+            R.id.destFriendsFragments, R.id.destAddFriendFragment
         )
     }
 
