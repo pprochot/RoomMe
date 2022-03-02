@@ -35,7 +35,7 @@ namespace RoomMe.API.Converters
             return new FlatPostReturnModel()
             {
                 Id = flat.Id,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 
