@@ -119,11 +119,20 @@ namespace RoomMe.API.Controllers
         [HttpGet("{houseworkId}/settings", Name = nameof(GetHouseworkSettings))]
         public async Task<ActionResult<HouseworkSettingsModel>> GetHouseworkSettings(int settingsId)
         {
-            var settings = await _sqlContext.HouseworkSettings.FindAsync(settingsId).ConfigureAwait(false);
+            var settings = await _sqlContext.HouseworkSettings
+                .Include(x => x.Frequency)
+                .FirstOrDefaultAsync(y => y.Id == settingsId)
+                .ConfigureAwait(false);
 
             if(settings == null)
             {
                 _logger.LogError($"Settings not found for id {settingsId}");
+                return new BadRequestResult();
+            }
+
+            if(settings.Frequency == null)
+            {
+                _logger.LogError($"Frequency not found for settingsId {settingsId}");
                 return new BadRequestResult();
             }
 
