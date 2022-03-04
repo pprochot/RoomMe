@@ -13,16 +13,16 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLayoutSignInNickname"
+            android:id="@+id/inputLayoutSignInEmail"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nickname"
+            android:hint="Email"
             app:endIconMode="clear_text"
             app:startIconDrawable="@drawable/ic_person">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputEditTextSignInNickname"
+                android:id="@+id/inputEditTextSignInEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"

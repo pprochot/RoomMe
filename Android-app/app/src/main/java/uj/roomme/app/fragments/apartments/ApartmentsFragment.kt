@@ -46,7 +46,7 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
     }
 
     private fun getFlatsFromService() {
-        userService.getFlats(sessionViewModel.userId!!)
+        userService.getFlats(sessionViewModel.userData!!.id)
             .enqueue(object : Callback<List<FlatNameModel>> {
                 override fun onResponse(
                     call: Call<List<FlatNameModel>>,

@@ -8,9 +8,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import uj.roomme.domain.auth.ErrorCode
+import uj.roomme.services.AuthService
+import uj.roomme.services.BuildConfig
 import uj.roomme.services.FlatService
 import uj.roomme.services.UserService
-import uj.roomme.services.configuration.ServiceConfiguration.SERVICE_LOCALHOST_EMULATOR_URL
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Singleton
@@ -22,11 +24,16 @@ class ServicesModule {
     @Provides
     @Singleton
     fun gsonConverterFactory(): GsonConverterFactory {
-        val offsetDateTimeDeserializer = JsonDeserializer { json, typeOfT, context ->
+        val offsetDateTimeDeserializer = JsonDeserializer { json, _, _ ->
             OffsetDateTime.parse(json.asString, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+        }
+        val errorCodeDeserializer = JsonDeserializer { json, _, _ ->
+            ErrorCode.fromCode(json.asInt)
         }
         val gson = GsonBuilder()
             .registerTypeAdapter(OffsetDateTime::class.java, offsetDateTimeDeserializer)
+            .registerTypeAdapter(ErrorCode::class.java, errorCodeDeserializer)
+            .setLenient()
             .create()
         return GsonConverterFactory.create(gson)
     }
@@ -39,9 +46,13 @@ class ServicesModule {
     @Singleton
     fun flatService(gson: GsonConverterFactory) = createService<FlatService>(gson)
 
+    @Provides
+    @Singleton
+    fun authService(gson: GsonConverterFactory) = createService<AuthService>(gson)
+
     private inline fun <reified T> createService(gsonConverterFactory: GsonConverterFactory): T {
         return Retrofit.Builder()
-            .baseUrl(SERVICE_LOCALHOST_EMULATOR_URL)
+            .baseUrl(BuildConfig.SERVICE_URL)
             .addConverterFactory(gsonConverterFactory)
             .build()
             .create(T::class.java)

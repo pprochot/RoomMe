@@ -80,7 +80,7 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
         return FlatPostModel(
             flatNameView?.text.toString(),
             flatAddressView?.text.toString(),
-            listOf(sessionViewModel.userId!!)
+            listOf(sessionViewModel.userData!!.id)
         )
     }
 

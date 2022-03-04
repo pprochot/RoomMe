@@ -1,11 +1,11 @@
 package uj.roomme.app.validators
 
-import uj.roomme.app.models.UserSignInData
+import uj.roomme.domain.auth.SignInModel
 
 class SignInValidator {
 
-    fun isValid(userSignInData: UserSignInData): Boolean {
-        if (userSignInData.login.isBlank() || userSignInData.password.isBlank()) {
+    fun isValid(signInModel: SignInModel): Boolean {
+        if (signInModel.email.isBlank() || signInModel.password.isBlank()) {
             return false
         }
         return true

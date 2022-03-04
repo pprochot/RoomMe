@@ -1,6 +1,6 @@
-package uj.roomme.domain.user
+package uj.roomme.domain.auth
 
-data class UserPostModel(
+data class SignUpUserModel(
     val nickname: String,
     val email: String,
     val password: String,
