@@ -1,5 +1,6 @@
 package uj.roomme.app.fragments.apartments
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.Toast
@@ -13,8 +14,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.app.R
 import uj.roomme.app.adapters.FlatsAdapter
+import uj.roomme.app.consts.Toasts
 import uj.roomme.domain.flat.FlatNameModel
-import uj.roomme.services.UserService
+import uj.roomme.services.service.UserService
 import uj.roomme.app.viewmodels.SessionViewModel
 import javax.inject.Inject
 import uj.roomme.app.fragments.apartments.ApartmentsFragmentDirections as Directions
@@ -46,28 +48,17 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
     }
 
     private fun getFlatsFromService() {
-        userService.getFlats(sessionViewModel.userData!!.id)
-            .enqueue(object : Callback<List<FlatNameModel>> {
-                override fun onResponse(
-                    call: Call<List<FlatNameModel>>,
-                    response: Response<List<FlatNameModel>>
-                ) {
-                    if (response.isSuccessful) {
-                        displayData(response.body()!!)
-                    } else {
-                        toastOnFailure()
-                    }
+        sessionViewModel.userData?.apply {
+            userService.getFlats(this.token, this.id).processAsync { code, body, _ ->
+                if (code == 401) {
+                    Log.d("Tag", "Unauthorized request")
                 }
-
-                override fun onFailure(call: Call<List<FlatNameModel>>, t: Throwable) {
-                    toastOnFailure()
+                if (body == null) {
+                    Toasts.toastOnSendingRequestFailure(context)
+                } else {
+                    displayData(body)
                 }
-            })
-    }
-
-    private fun toastOnFailure() {
-        if (activity != null) {
-            Toast.makeText(activity, "Something is invalid! Try again.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

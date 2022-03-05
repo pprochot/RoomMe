@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
@@ -14,14 +13,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
-import uj.roomme.app.exceptions.UnsuccessfulHttpCall
 import uj.roomme.app.models.UserSignUpData
 import uj.roomme.app.validators.SignUpValidator
-import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.auth.ApiModel
 import uj.roomme.domain.auth.SignUpReturnModel
 import uj.roomme.domain.auth.SignUpUserModel
-import uj.roomme.services.AuthService
+import uj.roomme.services.service.AuthService
 import javax.inject.Inject
 import uj.roomme.app.fragments.login.SignUpFragmentDirections as Directions
 
@@ -68,17 +65,34 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         signUpButton.isClickable = false
 
         val inputData = inputDataFromViews()
-        if (signUpValidator.isValid(inputData)) {
-            createUserViaService(inputData.toRequestBody())
-        } else {
-            Toasts.invalidInputData(context)
+        when (signUpValidator.isValid(inputData)) {
+            true -> createUserViaService(inputData.toRequestBody())
+            false -> {
+                Toasts.invalidInputData(context)
+                signUpButton.isClickable = true
+            }
         }
     }
 
     private fun createUserViaService(requestBody: SignUpUserModel) {
-        val callback = SignUpUserCallback()
-        authService.signUp(requestBody)
-            .enqueue(callback)
+        authService.signUp(requestBody).processAsync { _, body, throwable ->
+            if (body == null) {
+                Log.d(TAG, "Failed to sign up.", throwable)
+                Toasts.toastOnSendingRequestFailure(context)
+            } else when (body.result) {
+                true -> {
+                    Log.i(TAG, "User has successfully registered.")
+                    Toasts.successfulSignUp(context)
+                    navController.navigate(Directions.actionSignUpToSignIn())
+                }
+                false -> {
+                    Log.e(TAG, "Failed to successfully register user!")
+                    Toasts.toastOnUnsuccessfulResponse(context, body.errorCode)
+                }
+
+            }
+            signUpButton.isClickable = true
+        }
     }
 
     private fun inputDataFromViews() = UserSignUpData(
@@ -99,33 +113,4 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         this.lastname,
         this.phoneNumber
     )
-
-    private inner class SignUpUserCallback : Callback<ApiModel<SignUpReturnModel>> {
-        override fun onResponse(
-            call: Call<ApiModel<SignUpReturnModel>>,
-            response: Response<ApiModel<SignUpReturnModel>>
-        ) {
-            if (!response.isSuccessful) {
-                return onFailure(call, UnsuccessfulHttpCall(response.code(), response.body()))
-            }
-
-            val body = response.body()!!
-            if (body.result) {
-                Log.i(TAG, "User has successfully registered.")
-                Toasts.successfulSignUp(context)
-                navController.navigate(Directions.actionSignUpToSignIn())
-                signUpButton.isClickable = true
-            } else {
-                Log.e(TAG, "Failed to successfully register user!")
-                Toasts.toastOnUnsuccessfulResponse(context, body.errorCode)
-                signUpButton.isClickable = true
-            }
-        }
-
-        override fun onFailure(call: Call<ApiModel<SignUpReturnModel>>, t: Throwable) {
-            Log.e(TAG, "Request to register user failed!", t)
-            Toasts.toastOnSendingRequestFailure(context)
-            signUpButton.isClickable = true
-        }
-    }
 }

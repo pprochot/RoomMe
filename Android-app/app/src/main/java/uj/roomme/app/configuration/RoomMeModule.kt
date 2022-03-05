@@ -1,4 +1,4 @@
-package uj.roomme.app
+package uj.roomme.app.configuration
 
 import dagger.Module
 import dagger.Provides
@@ -13,13 +13,11 @@ import javax.inject.Singleton
 class RoomMeModule {
 
     @Provides
-    @Singleton
     fun signInValidator(): SignInValidator {
         return SignInValidator()
     }
 
     @Provides
-    @Singleton
     fun signUpValidator(): SignUpValidator {
         return SignUpValidator()
     }

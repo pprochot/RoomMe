@@ -9,7 +9,7 @@ object Toasts {
     fun invalidInputData(context: Context?) = showShortToast(context, "Invalid input!")
 
     fun toastOnSendingRequestFailure(context: Context?) =
-        showShortToast(context, "Could not send request!")
+        showShortToast(context, "Failed to proceed!")
 
     fun toastOnUnsuccessfulResponse(context: Context?, errorCode: ErrorCode?) {
         when (errorCode) {
@@ -21,6 +21,9 @@ object Toasts {
 
     fun successfulSignUp(context: Context?) =
         showShortToast(context, "You have registered! You can log in now.")
+
+    fun createdApartment(context: Context?) =
+        showShortToast(context, "You have created new apartment")
 
     private fun showShortToast(context: Context?, text: String) {
         context?.apply {
