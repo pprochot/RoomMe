@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
+import uj.roomme.domain.user.UserShortModel
 
-class FriendsAdapter(private val context: Context) :
+class FriendsAdapter(private val users: List<UserShortModel>) :
     RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -18,18 +19,20 @@ class FriendsAdapter(private val context: Context) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(context)
+        val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.rv_user_info, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.usernameView.text = "Markyy"
-        holder.firstnameView.text = "Mark"
-        holder.lastnameView.text = "Zuck"
+        users[position].apply {
+            holder.usernameView.text = nickname
+            holder.firstnameView.text = firstname
+            holder.lastnameView.text = lastname
+        }
     }
 
     override fun getItemCount(): Int {
-        return 1
+        return users.size
     }
 }

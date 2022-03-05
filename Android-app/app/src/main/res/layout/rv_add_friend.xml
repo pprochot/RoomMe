@@ -6,6 +6,7 @@
     <include layout="@layout/rv_user_info" />
 
     <ImageButton
+        android:id="@+id/icAddFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add_friend"
