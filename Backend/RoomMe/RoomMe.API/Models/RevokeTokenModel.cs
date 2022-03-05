@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RoomMe.API.Helpers
+namespace RoomMe.API.Models
 {
-    public enum ErrorCodes
+    public class RevokeTokenModel
     {
-        EmailAlreadyInDB,
-        WrongEmailOrPassword
+        public string Token { get; set; }
     }
 }

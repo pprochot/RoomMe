@@ -26,6 +26,7 @@ namespace RoomMe.SQLContext
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<RentCost> RentCosts { get; set; }
         public DbSet<UserFriend> UserFriends { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
