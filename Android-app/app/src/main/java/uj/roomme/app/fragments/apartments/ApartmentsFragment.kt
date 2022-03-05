@@ -24,6 +24,8 @@ import uj.roomme.app.fragments.apartments.ApartmentsFragmentDirections as Direct
 @AndroidEntryPoint
 class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
 
+    private val TAG = "ApartmentsFragment"
+
     @Inject
     lateinit var userService: UserService
 
@@ -51,7 +53,7 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
         sessionViewModel.userData?.apply {
             userService.getFlats(this.token, this.id).processAsync { code, body, _ ->
                 if (code == 401) {
-                    Log.d("Tag", "Unauthorized request")
+                    Log.d(TAG, "Unauthorized request")
                 }
                 if (body == null) {
                     Toasts.toastOnSendingRequestFailure(context)

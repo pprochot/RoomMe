@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun setUpToolbarAndDrawerLayout() {
         setSupportActionBar(toolbar)
         toolbar.findViewById<ImageButton>(R.id.buttonLogOut).setOnClickListener {
+            sessionViewModel.userData = null
             navController.navigate(R.id.actionGlobalLogOut)
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
