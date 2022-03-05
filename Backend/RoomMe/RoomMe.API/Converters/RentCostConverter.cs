@@ -16,7 +16,7 @@ namespace RoomMe.API.Converters
                 FlatId = flatId,
                 UserId = userId,
                 Value = cost.Value,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 
@@ -26,14 +26,14 @@ namespace RoomMe.API.Converters
             {
                 userId = cost.UserId,
                 flatId = cost.FlatId,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 
         public static void UpdateRentCost(this RentCost entityCost, RentCostPutModel cost)
         {
             entityCost.Value = cost.Value;
-            entityCost.CreationDate = DateTime.Now;
+            entityCost.CreationDate = DateTime.UtcNow;
         }
     }
 }

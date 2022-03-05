@@ -34,10 +34,10 @@
         android:label="Sign up"
         tools:layout="@layout/fragment_sign_up">
         <action
-            android:id="@+id/actionSignUpToHome"
-            app:destination="@id/mainNavGraph"
-            app:popUpTo="@id/loginNavGraph"
-            app:popUpToInclusive="true" />
+            android:id="@+id/actionSignUpToSignIn"
+            app:destination="@id/destSignInFragment"
+            app:popUpTo="@id/destSignInFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/destForgotPasswordFragment"

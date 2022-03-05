@@ -1,14 +1,16 @@
 package uj.roomme.app.viewmodels
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.ViewModelScoped
+import uj.roomme.domain.auth.SignInReturnModel
+import javax.inject.Inject
 
-class SessionViewModel : ViewModel() {
+@HiltViewModel
+class SessionViewModel @Inject constructor() : ViewModel() {
 
-    var userId: Int? = null
-    var userNickname: String? = null
-    var userEmail: String? = null
-    var firstName: String? = null
-    var secondName: String? = null
-    var phoneNumber: String? = null
-    var mainFlatId: Int? = null
+    var userData: SignInReturnModel? = null
+
+    fun isLoggedIn() = userData != null
 }

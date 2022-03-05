@@ -3,6 +3,7 @@ using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BCryptNet = BCrypt.Net;
 using System.Threading.Tasks;
 
 namespace RoomMe.API.Converters
@@ -18,13 +19,13 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static User ToUser(this UserPostModel user)
+        public static User ToUser(this SignUpUserModel user)
         {
             return new User()
             {
                 Nickname = user.Nickname,
                 Email = user.Email,
-                Password = user.Password,
+                Password = BCryptNet.BCrypt.EnhancedHashPassword(user.Password),
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 PhoneNumber = user.PhoneNumber
@@ -43,10 +44,9 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static UserFriendModel ToUserFriendModel (this UserFriend userFriend)
+        public static UserShortModel ToUserShortModel (this UserFriend userFriend)
         {
-
-            return new UserFriendModel()
+            return new UserShortModel()
             {
                 Id = userFriend.Friend.Id,
                 Nickname = userFriend.Friend.Nickname,
@@ -55,9 +55,25 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static List<UserFriendModel> ToUserFriendListModel (this IEnumerable<UserFriend> userFriends)
+        public static UserShortModel ToUserShortModel (this User user)
         {
-            return userFriends.Select(x => x.ToUserFriendModel()).ToList();
+            return new UserShortModel
+            {
+                Id = user.Id,
+                Nickname = user.Nickname,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname
+            };
+        }
+
+        public static List<UserShortModel> ToUserShortListModel (this IEnumerable<UserFriend> userFriends)
+        {
+            return userFriends.Select(x => x.ToUserShortModel()).ToList();
+        }
+
+        public static List<UserShortModel> ToUserShortListModel (this IEnumerable<User> users)
+        {
+            return users.Select(x => x.ToUserShortModel()).ToList();
         }
     }
 }
