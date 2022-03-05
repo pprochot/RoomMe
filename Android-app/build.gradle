@@ -19,3 +19,9 @@ buildscript {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+ext {
+    serviceUrl = properties["SERVICE_URL"]
+}

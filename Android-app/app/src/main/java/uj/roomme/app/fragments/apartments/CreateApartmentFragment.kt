@@ -1,5 +1,6 @@
 package uj.roomme.app.fragments.apartments
 
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -11,15 +12,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
-import uj.roomme.services.FlatService
+import uj.roomme.services.service.FlatService
 import uj.roomme.app.viewmodels.SessionViewModel
 import javax.inject.Inject
 import uj.roomme.app.fragments.apartments.CreateApartmentFragmentDirections as Directions
 
 @AndroidEntryPoint
 class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
+
+    private val TAG = "CreateApartmentFragment"
 
     @Inject
     lateinit var flatService: FlatService
@@ -41,7 +45,7 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
                 it.isEnabled = false
                 createFlatByService()
             } else {
-                toastOnFailure()
+                Toasts.invalidInputData(context)
                 it.isEnabled = true
             }
         }
@@ -59,40 +63,27 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
 
     private fun createFlatByService() {
         val data = dataFromViews()
-        flatService.createNewFlat(data)
-            .enqueue(object : Callback<FlatPostReturnModel> {
-                override fun onResponse(
-                    call: Call<FlatPostReturnModel>,
-                    response: Response<FlatPostReturnModel>
-                ) {
-                    toastOnSuccess()
+        sessionViewModel.userData?.apply {
+            flatService.createNewFlat(this.token, data).processAsync { code, body, throwable ->
+                if (code == 401) {
+                    Log.d(TAG, "Unauthorized")
+                }
+                if (body == null) {
+                    Toasts.toastOnSendingRequestFailure(context)
+                    createNewApartmentButton?.isEnabled = true
+                } else {
+                    Toasts.createdApartment(context)
                     findNavController().navigate(Directions.actionCreateFlatToApartments())
                 }
-
-                override fun onFailure(call: Call<FlatPostReturnModel>, t: Throwable) {
-                    toastOnFailure()
-                    createNewApartmentButton?.isEnabled = true
-                }
-            })
+            }
+        }
     }
 
     private fun dataFromViews(): FlatPostModel {
         return FlatPostModel(
             flatNameView?.text.toString(),
             flatAddressView?.text.toString(),
-            listOf(sessionViewModel.userId!!)
+            listOf(sessionViewModel.userData!!.id)
         )
-    }
-
-    private fun toastOnSuccess() {
-        if (activity != null) {
-            Toast.makeText(activity, "Flat has been created!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun toastOnFailure() {
-        if (activity != null) {
-            Toast.makeText(activity, "Something is invalid! Try again.", Toast.LENGTH_SHORT).show()
-        }
     }
 }

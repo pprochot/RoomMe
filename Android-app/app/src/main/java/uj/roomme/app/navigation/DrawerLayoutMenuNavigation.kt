@@ -18,7 +18,7 @@ class DrawerLayoutMenuNavigation(private val navController: NavController, priva
         }
         navController.popBackStack(R.id.destHomeFragment, false)
         when (item.itemId) {
-            R.id.destUserInfoFragment -> navController.navigate(R.id.actionGlobalToUserInfo)
+            R.id.destProfileFragment -> navController.navigate(R.id.actionGlobalToProfile)
             R.id.destFriendsFragments -> navController.navigate(R.id.actionGlobalToFriends)
             R.id.destApartmentsFragment -> navController.navigate(R.id.actionGlobalToApartments)
         }

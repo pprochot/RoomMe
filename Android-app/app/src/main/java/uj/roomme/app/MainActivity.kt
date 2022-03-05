@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     companion object {
         val topLevelDestinations = setOf(
             R.id.destShoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment,
-            R.id.destUserInfoFragment, R.id.destFriendsFragments, R.id.destApartmentsFragment,
+            R.id.destProfileFragment, R.id.destFriendsFragments, R.id.destApartmentsFragment,
             R.id.destHouseWorksFragment, R.id.destRoommatesFragment, R.id.destStatisticsFragment
         )
     }
@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun setUpToolbarAndDrawerLayout() {
         setSupportActionBar(toolbar)
         toolbar.findViewById<ImageButton>(R.id.buttonLogOut).setOnClickListener {
+            sessionViewModel.userData = null
             navController.navigate(R.id.actionGlobalLogOut)
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
