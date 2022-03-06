@@ -15,13 +15,14 @@ import uj.roomme.domain.user.UserShortModel
 import uj.roomme.services.service.UserService
 
 class AddFriendAdapter(
-    private val users: List<UserShortModel>,
+    listOfUsers: List<UserShortModel>,
     private val userService: UserService,
     private val sessionViewModel: SessionViewModel
 ) :
     RecyclerView.Adapter<AddFriendAdapter.ViewHolder>() {
 
     private val TAG = "AddFriendAdapter"
+    private val users: MutableList<UserShortModel> = listOfUsers.toMutableList()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var id: Int? = null
@@ -45,7 +46,7 @@ class AddFriendAdapter(
 
         val icAddFriend = holder.itemView.findViewById<ImageButton>(R.id.icAddFriend)
         icAddFriend.setOnClickListener {
-            addFriend(holder.itemView.context, data.id)
+            addFriend(holder.itemView.context, data.id, holder.adapterPosition)
         }
     }
 
@@ -53,19 +54,27 @@ class AddFriendAdapter(
         return users.size
     }
 
-    private fun addFriend(context: Context, friendId: Int) = sessionViewModel.userData?.apply {
-        userService.addFriend(token, friendId).processAsync { code, offsetDateTime, throwable ->
-            when {
-                code == 401 -> Log.d(TAG, "Unauthorized")
-                offsetDateTime != null -> {
-                    Log.d(TAG, "Friend added!")
-                    Toasts.addedFriend(context)
-                }
-                else -> {
-                    Log.d(TAG, "Failed", throwable)
-                    Toasts.toastOnSendingRequestFailure(context)
+    private fun addFriend(context: Context, friendId: Int, position: Int) {
+        sessionViewModel.userData?.apply {
+            userService.addFriend(token, friendId).processAsync { code, offsetDateTime, throwable ->
+                when {
+                    code == 401 -> Log.d(TAG, "Unauthorized")
+                    offsetDateTime != null -> {
+                        Log.d(TAG, "Friend added!")
+                        Toasts.addedFriend(context)
+                        removeItem(position)
+                    }
+                    else -> {
+                        Log.d(TAG, "Failed", throwable)
+                        Toasts.toastOnSendingRequestFailure(context)
+                    }
                 }
             }
         }
+    }
+
+    private fun removeItem(position: Int) {
+        users.removeAt(position);
+        notifyItemRemoved(position);
     }
 }
