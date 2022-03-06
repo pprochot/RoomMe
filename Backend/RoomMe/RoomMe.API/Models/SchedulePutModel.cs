@@ -8,7 +8,6 @@ namespace RoomMe.API.Models
     public class SchedulePutModel
     {
         public int HouseworkId { get; set; }
-        public int UserId { get; set; }
         public DateTime Date { get; set; }
     }
 }

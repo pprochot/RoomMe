@@ -54,7 +54,7 @@ namespace RoomMe.API.Controllers
 
             foreach (var userId in housework.Users)
             {
-                var existsUser = users.Any(x => x.Id == userId); 
+                var existsUser = users.Any(x => x.Id == userId);
 
                 if (!existsUser)
                 {
@@ -117,60 +117,34 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpGet("{houseworkId}/settings", Name = nameof(GetHouseworkSettings))]
-        public async Task<ActionResult<HouseworkSettingsModel>> GetHouseworkSettings(int settingsId)
+        public async Task<ActionResult<HouseworkSettingsModel>> GetHouseworkSettings(int houseworkId)
         {
-            var settings = await _sqlContext.HouseworkSettings
-                .Include(x => x.Frequency)
-                .FirstOrDefaultAsync(y => y.Id == settingsId)
-                .ConfigureAwait(false);
+            var housework = await _sqlContext.Houseworks
+               .Include(x => x.HouseworkSettings)
+               .ThenInclude(y => y.Frequency)
+               .FirstOrDefaultAsync(x => x.Id == houseworkId)
+               .ConfigureAwait(false);
 
-            if(settings == null)
+            if (housework == null)
             {
-                _logger.LogError($"Settings not found for id {settingsId}");
+                _logger.LogError($"Housework not found for id {houseworkId}");
                 return new BadRequestResult();
             }
 
-            if(settings.Frequency == null)
+            if (housework.HouseworkSettings == null)
             {
-                _logger.LogError($"Frequency not found for settingsId {settingsId}");
+                _logger.LogError($"Settings not found for housework id {houseworkId}");
                 return new BadRequestResult();
             }
 
-            return settings.ToHouseworkSettingsModel();
-        }
-
-        [HttpGet("{houseworkId}/{settingsId}/frequency", Name = nameof(GetSettingsFrequency))]
-        public async Task<ActionResult<HouseworkFrequencyModel>> GetSettingsFrequency(int settingsId)
-        {
-            var settings = await _sqlContext.HouseworkSettings
-                .Include(x => x.Frequency)
-                .FirstOrDefaultAsync(y => y.Id == settingsId)
-                .ConfigureAwait(false);
-
-            if(settings == null)
+            if (housework.HouseworkSettings.Frequency == null)
             {
-                _logger.LogError($"Housework not found for id {settingsId}");
+                _logger.LogError($"Frequency not found for settings in housework with Id {houseworkId}");
                 return new BadRequestResult();
             }
 
-            return settings.Frequency.ToHouseworkFrequencyModel();
+            return housework.HouseworkSettings.ToHouseworkSettingsModel();
         }
 
-        [HttpGet("list", Name = nameof(GetFullHouseworkByDate))]
-        public async Task<ActionResult<List<HouseworkFullGetModel>>> GetFullHouseworkByDate(FromToDateModel dates)
-        {
-            List<HouseworkFullGetModel> houseworkModels = new List<HouseworkFullGetModel>();
-
-            var houseworks = await _sqlContext.HouseworkSchedules
-                .Where(x => x.Date >= dates.From && x.Date <= dates.To)
-                .Include(y => y.Housework)
-                .Select(x => x.Housework)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            houseworkModels = houseworks.Select(x => x.ToHouseworkFullModel()).ToList();
-
-            return houseworkModels;
-        }
     }
 }

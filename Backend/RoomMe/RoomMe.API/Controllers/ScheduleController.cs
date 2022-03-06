@@ -63,14 +63,6 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var isUser = await _sqlContext.Users.AnyAsync(x => x.Id == schedule.UserId).ConfigureAwait(false);
-
-            if(!isUser)
-            {
-                _logger.LogError($"User not found for id {schedule.UserId}");
-                return new BadRequestResult();
-            }
-
             var scheduleEntity = schedule.ToScheduleModel(housework);
 
             scheduleEntity.StatusId = 1;
@@ -85,20 +77,42 @@ namespace RoomMe.API.Controllers
             return scheduleEntity.ToSchedulePutReturnModel();
         }
 
-        [HttpGet("{scheduleId}/date", Name = nameof(GetScheduleDate))]
-        public async Task<ActionResult<ScheduleDateModel>> GetScheduleDate(int scheduleId)
+        [HttpGet("/date", Name = nameof(GetScheduleDate))]
+        public async Task<ActionResult<List<ScheduleDateModel>>> GetScheduleDate([FromQuery] FromToDateModel dates)
         {
-            var schedule = await _sqlContext.HouseworkSchedules
-                .FirstOrDefaultAsync(x => x.Id == scheduleId)
+            List<ScheduleDateModel> schedulesModels = new List<ScheduleDateModel>();
+
+            var schedules = await _sqlContext.HouseworkSchedules
+                .Where(x => x.Date >= dates.From && x.Date <= dates.To)
+                .Include(y => y.Housework)
+                .ToListAsync()
                 .ConfigureAwait(false);
 
-            if(schedule == null)
-            {
-                _logger.LogError($"Schedule not found for id {scheduleId}");
-                return new BadRequestResult();
-            }
+            schedulesModels = schedules.Select(x => x.ToScheduleDateModel()).ToList();
 
-            return schedule.ToScheduleDateModel();
+            return schedulesModels;
         }
+
+        [HttpGet("{houseworkId}/list", Name = nameof(GetFullSchedulesByDate))]
+        public async Task<ActionResult<List<ScheduleFullGetModel>>> GetFullSchedulesByDate([FromQuery] FromToDateModel dates, int houseworkId)
+        {
+            List<ScheduleFullGetModel> schedulesModels = new List<ScheduleFullGetModel>();
+
+            var schedules = await _sqlContext.HouseworkSchedules
+                .Where(x => x.Date >= dates.From && x.Date <= dates.To && x.HouseworkId == houseworkId)
+                .Include(x => x.User)
+                .Include(x => x.HouseworkStatus)
+                .Include(x => x.Housework)
+                .ThenInclude(y => y.HouseworkSettings)
+                .ThenInclude(z => z.Frequency)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            schedulesModels = schedules.Select(x => x.ToScheduleFullGetModel()).ToList();
+
+            return schedulesModels;
+        }
+
+
     }
 }

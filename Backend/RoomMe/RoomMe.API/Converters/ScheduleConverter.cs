@@ -28,7 +28,7 @@ namespace RoomMe.API.Converters
             {
                 HouseworkId = schedule.HouseworkId,
                 Housework = housework,
-                UserId = schedule.UserId,
+                //TODO: UserId received through JWT token
                 Date = schedule.Date,
             };
         }
