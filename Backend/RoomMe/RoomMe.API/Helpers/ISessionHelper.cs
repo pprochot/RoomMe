@@ -10,5 +10,6 @@ namespace RoomMe.API.Helpers
     {
         public int UserId { get; }
         public User Session { get; }
+        public List<int> FriendsIds { get; }
     }
 }

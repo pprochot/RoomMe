@@ -37,6 +37,8 @@ namespace RoomMe.API.Controllers
         {
             var users = await _sqlContext.Users
                 .Where(x => x.Nickname.StartsWith(phrase) || x.Firstname.StartsWith(phrase) || x.Lastname.StartsWith(phrase))
+                .Where(x => x.Id != _sessionHelper.UserId)
+                .Where(x => !_sessionHelper.FriendsIds.Any(id => id == x.Id))
                 .ToListAsync()
                 .ConfigureAwait(false);
 

@@ -42,7 +42,7 @@ namespace RoomMe.API.Controllers
         public async Task<ActionResult<ApiResult<SignUpReturnModel>>> SignUpUser(SignUpUserModel user)
         {
             var entity = await _sqlContext.Users
-                .AnyAsync(x => x.Email == user.Email)
+                .AnyAsync(x => x.Email == user.Email || x.Nickname == user.Nickname)
                 .ConfigureAwait(false);
 
             if (entity)
