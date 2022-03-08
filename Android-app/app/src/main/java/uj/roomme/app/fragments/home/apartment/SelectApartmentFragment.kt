@@ -49,8 +49,8 @@ class SelectApartmentFragment : Fragment(R.layout.fragment_select_apartment) {
     }
 
     private fun getFlatsFromService() {
-        sessionViewModel.userData?.apply {
-            userService.getFlats(this.token, this.id).processAsync { code, body, _ ->
+        sessionViewModel.userData?.let {
+            userService.getFlats(it.accessToken).processAsync { code, body, _ ->
                 if (code == 401) {
                     Log.d(TAG, "Unauthorized request")
                 }

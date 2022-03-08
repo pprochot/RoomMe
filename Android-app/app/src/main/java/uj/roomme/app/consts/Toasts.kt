@@ -12,7 +12,8 @@ object Toasts {
 
     fun toastOnUnsuccessfulResponse(context: Context?, errorCode: ErrorCode?) {
         when (errorCode) {
-            ErrorCode.EmailAlreadyInDB -> showShortToast(context, "Email already in use!")
+            ErrorCode.EmailOrNicknameAlreadyInDB ->
+                showShortToast(context, "Email or nickname already in use!")
             ErrorCode.WrongEmailOrPassword -> showShortToast(context, "Wrong email or password!")
             else -> return
         }
@@ -25,6 +26,10 @@ object Toasts {
 
     fun createdApartment(context: Context?) =
         showShortToast(context, "You have created new apartment")
+
+    fun addedFriend(context: Context?) = showShortToast(context, "Friend added")
+
+    fun removedFriend(context: Context?) = showShortToast(context, "Friend removed")
 
     private fun showShortToast(context: Context?, text: String) {
         context?.apply {

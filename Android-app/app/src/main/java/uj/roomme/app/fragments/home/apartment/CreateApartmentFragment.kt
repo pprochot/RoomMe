@@ -59,7 +59,7 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
     private fun createFlatByService() {
         val data = dataFromViews()
         sessionViewModel.userData?.apply {
-            flatService.createNewFlat(this.token, data).processAsync { code, body, throwable ->
+            flatService.createNewFlat(this.accessToken, data).processAsync { code, body, throwable ->
                 if (code == 401) {
                     Log.d(TAG, "Unauthorized")
                 }

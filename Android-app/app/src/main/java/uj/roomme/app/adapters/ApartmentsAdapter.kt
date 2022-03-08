@@ -58,7 +58,7 @@ class ApartmentsAdapter(
     }
 
     private fun getFlatFullInfo(apartmentId: Int, context: Context, navController: NavController) {
-        flatService.getFlatFull(sessionViewModel.userData!!.token, apartmentId)
+        flatService.getFlatFull(sessionViewModel.userData!!.accessToken, apartmentId)
             .processAsync { code, body, throwable ->
                 if (code == 401) {
                     Log.d(TAG, "Unauthorized request")

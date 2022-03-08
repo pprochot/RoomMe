@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.activity.MainActivity
+import uj.roomme.app.activity.NavViewDataSetter
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.validators.SignInValidator
 import uj.roomme.app.viewmodels.SessionViewModel
@@ -35,10 +37,12 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     private lateinit var nicknameView: TextInputEditText
     private lateinit var passwordView: TextInputEditText
     private lateinit var signInButton: Button
+    private lateinit var navViewDataSetter: NavViewDataSetter
 
     override fun onStart() {
         super.onStart()
 
+        navViewDataSetter = activity as NavViewDataSetter
         navController = findNavController()
         view?.apply {
             nicknameView = findViewById(R.id.inputEditTextSignInEmail)
@@ -81,12 +85,13 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                 true -> {
                     Log.d(TAG, "User has successfully logged in.")
                     sessionViewModel.userData = body.value
+                    navViewDataSetter.setDataInNavigationView()
                     navController.navigate(Directions.actionSignInToHome())
                 }
                 false -> {
                     Log.d(TAG, "Failed to successfully log in!")
                     activity?.runOnUiThread {
-                        Toasts.toastOnUnsuccessfulResponse(context, body.errorCode)
+                        Toasts.toastOnUnsuccessfulResponse(context, body.errorName)
                     }
                 }
             }

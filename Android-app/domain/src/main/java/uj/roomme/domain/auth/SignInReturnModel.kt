@@ -7,6 +7,6 @@ data class SignInReturnModel(
     val firstname: String?,
     val lastname: String?,
     val phoneNumber: String?,
-    val token: String,
+    val accessToken: String,
     val refreshToken: String
 )
