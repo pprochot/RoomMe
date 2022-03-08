@@ -14,5 +14,8 @@ class SessionViewModel @Inject constructor() : ViewModel() {
     var userData: SignInReturnModel? = null
     var apartmentInfo: FlatFullGetModel? = null
 
-    fun isLoggedIn() = userData != null
+    fun clear() {
+        userData = null
+        apartmentInfo = null
+    }
 }
