@@ -92,7 +92,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                 false -> {
                     Log.d(TAG, "Failed to successfully log in!")
                     activity?.runOnUiThread {
-                        Toasts.toastOnUnsuccessfulResponse(context, body.errorCode)
+                        Toasts.toastOnUnsuccessfulResponse(context, body.errorName)
                     }
                 }
             }

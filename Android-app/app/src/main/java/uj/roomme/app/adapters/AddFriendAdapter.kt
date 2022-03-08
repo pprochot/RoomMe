@@ -56,7 +56,7 @@ class AddFriendAdapter(
 
     private fun addFriend(context: Context, friendId: Int, position: Int) {
         sessionViewModel.userData?.apply {
-            userService.addFriend(token, friendId).processAsync { code, offsetDateTime, throwable ->
+            userService.addFriend(accessToken, friendId).processAsync { code, offsetDateTime, throwable ->
                 when {
                     code == 401 -> Log.d(TAG, "Unauthorized")
                     offsetDateTime != null -> {

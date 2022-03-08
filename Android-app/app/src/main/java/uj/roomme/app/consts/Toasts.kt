@@ -13,7 +13,8 @@ object Toasts {
 
     fun toastOnUnsuccessfulResponse(context: Context?, errorCode: ErrorCode?) {
         when (errorCode) {
-            ErrorCode.EmailAlreadyInDB -> showShortToast(context, "Email already in use!")
+            ErrorCode.EmailOrNicknameAlreadyInDB ->
+                showShortToast(context, "Email or nickname already in use!")
             ErrorCode.WrongEmailOrPassword -> showShortToast(context, "Wrong email or password!")
             else -> return
         }

@@ -87,7 +87,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                 }
                 false -> {
                     Log.e(TAG, "Failed to successfully register user!")
-                    Toasts.toastOnUnsuccessfulResponse(context, body.errorCode)
+                    Toasts.toastOnUnsuccessfulResponse(context, body.errorName)
                 }
 
             }

@@ -42,7 +42,7 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
     }
 
     private fun getUserFromService(phrase: String) = sessionViewModel.userData?.apply {
-        userService.getUsers(this.token, phrase).processAsync { code, list, throwable ->
+        userService.getUsers(this.accessToken, phrase).processAsync { code, list, throwable ->
             when {
                 code == 401 -> Log.d(TAG, "Unauthorized")
                 list != null -> {

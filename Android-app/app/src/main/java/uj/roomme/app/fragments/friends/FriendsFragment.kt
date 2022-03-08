@@ -7,11 +7,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.adapters.AddFriendAdapter
-import uj.roomme.app.adapters.FlatsAdapter
 import uj.roomme.app.adapters.FriendsAdapter
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.viewmodels.SessionViewModel
@@ -46,8 +43,8 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
         getUserFromService()
     }
 
-    private fun getUserFromService() = sessionViewModel.userData?.apply {
-        userService.getFriends(token, id).processAsync { code, list, throwable ->
+    private fun getUserFromService() = sessionViewModel.userData?.let {
+        userService.getFriends(it.accessToken).processAsync { code, list, throwable ->
             when {
                 code == 401 -> Log.d(TAG, "Unauthorized")
                 list != null -> {
