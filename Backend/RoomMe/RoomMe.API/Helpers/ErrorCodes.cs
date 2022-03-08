@@ -7,7 +7,7 @@ namespace RoomMe.API.Helpers
 {
     public enum ErrorCodes
     {
-        EmailAlreadyInDB,
+        EmailOrNicknameAlreadyInDB,
         WrongEmailOrPassword
     }
 }

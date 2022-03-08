@@ -19,7 +19,7 @@ namespace RoomMe.API.Converters
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 PhoneNumber = user.PhoneNumber,
-                Token = token,
+                AccessToken = token,
                 RefreshToken = refreshToken
             };
         }

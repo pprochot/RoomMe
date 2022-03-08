@@ -10,6 +10,7 @@ namespace RoomMe.API.Models
     {
         public bool Result { get; set; }
         public ErrorCodes? ErrorCode { get; set; }
+        public string ErrorName { get; set; }
         public T Value { get; set; }
     }
 }

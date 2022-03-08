@@ -45,34 +45,24 @@ namespace RoomMe.API.Controllers
             return users.ToUserShortListModel();
         }
 
-        [HttpGet("{userId}", Name = nameof(GetUserInfo))]
-        public async Task<ActionResult<UserGetModel>> GetUserInfo(int userId)
+        [HttpGet("", Name = nameof(GetUserInfo))]
+        public async Task<ActionResult<UserGetModel>> GetUserInfo()
         {
+            var userId = _sessionHelper.UserId;
             var user = await _sqlContext.Users
                 .FindAsync(userId);
-
-            if(user == null)
-            {
-                _logger.LogError($"User not found for id {userId}");
-                return new BadRequestResult();
-            }
 
             return user.ToUserGetModel();
         }
 
-        [HttpGet("{userId}/flats", Name = nameof(GetFlats))]
-        public async Task<ActionResult<IEnumerable<FlatNameModel>>> GetFlats(int userId)
+        [HttpGet("flats", Name = nameof(GetFlats))]
+        public async Task<ActionResult<IEnumerable<FlatNameModel>>> GetFlats()
         {
+            var userId = _sessionHelper.UserId;
             var user = await _sqlContext.Users
                 .Include(x => x.Flats)
                 .FirstOrDefaultAsync(x => x.Id == userId)
                 .ConfigureAwait(false);
-
-            if(user == null)
-            {
-                _logger.LogError($"User not found for id {userId}");
-                return new BadRequestResult();
-            }
 
             return user.Flats.ToFlatNameModelList();
         }
@@ -83,14 +73,9 @@ namespace RoomMe.API.Controllers
             var userId = _sessionHelper.UserId;
 
             var user = await _sqlContext.Users
-                .FindAsync(userId)
+                .Include(x => x.Friends)
+                .SingleOrDefaultAsync(x => x.Id == userId)
                 .ConfigureAwait(false);
-
-            if (user == null)
-            {
-                _logger.LogError($"User not found for id {userId}");
-                return new BadRequestResult();
-            }
 
             var friend = await _sqlContext.Users
                 .FindAsync(friendId)
@@ -102,6 +87,12 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
+            if (user.Friends.Any(x => x.FriendId == friendId))
+            {
+                _logger.LogError($"User has already friend for given id: {friendId}");
+                return new BadRequestResult();
+            }
+
             await _sqlContext.UserFriends.AddAsync(new UserFriend() { UserId = userId, FriendId = friendId }).ConfigureAwait(false);
             await _sqlContext.UserFriends.AddAsync(new UserFriend() { UserId = friendId, FriendId = userId }).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
@@ -109,9 +100,33 @@ namespace RoomMe.API.Controllers
             return DateTime.Now;
         }
 
-        [HttpGet("{userId}/friends", Name = nameof(GetFriends))]
-        public async Task<ActionResult<IEnumerable<UserShortModel>>> GetFriends(int userId)
+        [HttpDelete("friends/{friendId}", Name = nameof(DeleteFriend))]
+        public async Task<ActionResult> DeleteFriend(int friendId)
         {
+            var userId = _sessionHelper.UserId;
+            var user = await _sqlContext.Users
+                .Include(x => x.Friends)
+                .FirstOrDefaultAsync(x => x.Id == userId)
+                .ConfigureAwait(false);
+
+            if(!user.Friends.Any(x => x.FriendId == friendId))
+            {
+                _logger.LogError($"Not found friend for given id: {friendId}");
+                return new BadRequestResult();
+            }
+
+            var entity = user.Friends.Single(x => x.FriendId == friendId);
+
+            _sqlContext.UserFriends.Remove(entity);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return Ok();
+        }
+
+        [HttpGet("friends", Name = nameof(GetFriends))]
+        public async Task<ActionResult<IEnumerable<UserShortModel>>> GetFriends()
+        {
+            var userId = _sessionHelper.UserId;
             var user = await _sqlContext.Users
                 .Include(x => x.Friends)
                 .ThenInclude(y => y.Friend)
