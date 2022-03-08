@@ -50,7 +50,6 @@ namespace RoomMe.API.Controllers
                 return new ApiResult<SignUpReturnModel>()
                 {
                     Result = false,
-                    ErrorCode = ErrorCodes.EmailOrNicknameAlreadyInDB,
                     ErrorName = Enum.GetName(typeof(ErrorCodes), ErrorCodes.EmailOrNicknameAlreadyInDB),
                     Value = null
                 };
@@ -68,7 +67,6 @@ namespace RoomMe.API.Controllers
             return new ApiResult<SignUpReturnModel>()
             {
                 Result = true,
-                ErrorCode = null,
                 ErrorName = null,
                 Value = new SignUpReturnModel() { UserId = newEntity.Id }
             };
@@ -89,7 +87,6 @@ namespace RoomMe.API.Controllers
                 return new ApiResult<SignInReturnModel>()
                 {
                     Result = false,
-                    ErrorCode = ErrorCodes.WrongEmailOrPassword,
                     ErrorName = Enum.GetName(typeof(ErrorCodes), ErrorCodes.WrongEmailOrPassword),
                     Value = null
                 };
@@ -108,7 +105,6 @@ namespace RoomMe.API.Controllers
             return new ApiResult<SignInReturnModel>()
             {
                 Result = true,
-                ErrorCode = null,
                 ErrorName = null,
                 Value = user.ToLoginReturnModel(token, refreshToken.Token)
             };
