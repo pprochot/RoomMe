@@ -10,17 +10,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.validators.SignInValidator
 import uj.roomme.app.viewmodels.SessionViewModel
-import uj.roomme.domain.auth.ApiModel
 import uj.roomme.domain.auth.SignInModel
-import uj.roomme.domain.auth.SignInReturnModel
-import uj.roomme.domain.auth.SignUpUserModel
 import uj.roomme.services.service.AuthService
 import javax.inject.Inject
 import uj.roomme.app.fragments.login.SignInFragmentDirections as Directions
@@ -82,7 +76,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         authService.signIn(signInModel).processAsync { _, body, throwable ->
             if (body == null) {
                 Log.e(TAG, "Request to log in failed!", throwable)
-                activity?.runOnUiThread { Toasts.toastOnSendingRequestFailure(context) }
+                activity?.runOnUiThread { Toasts.sendingRequestFailure(context) }
             } else when (body.result) {
                 true -> {
                     Log.d(TAG, "User has successfully logged in.")

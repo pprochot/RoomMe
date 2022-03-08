@@ -11,28 +11,7 @@
     <action
         android:id="@+id/actionGlobalToFriends"
         app:destination="@id/destFriendsFragments" />
-    <action
-        android:id="@+id/actionGlobalToApartments"
-        app:destination="@id/destApartmentsFragment" />
 
-    <fragment
-        android:id="@+id/destApartmentsFragment"
-        android:name="uj.roomme.app.fragments.apartments.ApartmentsFragment"
-        android:label="Apartments"
-        tools:layout="@layout/fragment_apartments" >
-        <action
-            android:id="@+id/actionApartmentsToCreateApartment"
-            app:destination="@id/destCreateApartmentFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/destCreateApartmentFragment"
-        android:name="uj.roomme.app.fragments.apartments.CreateApartmentFragment"
-        android:label="Create apartment"
-        tools:layout="@layout/fragment_create_apartment" >
-        <action
-            android:id="@+id/actionCreateFlatToApartments"
-            app:destination="@id/destApartmentsFragment" />
-    </fragment>
     <fragment
         android:id="@+id/destProfileFragment"
         android:name="uj.roomme.app.fragments.ProfileFragment"
