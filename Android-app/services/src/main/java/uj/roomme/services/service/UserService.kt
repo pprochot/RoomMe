@@ -11,28 +11,28 @@ interface UserService {
 
     @GET("/user/list")
     fun getUsers(
-        @Header("Authorization") token: String,
+        @Header("Authorization") accessToken: String,
         @Query("phrase") phrase: String
     ): RoomMeCall<List<UserShortModel>>
 
     @GET("/user")
-    fun getUser(@Header("Authorization") token: String): RoomMeCall<UserGetModel>
+    fun getUser(@Header("Authorization") accessToken: String): RoomMeCall<UserGetModel>
 
     @GET("/user/flats")
-    fun getFlats(@Header("Authorization") token: String): RoomMeCall<List<FlatNameModel>>
+    fun getFlats(@Header("Authorization") accessToken: String): RoomMeCall<List<FlatNameModel>>
 
     @POST("/user/friends/{friendId}")
     fun addFriend(
-        @Header("Authorization") token: String,
+        @Header("Authorization") accessToken: String,
         @Path("friendId") userId: Int
     ): RoomMeCall<OffsetDateTime>
 
     @DELETE("/user/friends/{friendId}")
     fun deleteFriend(
-        @Header("Authorization") token: String,
+        @Header("Authorization") accessToken: String,
         @Path("friendId") userId: Int
-    ): RoomMeCall<OffsetDateTime>
+    ): RoomMeCall<Void>
 
     @GET("/user/friends")
-    fun getFriends(@Header("Authorization") token: String): RoomMeCall<List<UserShortModel>>
+    fun getFriends(@Header("Authorization") accessToken: String): RoomMeCall<List<UserShortModel>>
 }

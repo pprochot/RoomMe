@@ -49,7 +49,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
                 code == 401 -> Log.d(TAG, "Unauthorized")
                 list != null -> {
                     Log.d(TAG, "Fetched users")
-                    recyclerView.adapter = FriendsAdapter(list)
+                    recyclerView.adapter = FriendsAdapter(list, userService, sessionViewModel)
                     recyclerView.layoutManager = LinearLayoutManager(requireContext())
                 }
                 else -> {

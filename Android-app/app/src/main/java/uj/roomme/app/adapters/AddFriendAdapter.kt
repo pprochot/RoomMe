@@ -18,8 +18,7 @@ class AddFriendAdapter(
     listOfUsers: List<UserShortModel>,
     private val userService: UserService,
     private val sessionViewModel: SessionViewModel
-) :
-    RecyclerView.Adapter<AddFriendAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<AddFriendAdapter.ViewHolder>() {
 
     private val TAG = "AddFriendAdapter"
     private val users: MutableList<UserShortModel> = listOfUsers.toMutableList()
@@ -46,7 +45,7 @@ class AddFriendAdapter(
 
         val icAddFriend = holder.itemView.findViewById<ImageButton>(R.id.icAddFriend)
         icAddFriend.setOnClickListener {
-            addFriend(holder.itemView.context, data.id, holder.adapterPosition)
+            addFriendByService(holder.itemView.context, data.id, holder.adapterPosition)
         }
     }
 
@@ -54,12 +53,12 @@ class AddFriendAdapter(
         return users.size
     }
 
-    private fun addFriend(context: Context, friendId: Int, position: Int) {
+    private fun addFriendByService(context: Context, friendId: Int, position: Int) {
         sessionViewModel.userData?.apply {
-            userService.addFriend(accessToken, friendId).processAsync { code, offsetDateTime, throwable ->
+            userService.addFriend(accessToken, friendId).processAsync { code, body, throwable ->
                 when {
                     code == 401 -> Log.d(TAG, "Unauthorized")
-                    offsetDateTime != null -> {
+                    body != null -> {
                         Log.d(TAG, "Friend added!")
                         Toasts.addedFriend(context)
                         removeItem(position)
@@ -74,7 +73,7 @@ class AddFriendAdapter(
     }
 
     private fun removeItem(position: Int) {
-        users.removeAt(position);
-        notifyItemRemoved(position);
+        users.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

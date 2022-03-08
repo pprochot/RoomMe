@@ -1,7 +1,8 @@
-package uj.roomme.app
+package uj.roomme.app.activity
 
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -16,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import uj.roomme.app.R
 import uj.roomme.app.hiders.BottomNavigationViewHider
 import uj.roomme.app.hiders.ToolbarOptionsHider
 import uj.roomme.app.navigation.DrawerLayoutMenuNavigation
@@ -23,7 +25,7 @@ import uj.roomme.app.navigation.NavBottomViewMenuNavigation
 import uj.roomme.app.viewmodels.SessionViewModel
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSetter {
 
     companion object {
         val topLevelDestinations = setOf(
@@ -69,7 +71,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener(ToolbarOptionsHider(drawerLayout, toolbar))
-        navView.setNavigationItemSelectedListener(DrawerLayoutMenuNavigation(navController, drawerLayout))
+        navView.setNavigationItemSelectedListener(
+            DrawerLayoutMenuNavigation(navController, drawerLayout)
+        )
     }
 
     private fun setUpBottomNavView() {
@@ -88,5 +92,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun setDataInNavigationView() {
+        navView.getHeaderView(0).findViewById<TextView>(R.id.textNavViewNickname)?.text =
+            sessionViewModel.userData?.email
     }
 }

@@ -26,8 +26,9 @@ object Toasts {
     fun createdApartment(context: Context?) =
         showShortToast(context, "You have created new apartment")
 
-    fun addedFriend(context: Context?) =
-        showShortToast(context, "Friend added")
+    fun addedFriend(context: Context?) = showShortToast(context, "Friend added")
+
+    fun removedFriend(context: Context?) = showShortToast(context, "Friend removed")
 
     private fun showShortToast(context: Context?, text: String) {
         context?.apply {
