@@ -22,5 +22,7 @@ namespace RoomMe.API.Helpers
         public User Session => (User)_httpContextAccessor.HttpContext.Items["User"];
 
         public int UserId => Session.Id;
+
+        public List<int> FriendsIds => Session.Friends.Select(x => x.FriendId).ToList();
     }
 }

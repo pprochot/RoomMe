@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RoomMe.SQLContext;
@@ -29,7 +30,7 @@ namespace RoomMe.API.Authorization
 
             if(userId != null)
             {
-                context.Items["User"] = await sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
+                context.Items["User"] = await sqlContext.Users.Include(x => x.Friends).SingleOrDefaultAsync(x => x.Id == userId).ConfigureAwait(false);
             }
 
             await _next(context);

@@ -42,7 +42,7 @@ namespace RoomMe.API.Controllers
         public async Task<ActionResult<ApiResult<SignUpReturnModel>>> SignUpUser(SignUpUserModel user)
         {
             var entity = await _sqlContext.Users
-                .AnyAsync(x => x.Email == user.Email)
+                .AnyAsync(x => x.Email == user.Email || x.Nickname == user.Nickname)
                 .ConfigureAwait(false);
 
             if (entity)
@@ -50,7 +50,7 @@ namespace RoomMe.API.Controllers
                 return new ApiResult<SignUpReturnModel>()
                 {
                     Result = false,
-                    ErrorCode = ErrorCodes.EmailAlreadyInDB,
+                    ErrorName = Enum.GetName(typeof(ErrorCodes), ErrorCodes.EmailOrNicknameAlreadyInDB),
                     Value = null
                 };
             }
@@ -67,7 +67,7 @@ namespace RoomMe.API.Controllers
             return new ApiResult<SignUpReturnModel>()
             {
                 Result = true,
-                ErrorCode = null,
+                ErrorName = null,
                 Value = new SignUpReturnModel() { UserId = newEntity.Id }
             };
         }
@@ -87,7 +87,7 @@ namespace RoomMe.API.Controllers
                 return new ApiResult<SignInReturnModel>()
                 {
                     Result = false,
-                    ErrorCode = ErrorCodes.WrongEmailOrPassword,
+                    ErrorName = Enum.GetName(typeof(ErrorCodes), ErrorCodes.WrongEmailOrPassword),
                     Value = null
                 };
             }
@@ -105,7 +105,7 @@ namespace RoomMe.API.Controllers
             return new ApiResult<SignInReturnModel>()
             {
                 Result = true,
-                ErrorCode = null,
+                ErrorName = null,
                 Value = user.ToLoginReturnModel(token, refreshToken.Token)
             };
         }
