@@ -1,8 +1,8 @@
-package uj.roomme.domain.flat
+package uj.roomme.domain.rent
 
 import java.time.OffsetDateTime
 
-data class RentCostPostReturnModel(
+data class RentCostPutModel(
     val userId: Int,
     val flatId: Int,
     val creationDate: OffsetDateTime
