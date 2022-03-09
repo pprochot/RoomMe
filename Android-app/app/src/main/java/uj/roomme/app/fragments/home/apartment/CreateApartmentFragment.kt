@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.apartments
+package uj.roomme.app.fragments.home.apartment
 
 import android.util.Log
 import android.widget.Button
@@ -13,7 +13,7 @@ import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.services.service.FlatService
 import uj.roomme.app.viewmodels.SessionViewModel
 import javax.inject.Inject
-import uj.roomme.app.fragments.apartments.CreateApartmentFragmentDirections as Directions
+import uj.roomme.app.fragments.home.apartment.CreateApartmentFragmentDirections as Directions
 
 @AndroidEntryPoint
 class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
@@ -64,11 +64,11 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
                     Log.d(TAG, "Unauthorized")
                 }
                 if (body == null) {
-                    Toasts.toastOnSendingRequestFailure(context)
+                    Toasts.sendingRequestFailure(context)
                     createNewApartmentButton?.isEnabled = true
                 } else {
                     Toasts.createdApartment(context)
-                    findNavController().navigate(Directions.actionCreateFlatToApartments())
+                    findNavController().navigate(Directions.actionCreateApartmentToHome())
                 }
             }
         }

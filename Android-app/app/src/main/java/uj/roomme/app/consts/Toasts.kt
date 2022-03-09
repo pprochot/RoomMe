@@ -8,8 +8,7 @@ object Toasts {
 
     fun invalidInputData(context: Context?) = showShortToast(context, "Invalid input!")
 
-    fun toastOnSendingRequestFailure(context: Context?) =
-        showShortToast(context, "Failed to proceed!")
+    fun sendingRequestFailure(context: Context?) = showShortToast(context, "Failed to proceed!")
 
     fun toastOnUnsuccessfulResponse(context: Context?, errorCode: ErrorCode?) {
         when (errorCode) {
@@ -19,6 +18,8 @@ object Toasts {
             else -> return
         }
     }
+
+    fun unknownError(context: Context?) = showShortToast(context, "Unknown error.")
 
     fun successfulSignUp(context: Context?) =
         showShortToast(context, "You have registered! You can log in now.")
