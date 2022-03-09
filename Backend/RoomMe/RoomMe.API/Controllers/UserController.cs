@@ -56,7 +56,7 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpGet("flats", Name = nameof(GetFlats))]
-        public async Task<ActionResult<IEnumerable<FlatNameModel>>> GetFlats()
+        public async Task<ActionResult<IEnumerable<FlatShortModel>>> GetFlats()
         {
             var userId = _sessionHelper.UserId;
             var user = await _sqlContext.Users
@@ -104,20 +104,22 @@ namespace RoomMe.API.Controllers
         public async Task<ActionResult> DeleteFriend(int friendId)
         {
             var userId = _sessionHelper.UserId;
-            var user = await _sqlContext.Users
-                .Include(x => x.Friends)
-                .FirstOrDefaultAsync(x => x.Id == userId)
+            var entities = await _sqlContext.UserFriends
+                .Where(x => (x.UserId == userId && x.FriendId == friendId) || (x.UserId == friendId && x.FriendId == userId))
+                .ToListAsync()
                 .ConfigureAwait(false);
 
-            if(!user.Friends.Any(x => x.FriendId == friendId))
+            if(!entities.Any())
             {
                 _logger.LogError($"Not found friend for given id: {friendId}");
                 return new BadRequestResult();
             }
 
-            var entity = user.Friends.Single(x => x.FriendId == friendId);
+            foreach(var entity in entities)
+            {
+                _sqlContext.Remove(entity);
+            }
 
-            _sqlContext.UserFriends.Remove(entity);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
             return Ok();
