@@ -28,7 +28,8 @@ namespace RoomMe.API.Converters
             {
                 HouseworkId = schedule.HouseworkId,
                 Housework = housework,
-                //TODO: UserId received through JWT token
+                UserId = 1,
+                //UserId from sessionHelper
                 Date = schedule.Date,
             };
         }
@@ -48,6 +49,19 @@ namespace RoomMe.API.Converters
             {
                 Id = schedule.Id,
                 Date = schedule.Date
+            };
+        }
+
+        public static ScheduleListModel ToScheduleListModel(this HouseworkSchedule schedule)
+        {
+            return new ScheduleListModel()
+            {
+                Id = schedule.Id,
+                HouseworkName = schedule.Housework.Name,
+                Date = schedule.Date,
+                Status = schedule.HouseworkStatus.ToHouseworkStatusModel(),
+                UserId = schedule.UserId,
+                UserName = schedule.User.Nickname
             };
         }
 

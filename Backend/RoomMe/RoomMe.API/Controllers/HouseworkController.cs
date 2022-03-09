@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using RoomMe.API.Converters;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
@@ -14,7 +15,8 @@ namespace RoomMe.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class HouseworkController
+    [Authorize]
+    public class HouseworkController : ControllerBase
     {
         private readonly ILogger<HouseworkController> _logger;
         private readonly SqlContext _sqlContext;

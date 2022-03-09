@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using RoomMe.API.Converters;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
@@ -14,7 +15,8 @@ namespace RoomMe.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ScheduleController
+    [Authorize]
+    public class ScheduleController : ControllerBase
     {
         private readonly ILogger<ScheduleController> _logger;
         private readonly SqlContext _sqlContext;
@@ -67,10 +69,6 @@ namespace RoomMe.API.Controllers
 
             scheduleEntity.StatusId = 1;
 
-            var status = await _sqlContext.HouseworkStatuses.FindAsync(1).ConfigureAwait(false);
-
-            scheduleEntity.HouseworkStatus = status;
-
             await _sqlContext.HouseworkSchedules.AddAsync(scheduleEntity).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
@@ -80,37 +78,28 @@ namespace RoomMe.API.Controllers
         [HttpGet("/date", Name = nameof(GetScheduleDate))]
         public async Task<ActionResult<List<ScheduleDateModel>>> GetScheduleDate([FromQuery] FromToDateModel dates)
         {
-            List<ScheduleDateModel> schedulesModels = new List<ScheduleDateModel>();
-
             var schedules = await _sqlContext.HouseworkSchedules
                 .Where(x => x.Date >= dates.From && x.Date <= dates.To)
                 .Include(y => y.Housework)
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            schedulesModels = schedules.Select(x => x.ToScheduleDateModel()).ToList();
-
-            return schedulesModels;
+            return schedules.Select(x => x.ToScheduleDateModel()).ToList();
         }
 
         [HttpGet("{houseworkId}/list", Name = nameof(GetFullSchedulesByDate))]
-        public async Task<ActionResult<List<ScheduleFullGetModel>>> GetFullSchedulesByDate([FromQuery] FromToDateModel dates, int houseworkId)
+        public async Task<ActionResult<List<ScheduleListModel>>> GetFullSchedulesByDate([FromQuery] FromToDateModel dates, int houseworkId)
         {
-            List<ScheduleFullGetModel> schedulesModels = new List<ScheduleFullGetModel>();
 
             var schedules = await _sqlContext.HouseworkSchedules
                 .Where(x => x.Date >= dates.From && x.Date <= dates.To && x.HouseworkId == houseworkId)
                 .Include(x => x.User)
                 .Include(x => x.HouseworkStatus)
                 .Include(x => x.Housework)
-                .ThenInclude(y => y.HouseworkSettings)
-                .ThenInclude(z => z.Frequency)
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            schedulesModels = schedules.Select(x => x.ToScheduleFullGetModel()).ToList();
-
-            return schedulesModels;
+            return schedules.Select(x => x.ToScheduleListModel()).ToList();
         }
 
 
