@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -13,13 +14,13 @@ import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.fragments.home.apartment.SelectApartmentFragmentDirections as Directions
-import uj.roomme.domain.flat.FlatNameModel
+import uj.roomme.domain.flat.FlatShortModel
 import uj.roomme.services.service.FlatService
 
 class ApartmentsAdapter(
     private val sessionViewModel: SessionViewModel,
     private val flatService: FlatService,
-    private val apartments: List<FlatNameModel>
+    private val apartments: List<FlatShortModel>
 ) :
     RecyclerView.Adapter<ApartmentsAdapter.ViewHolder>() {
 
@@ -27,20 +28,23 @@ class ApartmentsAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var apartmentId: Int? = null
-        val nameView: TextView = itemView.findViewById(R.id.rvApartmentsName)
+        val nameView: TextView = itemView.findViewById(R.id.textApartmentName)
+        val addressView: TextView = itemView.findViewById(R.id.textApartmentAddress)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.rv_row_flat, parent, false)
+        val view = inflater.inflate(R.layout.rv_row_apartment, parent, false)
         val viewHolder = ViewHolder(view)
-        view.setOnClickListener { onApartmentClick(viewHolder) }
+        view.findViewById<ImageView>(R.id.imageGoToApartment)
+            .setOnClickListener { onApartmentClick(viewHolder) }
         return viewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         apartments[position].let {
             holder.nameView.text = it.name
+            holder.addressView.text = it.address
             holder.apartmentId = it.id
         }
     }

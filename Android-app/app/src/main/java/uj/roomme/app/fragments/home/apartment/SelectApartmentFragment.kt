@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.adapters.ApartmentsAdapter
 import uj.roomme.app.consts.Toasts
-import uj.roomme.domain.flat.FlatNameModel
+import uj.roomme.domain.flat.FlatShortModel
 import uj.roomme.services.service.UserService
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.services.service.FlatService
@@ -43,7 +43,7 @@ class SelectApartmentFragment : Fragment(R.layout.fragment_select_apartment) {
         }
     }
 
-    private fun displayData(body: List<FlatNameModel>) {
+    private fun displayData(body: List<FlatShortModel>) {
         recyclerView.adapter = ApartmentsAdapter(sessionViewModel, flatService, body)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
