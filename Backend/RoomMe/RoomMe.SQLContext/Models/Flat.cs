@@ -11,6 +11,8 @@ namespace RoomMe.SQLContext.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+        public int CreatorId { get; set; }
+        public User Creator { get; set; }
         public List<User> Users { get; set; }
         public List<Housework> Houseworks { get; set; }
         public List<FlatNotification> Notifications { get; set; }

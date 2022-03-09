@@ -39,8 +39,9 @@ namespace RoomMe.SQLContext
             modelBuilder.Entity<RentCost>().HasKey(x => new { x.UserId, x.FlatId });
 
             modelBuilder.Entity<UserFriend>().HasKey(x => new { x.UserId, x.FriendId });
-
             modelBuilder.Entity<UserFriend>().HasOne(x => x.User).WithMany(y => y.Friends).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Flat>().HasOne(x => x.Creator).WithMany(y => y.OwnedFlats).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

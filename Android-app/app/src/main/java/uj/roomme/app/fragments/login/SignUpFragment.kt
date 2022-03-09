@@ -8,15 +8,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.models.UserSignUpData
 import uj.roomme.app.validators.SignUpValidator
-import uj.roomme.domain.auth.ApiModel
-import uj.roomme.domain.auth.SignUpReturnModel
 import uj.roomme.domain.auth.SignUpUserModel
 import uj.roomme.services.service.AuthService
 import javax.inject.Inject
@@ -78,7 +73,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         authService.signUp(requestBody).processAsync { _, body, throwable ->
             if (body == null) {
                 Log.d(TAG, "Failed to sign up.", throwable)
-                Toasts.toastOnSendingRequestFailure(context)
+                Toasts.sendingRequestFailure(context)
             } else when (body.result) {
                 true -> {
                     Log.i(TAG, "User has successfully registered.")

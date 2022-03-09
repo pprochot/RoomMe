@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220309183252_add_creatorId_to_users")]
+    partial class add_creatorId_to_users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

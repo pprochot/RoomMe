@@ -1,23 +1,23 @@
 package uj.roomme.services.service
 
 import retrofit2.http.*
-import uj.roomme.domain.flat.FlatFullGetModel
+import uj.roomme.domain.flat.FlatGetModel
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
-import uj.roomme.domain.rent.RentCostPostReturnModel
 import uj.roomme.domain.product.ProductListPostReturnModel
 import uj.roomme.domain.product.ProductPostModel
+import uj.roomme.domain.rent.RentCostPostReturnModel
 import uj.roomme.domain.rent.RentCostPutModel
 import uj.roomme.domain.shoppinglist.*
 import uj.roomme.services.call.RoomMeCall
 
 interface FlatService {
 
-    @GET("/flat/{flatId}/full")
+    @GET("/flat/{flatId}")
     fun getFlatFull(
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int
-    ): RoomMeCall<FlatFullGetModel>
+    ): RoomMeCall<FlatGetModel>
 
     @POST("/flat")
     fun createNewFlat(
