@@ -26,5 +26,6 @@ namespace RoomMe.SQLContext.Models
         public List<ShoppingList> ShoppingLists { get; set; }
         public List<UserFriend> Friends { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
+        public List<Flat> OwnedFlats { get; set; }
     }
 }

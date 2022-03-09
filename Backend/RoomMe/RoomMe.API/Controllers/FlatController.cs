@@ -32,8 +32,8 @@ namespace RoomMe.API.Controllers
             _sessionHelper = sessionHelper;
         }
 
-        [HttpGet("{flatId}/full", Name = nameof(GetFlatFull))]
-        public async Task<ActionResult<FlatFullGetModel>> GetFlatFull(int flatId)
+        [HttpGet("{flatId}", Name = nameof(GetFlat))]
+        public async Task<ActionResult<FlatGetModel>> GetFlat(int flatId)
         {
             var flat = await _sqlContext.Flats
                 .Include(x => x.Users)
@@ -46,25 +46,31 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            return flat.ToFlatFullGetModel();
+            return flat.ToFlatGetModel();
+        }
+
+        [HttpGet("{flatId}/users", Name = nameof(GetFlatUsers))]
+        public async Task<ActionResult<FlatUsersGetReturnModel>> GetFlatUsers(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .Include(x => x.Creator)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !IsLoggedUserInFlat(flat))
+            {
+                _logger.LogError($"Flat not found for id {flatId}");
+                return new BadRequestResult();
+            }
+
+            return flat.ToFlatUsersGetReturnModel();
         }
 
         [HttpPost("", Name = nameof(CreateNewFlat))]
         public async Task<ActionResult<FlatPostReturnModel>> CreateNewFlat(FlatPostModel flat) 
         {
             List<User> users = new();
-
-            if (flat.Users.Count == 0)
-            {
-                _logger.LogError("Tried to create flat without users");
-                return new BadRequestResult();
-            }
-
-            if (!flat.Users.Any(id => id == _sessionHelper.UserId))
-            {
-                _logger.LogError("Tried to create flat from different account");
-                return new BadRequestResult();
-            }
 
             foreach(var userId in flat.Users)
             {
@@ -79,7 +85,9 @@ namespace RoomMe.API.Controllers
                 users.Add(entity);
             }
 
-            var flatEntity = flat.ToFlatModel(users);
+            users.Add(_sessionHelper.Session);
+
+            var flatEntity = flat.ToFlatModel(users, _sessionHelper.Session);
             await _sqlContext.Flats.AddAsync(flatEntity).ConfigureAwait(false);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
@@ -87,14 +95,14 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpPost("{flatId}/user/{userId}", Name = nameof(AddUserToFlat))]
-        public async Task<ActionResult> AddUserToFlat(int flatId, int userId)
+        public async Task<ActionResult<UserShortModel>> AddUserToFlat(int flatId, int userId)
         {
             var flat = await _sqlContext.Flats
                 .Include(x => x.Users)
                 .SingleOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !IsLoggedUserInFlat(flat) || flat.Users.Any(x => x.Id == userId))
+            if(flat == null || !IsCreatorOfFlat(flat) || flat.Users.Any(x => x.Id == userId))
             {
                 return new BadRequestResult();
             }
@@ -110,7 +118,7 @@ namespace RoomMe.API.Controllers
 
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            return Ok();
+            return user.ToUserShortModel();
         }
 
         [HttpDelete("{flatId}/user/{userId}", Name = nameof(RemoveUserFromFlat))]
@@ -121,7 +129,7 @@ namespace RoomMe.API.Controllers
                 .SingleOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !IsLoggedUserInFlat(flat))
+            if(flat == null || !IsCreatorOfFlat(flat))
             {
                 return new BadRequestResult();
             }
@@ -367,6 +375,11 @@ namespace RoomMe.API.Controllers
         private bool IsLoggedUserInFlat(Flat flat)
         {
             return flat.Users.Any(x => x.Id == _sessionHelper.UserId);
+        }
+
+        private bool IsCreatorOfFlat(Flat flat)
+        {
+            return flat.CreatorId == _sessionHelper.UserId;
         }
     }
 }
