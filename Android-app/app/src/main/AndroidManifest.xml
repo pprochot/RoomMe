@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomMe">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:theme="@style/Theme.RoomMe.NoActionBar"
             android:exported="true">
             <intent-filter>

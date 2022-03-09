@@ -43,7 +43,16 @@
         android:id="@+id/destFriendsFragments"
         android:name="uj.roomme.app.fragments.friends.FriendsFragment"
         android:label="Friends"
-        tools:layout="@layout/fragment_friends"/>
+        tools:layout="@layout/fragment_friends">
+        <action
+            android:id="@+id/actionFriendsToAddFriend"
+            app:destination="@id/destAddFriendFragment" />
+    </fragment>
 
     <include app:graph="@navigation/home_nav_graph" />
+    <fragment
+        android:id="@+id/destAddFriendFragment"
+        android:name="uj.roomme.app.fragments.friends.AddFriendFragment"
+        android:label="Add Friend"
+        tools:layout="@layout/fragment_add_friend"/>
 </navigation>

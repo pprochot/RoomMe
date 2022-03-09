@@ -36,12 +36,8 @@ class ServicesModule {
         val offsetDateTimeDeserializer = JsonDeserializer { json, _, _ ->
             OffsetDateTime.parse(json.asString, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         }
-        val errorCodeDeserializer = JsonDeserializer { json, _, _ ->
-            ErrorCode.fromCode(json.asInt)
-        }
         val gson = GsonBuilder()
             .registerTypeAdapter(OffsetDateTime::class.java, offsetDateTimeDeserializer)
-            .registerTypeAdapter(ErrorCode::class.java, errorCodeDeserializer)
             .setLenient()
             .create()
         return GsonConverterFactory.create(gson)

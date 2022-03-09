@@ -3,15 +3,11 @@ package uj.roomme.app.fragments.apartments
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import uj.roomme.app.R
 import uj.roomme.app.adapters.FlatsAdapter
 import uj.roomme.app.consts.Toasts
@@ -50,8 +46,8 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
     }
 
     private fun getFlatsFromService() {
-        sessionViewModel.userData?.apply {
-            userService.getFlats(this.token, this.id).processAsync { code, body, _ ->
+        sessionViewModel.userData?.let {
+            userService.getFlats(it.accessToken).processAsync { code, body, _ ->
                 if (code == 401) {
                     Log.d(TAG, "Unauthorized request")
                 }

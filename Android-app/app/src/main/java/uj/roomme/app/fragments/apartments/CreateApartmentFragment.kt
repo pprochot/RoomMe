@@ -2,19 +2,14 @@ package uj.roomme.app.fragments.apartments
 
 import android.util.Log
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
 import uj.roomme.domain.flat.FlatPostModel
-import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.services.service.FlatService
 import uj.roomme.app.viewmodels.SessionViewModel
 import javax.inject.Inject
@@ -64,7 +59,7 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
     private fun createFlatByService() {
         val data = dataFromViews()
         sessionViewModel.userData?.apply {
-            flatService.createNewFlat(this.token, data).processAsync { code, body, throwable ->
+            flatService.createNewFlat(this.accessToken, data).processAsync { code, body, throwable ->
                 if (code == 401) {
                     Log.d(TAG, "Unauthorized")
                 }
