@@ -1,6 +1,8 @@
 package uj.roomme.app.fragments.home.apartment
 
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,24 +20,22 @@ import uj.roomme.app.fragments.home.apartment.CreateApartmentFragmentDirections 
 @AndroidEntryPoint
 class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
 
-    private val TAG = "CreateApartmentFragment"
+    private companion object {
+        const val TAG = "CreateApartmentFragment"
+    }
 
     @Inject
     lateinit var flatService: FlatService
-
     private val sessionViewModel: SessionViewModel by activityViewModels()
-    private var createNewApartmentButton: Button? = null
-    private var flatNameView: TextInputEditText? = null
-    private var flatAddressView: TextInputEditText? = null
+    private lateinit var createNewApartmentButton: Button
+    private lateinit var flatNameView: TextInputEditText
+    private lateinit var flatAddressView: TextInputEditText
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        findViews(view)
 
-        flatNameView = view?.findViewById(R.id.textInputEditApartmentName)
-        flatAddressView = view?.findViewById(R.id.textInputEditApartmentAddress)
-        createNewApartmentButton = view?.findViewById(R.id.buttonCreateApartment)
-
-        createNewApartmentButton?.setOnClickListener {
+        createNewApartmentButton.setOnClickListener {
             if (areArgumentsValid()) {
                 it.isEnabled = false
                 createFlatByService()
@@ -46,39 +46,38 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
         }
     }
 
-    private fun areArgumentsValid(): Boolean {
-        if (flatNameView?.text.isNullOrBlank()) {
-            return false
-        }
-        if (flatAddressView?.text.isNullOrBlank()) {
-            return false
-        }
-        return true
+    private fun findViews(view: View) = view.apply {
+        flatNameView = findViewById(R.id.textInputEditApartmentName)
+        flatAddressView = findViewById(R.id.textInputEditApartmentAddress)
+        createNewApartmentButton = findViewById(R.id.buttonCreateApartment)
     }
 
-    private fun createFlatByService() {
+    private fun areArgumentsValid(): Boolean = when {
+        flatNameView.text.isNullOrBlank() -> false
+        flatAddressView.text.isNullOrBlank() -> false
+        else -> true
+    }
+
+    private fun createFlatByService() = sessionViewModel.userData?.let {
         val data = dataFromViews()
-        sessionViewModel.userData?.apply {
-            flatService.createNewFlat(this.accessToken, data).processAsync { code, body, throwable ->
+        flatService.createNewFlat(it.accessToken, data)
+            .processAsync { code, body, throwable ->
                 if (code == 401) {
                     Log.d(TAG, "Unauthorized")
                 }
                 if (body == null) {
                     Toasts.sendingRequestFailure(context)
-                    createNewApartmentButton?.isEnabled = true
+                    createNewApartmentButton.isEnabled = true
                 } else {
                     Toasts.createdApartment(context)
                     findNavController().navigate(Directions.actionCreateApartmentToHome())
                 }
             }
-        }
     }
 
-    private fun dataFromViews(): FlatPostModel {
-        return FlatPostModel(
-            flatNameView?.text.toString(),
-            flatAddressView?.text.toString(),
-            listOf(sessionViewModel.userData!!.id)
-        )
-    }
+    private fun dataFromViews() = FlatPostModel(
+        flatNameView.text.toString(),
+        flatAddressView.text.toString(),
+        listOf(sessionViewModel.userData!!.id)
+    )
 }

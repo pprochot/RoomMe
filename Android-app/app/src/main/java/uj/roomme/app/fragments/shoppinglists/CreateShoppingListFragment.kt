@@ -1,6 +1,8 @@
 package uj.roomme.app.fragments.shoppinglists
 
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,34 +23,35 @@ import uj.roomme.app.fragments.shoppinglists.CreateShoppingListFragmentDirection
 @AndroidEntryPoint
 class CreateShoppingListFragment : Fragment(R.layout.fragment_createshoppinglist) {
 
-    private val TAG = "NewShoppingListFragment"
+    private companion object {
+        const val TAG = "NewShoppingListFragment"
+    }
 
     @Inject
     lateinit var flatService: FlatService
-    private lateinit var nameView: TextInputEditText
-    private lateinit var descriptionView: TextInputEditText
+
     private val session: SessionViewModel by activityViewModels()
+    private lateinit var nameView: TextInputEditText
+    private lateinit var createNewShoppingListButton: Button
+    private lateinit var descriptionView: TextInputEditText
     private lateinit var navController: NavController
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        findViews(view)
 
-        navController = findNavController()
-        nameView = requireView().findViewById(R.id.textInputEditTextNewProductName)
-        descriptionView = requireView().findViewById(R.id.textInputEditTextNewShoppingListDescription)
-        val button = requireView().findViewById<Button>(R.id.buttonCreateNewShoppingList)
-        button.setOnClickListener {
-            if (session.hasSelectedApartment()) {
-                val requestBody = getDataFromViews()
-                createNewShoppingListByService(requestBody)
-            }
+        createNewShoppingListButton.setOnClickListener {
+            val requestBody = getDataFromViews()
+            createNewShoppingListByService(requestBody)
         }
     }
 
-    private fun getDataFromViews() = ShoppingListPostModel(
-        name = nameView.text.toString(),
-        description = descriptionView.text.toString()
-    )
+    private fun findViews(view: View) = view.apply {
+        navController = findNavController()
+        nameView = findViewById(R.id.textInputEditTextNewProductName)
+        createNewShoppingListButton = findViewById(R.id.buttonCreateNewShoppingList)
+        descriptionView = findViewById(R.id.textInputEditTextNewShoppingListDescription)
+    }
 
     private fun createNewShoppingListByService(body: ShoppingListPostModel) = session.apply {
         flatService.createNewShoppingList(userData!!.accessToken, apartmentData!!.id, body)
@@ -66,4 +69,9 @@ class CreateShoppingListFragment : Fragment(R.layout.fragment_createshoppinglist
                 }
             }
     }
+
+    private fun getDataFromViews() = ShoppingListPostModel(
+        name = nameView.text.toString(),
+        description = descriptionView.text.toString()
+    )
 }
