@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_shoppinglists">
         <action
             android:id="@+id/actionShoppingListsToNewShoppingList"
-            app:destination="@id/destNewShoppingListFragment" />
+            app:destination="@id/destCreateShoppingListFragment" />
         <action
             android:id="@+id/actionShoppingListsToProducts"
             app:destination="@id/destProductsFragment" />
@@ -26,26 +26,31 @@
             android:id="@+id/actionNewProductToProducts"
             app:destination="@id/destProductsFragment"
             app:popUpTo="@id/destProductsFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="flatId"
+            app:argType="integer" />
     </fragment>
     <fragment
-        android:id="@+id/destNewShoppingListFragment"
-        android:name="uj.roomme.app.fragments.shoppinglists.NewShoppingListFragment"
-        android:label="NewShoppingListFragment"
-        tools:layout="@layout/fragment_newshoppinglist">
+        android:id="@+id/destCreateShoppingListFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.CreateShoppingListFragment"
+        android:label="Create shopping list"
+        tools:layout="@layout/fragment_createshoppinglist">
         <action
-            android:id="@+id/actionNewShoppingListToShoppingLists"
-            app:destination="@id/destShoppingListsFragment"
-            app:popUpTo="@id/destShoppingListsFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/actionCreateShoppingListToProducts"
+            app:destination="@id/destProductsFragment"
+            app:popUpTo="@id/destShoppingListsFragment" />
     </fragment>
     <fragment
         android:id="@+id/destProductsFragment"
         android:name="uj.roomme.app.fragments.shoppinglists.ProductsFragment"
-        android:label="ProductsFragment"
+        android:label="Products"
         tools:layout="@layout/fragment_products">
         <action
             android:id="@+id/actionProductsToNewProduct"
             app:destination="@id/destNewProductFragment" />
+        <argument
+            android:name="flatId"
+            app:argType="integer" />
     </fragment>
 </navigation>

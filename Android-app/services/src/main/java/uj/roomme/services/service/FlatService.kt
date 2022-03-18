@@ -4,6 +4,7 @@ import retrofit2.http.*
 import uj.roomme.domain.flat.FlatGetModel
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
+import uj.roomme.domain.flat.FlatUsersGetReturnModel
 import uj.roomme.domain.product.ProductListPostReturnModel
 import uj.roomme.domain.product.ProductPostModel
 import uj.roomme.domain.rent.RentCostPostReturnModel
@@ -25,21 +26,27 @@ interface FlatService {
         @Body flat: FlatPostModel
     ): RoomMeCall<FlatPostReturnModel>
 
-    @POST("flat/{flatId}/user/{userId}")
+    @GET("/flat/{flatId}/users")
+    fun getFlatUsers(
+        @Header("Authorization") accessToken: String,
+        @Path("flatId") flatId: Int
+    ): RoomMeCall<FlatUsersGetReturnModel>
+
+    @POST("/flat/{flatId}/user/{userId}")
     fun addUserToFlat(
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int,
         @Path("userId") userId: Int
     ): RoomMeCall<Void>
 
-    @DELETE("flat/{flatId}/user/{userId}")
+    @DELETE("/flat/{flatId}/user/{userId}")
     fun removeUserFromFlat(
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int,
         @Path("userId") userId: Int
     ): RoomMeCall<Void>
 
-    @DELETE("flat/{flatId}/rent")
+    @DELETE("/flat/{flatId}/rent")
     fun setFlatRentCost(
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int,

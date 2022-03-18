@@ -1,6 +1,7 @@
 package uj.roomme.domain.common
 
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 data class CommonCostModel(
@@ -9,5 +10,5 @@ data class CommonCostModel(
     val userName: String,
     val value: BigDecimal,
     val description: String,
-    val date: OffsetDateTime
+    val date: LocalDateTime
 )

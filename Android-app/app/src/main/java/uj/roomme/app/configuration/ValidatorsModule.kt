@@ -4,21 +4,21 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import uj.roomme.app.validators.NewProductValidator
 import uj.roomme.app.validators.SignInValidator
 import uj.roomme.app.validators.SignUpValidator
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RoomMeModule {
+class ValidatorsModule {
 
     @Provides
-    fun signInValidator(): SignInValidator {
-        return SignInValidator()
-    }
+    fun signInValidator(): SignInValidator = SignInValidator()
 
     @Provides
-    fun signUpValidator(): SignUpValidator {
-        return SignUpValidator()
-    }
+    fun signUpValidator(): SignUpValidator = SignUpValidator()
+
+    @Provides
+    fun newProductValidator(): NewProductValidator = newProductValidator()
 }

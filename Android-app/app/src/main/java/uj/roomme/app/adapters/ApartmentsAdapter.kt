@@ -71,7 +71,7 @@ class ApartmentsAdapter(
                     Toasts.sendingRequestFailure(context)
                     Log.d(TAG, "Unable to get flat full info", throwable)
                 } else {
-                    sessionViewModel.apartmentInfo = body
+                    sessionViewModel.apartmentData = body
                     navController.navigate(Directions.actionSelectApartmentToHome())
                 }
             }

@@ -1,6 +1,7 @@
 package uj.roomme.domain.shoppinglist
 
 import uj.roomme.domain.product.ProductModel
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 data class ShoppingListGetModel(
