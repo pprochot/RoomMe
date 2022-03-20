@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Helpers
 {
-    public static class ErrorCodes
+    public enum ErrorCodes
     {
-        public enum UserPost
-        {
-            EmailAlreadyInDB
-        }
+        EmailOrNicknameAlreadyInDB,
+        WrongEmailOrPassword
     }
 }

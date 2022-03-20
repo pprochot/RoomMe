@@ -9,24 +9,24 @@ namespace RoomMe.API.Converters
 {
     public static class FlatConverter
     {
-        public static FlatFullGetModel ToFlatFullGetModel(this Flat flat)
+        public static FlatGetModel ToFlatGetModel(this Flat flat)
         {
-            return new FlatFullGetModel()
+            return new FlatGetModel()
             {
                 Id = flat.Id,
                 Name = flat.Name,
-                Address = flat.Address,
-                Users = flat.Users.Select(x => x.ToUserNicknameModel()).ToList()
+                Address = flat.Address
             };
         }
 
-        public static Flat ToFlatModel(this FlatPostModel flat, List<User> users)
+        public static Flat ToFlatModel(this FlatPostModel flat, List<User> users, User creator)
         {
             return new Flat()
             {
                 Name = flat.Name,
                 Address = flat.Address,
-                Users = users
+                Users = users,
+                Creator = creator
             };
         }
 
@@ -35,22 +35,32 @@ namespace RoomMe.API.Converters
             return new FlatPostReturnModel()
             {
                 Id = flat.Id,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 
-        public static FlatNameModel ToFlatNameModel(this Flat flat)
+        public static FlatShortModel ToFlatNameModel(this Flat flat)
         {
-            return new FlatNameModel()
+            return new FlatShortModel()
             {
                 Id = flat.Id,
-                Name = flat.Name
+                Name = flat.Name,
+                Address = flat.Address
             };
         }
 
-        public static List<FlatNameModel> ToFlatNameModelList(this IEnumerable<Flat> flats)
+        public static List<FlatShortModel> ToFlatNameModelList(this IEnumerable<Flat> flats)
         {
             return flats.Select(x => x.ToFlatNameModel()).ToList();
+        }
+
+        public static FlatUsersGetReturnModel ToFlatUsersGetReturnModel(this Flat flat)
+        {
+            return new FlatUsersGetReturnModel()
+            {
+                Creator = flat.Creator.ToUserNicknameModel(),
+                Users = flat.Users.Where(x => x.Id != flat.CreatorId).Select(x => x.ToUserNicknameModel()).ToList()
+            };
         }
     }
 }

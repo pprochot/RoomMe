@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/product_list_nav_graph"
+    app:startDestination="@id/destShoppingListsFragment">
+
+    <fragment
+        android:id="@+id/destShoppingListsFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.ShoppingListsFragment"
+        android:label="Shopping lists"
+        tools:layout="@layout/fragment_shoppinglists">
+        <action
+            android:id="@+id/actionShoppingListsToNewShoppingList"
+            app:destination="@id/destNewShoppingListFragment" />
+        <action
+            android:id="@+id/actionShoppingListsToProducts"
+            app:destination="@id/destProductsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/destNewProductFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.NewProductFragment"
+        android:label="New product"
+        tools:layout="@layout/fragment_newproduct">
+        <action
+            android:id="@+id/actionNewProductToProducts"
+            app:destination="@id/destProductsFragment"
+            app:popUpTo="@id/destProductsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/destNewShoppingListFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.NewShoppingListFragment"
+        android:label="NewShoppingListFragment"
+        tools:layout="@layout/fragment_newshoppinglist">
+        <action
+            android:id="@+id/actionNewShoppingListToShoppingLists"
+            app:destination="@id/destShoppingListsFragment"
+            app:popUpTo="@id/destShoppingListsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/destProductsFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.ProductsFragment"
+        android:label="ProductsFragment"
+        tools:layout="@layout/fragment_products">
+        <action
+            android:id="@+id/actionProductsToNewProduct"
+            app:destination="@id/destNewProductFragment" />
+    </fragment>
+</navigation>

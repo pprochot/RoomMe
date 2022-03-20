@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RoomMe.API.Authorization;
 using RoomMe.API.Converters;
+using RoomMe.API.Helpers;
 using RoomMe.API.Models;
+using RoomMe.API.Validators;
 using RoomMe.SQLContext;
+using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,53 +16,122 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Controllers
 {
+    [JWTAuthorize]
     [ApiController]
     [Route("[controller]")]
-    public class UserController
+    public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
         private readonly SqlContext _sqlContext;
+        private readonly ISessionHelper _sessionHelper;
 
-        public UserController(ILogger<UserController> logger, SqlContext sqlContext)
+        public UserController(ILogger<UserController> logger, SqlContext sqlContext, ISessionHelper sessionHelper)
         {
             _logger = logger;
             _sqlContext = sqlContext;
+            _sessionHelper = sessionHelper;
         }
 
-        [HttpPost("test", Name = nameof(CreateTestUser))]
-        public async Task<ActionResult<UserPostReturnModel>> CreateTestUser(UserPostModel user)
+        [HttpGet("list", Name = nameof(GetUsers))]
+        public async Task<IEnumerable<UserShortModel>> GetUsers(string phrase)
         {
-            var entity = await _sqlContext.Users
-                .FirstOrDefaultAsync(x => x.Email == user.Email)
+            var users = await _sqlContext.Users
+                .Where(x => x.Nickname.StartsWith(phrase) || x.Firstname.StartsWith(phrase) || x.Lastname.StartsWith(phrase))
+                .Where(x => x.Id != _sessionHelper.UserId)
+                .Where(x => !_sessionHelper.FriendsIds.Any(id => id == x.Id))
+                .ToListAsync()
                 .ConfigureAwait(false);
 
-            if (entity != null)
-            {
-                return new UserPostReturnModel()
-                {
-                    Result = false,
-                    ErrorCode = Helpers.ErrorCodes.UserPost.EmailAlreadyInDB,
-                    UserId = null
-                };
-            }
-
-            entity = user.ToUser();
-            await _sqlContext.Users.AddAsync(entity).ConfigureAwait(false);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return new UserPostReturnModel()
-            {
-                Result = true,
-                ErrorCode = null,
-                UserId = entity.Id
-            };
+            return users.ToUserShortListModel();
         }
 
-        [HttpGet("{userId}/flats", Name = nameof(GetFlats))]
-        public async Task<ActionResult<IEnumerable<FlatNameModel>>> GetFlats(int userId)
+        [HttpGet("", Name = nameof(GetUserInfo))]
+        public async Task<ActionResult<UserGetModel>> GetUserInfo()
         {
+            var userId = _sessionHelper.UserId;
+            var user = await _sqlContext.Users
+                .FindAsync(userId);
+
+            return user.ToUserGetModel();
+        }
+
+        [HttpGet("flats", Name = nameof(GetFlats))]
+        public async Task<ActionResult<IEnumerable<FlatShortModel>>> GetFlats()
+        {
+            var userId = _sessionHelper.UserId;
             var user = await _sqlContext.Users
                 .Include(x => x.Flats)
+                .FirstOrDefaultAsync(x => x.Id == userId)
+                .ConfigureAwait(false);
+
+            return user.Flats.ToFlatNameModelList();
+        }
+
+        [HttpPost("friends/{friendId}", Name = nameof(AddFriend))]
+        public async Task<ActionResult<DateTime>> AddFriend(int friendId)
+        {
+            var userId = _sessionHelper.UserId;
+
+            var user = await _sqlContext.Users
+                .Include(x => x.Friends)
+                .SingleOrDefaultAsync(x => x.Id == userId)
+                .ConfigureAwait(false);
+
+            var friend = await _sqlContext.Users
+                .FindAsync(friendId)
+                .ConfigureAwait(false);
+
+            if (friend == null)
+            {
+                _logger.LogError($"User not found for id {friendId}");
+                return new BadRequestResult();
+            }
+
+            if (user.Friends.Any(x => x.FriendId == friendId))
+            {
+                _logger.LogError($"User has already friend for given id: {friendId}");
+                return new BadRequestResult();
+            }
+
+            await _sqlContext.UserFriends.AddAsync(new UserFriend() { UserId = userId, FriendId = friendId }).ConfigureAwait(false);
+            await _sqlContext.UserFriends.AddAsync(new UserFriend() { UserId = friendId, FriendId = userId }).ConfigureAwait(false);
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return DateTime.Now;
+        }
+
+        [HttpDelete("friends/{friendId}", Name = nameof(DeleteFriend))]
+        public async Task<ActionResult> DeleteFriend(int friendId)
+        {
+            var userId = _sessionHelper.UserId;
+            var entities = await _sqlContext.UserFriends
+                .Where(x => (x.UserId == userId && x.FriendId == friendId) || (x.UserId == friendId && x.FriendId == userId))
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            if(!entities.Any())
+            {
+                _logger.LogError($"Not found friend for given id: {friendId}");
+                return new BadRequestResult();
+            }
+
+            foreach(var entity in entities)
+            {
+                _sqlContext.Remove(entity);
+            }
+
+            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
+
+            return Ok();
+        }
+
+        [HttpGet("friends", Name = nameof(GetFriends))]
+        public async Task<ActionResult<IEnumerable<UserShortModel>>> GetFriends()
+        {
+            var userId = _sessionHelper.UserId;
+            var user = await _sqlContext.Users
+                .Include(x => x.Friends)
+                .ThenInclude(y => y.Friend)
                 .FirstOrDefaultAsync(x => x.Id == userId)
                 .ConfigureAwait(false);
 
@@ -67,7 +141,7 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            return user.Flats.ToFlatNameModelList();
+            return user.Friends.ToUserShortListModel();
         }
     }
 }
