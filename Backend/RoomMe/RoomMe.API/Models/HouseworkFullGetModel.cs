@@ -9,7 +9,7 @@ namespace RoomMe.API.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public FlatNameModel Flat { get; set; }
+        public FlatShortModel Flat { get; set; }
         public UserNicknameModel Author { get; set; }
         public string Description { get; set; }
         public List<UserNicknameModel> Users { get; set; }
