@@ -41,7 +41,7 @@ namespace RoomMe.API.Converters
             {
                 Id = housework.Id,
                 SettingsId = settingsId,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 

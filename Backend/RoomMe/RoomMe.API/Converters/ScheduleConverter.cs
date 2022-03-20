@@ -39,7 +39,7 @@ namespace RoomMe.API.Converters
             return new SchedulePutReturnModel()
             {
                 Id = schedule.Id,
-                TimeStamp = DateTime.Now
+                TimeStamp = DateTime.UtcNow
             };
         }
 
