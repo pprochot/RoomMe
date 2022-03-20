@@ -54,7 +54,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
                 }
                 else -> {
                     Log.d(TAG, "Failed", throwable)
-                    Toasts.toastOnSendingRequestFailure(context)
+                    Toasts.sendingRequestFailure(context)
                 }
             }
         }

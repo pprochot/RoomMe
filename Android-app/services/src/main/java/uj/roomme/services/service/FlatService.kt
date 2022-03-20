@@ -1,8 +1,7 @@
 package uj.roomme.services.service
 
-import retrofit2.Call
 import retrofit2.http.*
-import uj.roomme.domain.flat.FlatFullGetModel
+import uj.roomme.domain.flat.FlatGetModel
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.domain.product.ProductListPostReturnModel
@@ -20,11 +19,11 @@ interface FlatService {
         @Body flat: FlatPostModel
     ): RoomMeCall<FlatPostReturnModel>
 
-    @GET("/flat/{flatId}/full")
+    @GET("/flat/{flatId}")
     fun getFlatFull(
         @Header("Authorization") token: String,
         @Path("flatId") flatId: Int
-    ): RoomMeCall<FlatFullGetModel>
+    ): RoomMeCall<FlatGetModel>
 
     @POST("/flat/{flatId}/shopping-lists")
     fun createNewShoppingList(

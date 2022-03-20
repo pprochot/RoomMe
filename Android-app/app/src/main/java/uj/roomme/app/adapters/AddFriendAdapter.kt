@@ -65,7 +65,7 @@ class AddFriendAdapter(
                     }
                     else -> {
                         Log.d(TAG, "Failed", throwable)
-                        Toasts.toastOnSendingRequestFailure(context)
+                        Toasts.sendingRequestFailure(context)
                     }
                 }
             }
