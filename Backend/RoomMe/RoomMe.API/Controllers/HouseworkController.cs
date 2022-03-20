@@ -6,6 +6,7 @@ using RoomMe.API.Converters;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
 using RoomMe.SQLContext.Models;
+using RoomMe.API.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace RoomMe.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [JWTAuthorize]
     public class HouseworkController : ControllerBase
     {
         private readonly ILogger<HouseworkController> _logger;

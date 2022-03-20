@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using RoomMe.API.Converters;
 using RoomMe.API.Models;
 using RoomMe.SQLContext;
+using RoomMe.API.Authorization;
 using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace RoomMe.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [JWTAuthorize]
     public class ScheduleController : ControllerBase
     {
         private readonly ILogger<ScheduleController> _logger;
