@@ -1,7 +1,7 @@
 package uj.roomme.services.service
 
 import retrofit2.http.*
-import uj.roomme.domain.flat.FlatNameModel
+import uj.roomme.domain.flat.FlatShortModel
 import uj.roomme.domain.user.UserGetModel
 import uj.roomme.domain.user.UserShortModel
 import uj.roomme.services.call.RoomMeCall
@@ -19,7 +19,7 @@ interface UserService {
     fun getUser(@Header("Authorization") accessToken: String): RoomMeCall<UserGetModel>
 
     @GET("/user/flats")
-    fun getFlats(@Header("Authorization") accessToken: String): RoomMeCall<List<FlatNameModel>>
+    fun getFlats(@Header("Authorization") accessToken: String): RoomMeCall<List<FlatShortModel>>
 
     @POST("/user/friends/{friendId}")
     fun addFriend(

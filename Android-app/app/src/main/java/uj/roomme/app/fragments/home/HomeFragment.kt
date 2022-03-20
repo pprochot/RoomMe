@@ -1,7 +1,9 @@
 package uj.roomme.app.fragments.home
 
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 
-class HomeFragment : Fragment(R.layout.fragment_home_selected_apartment) {
+@AndroidEntryPoint
+class HomeFragment : Fragment(R.layout.fragment_home) {
 }

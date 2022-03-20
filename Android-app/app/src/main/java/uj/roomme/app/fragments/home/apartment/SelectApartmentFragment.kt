@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.apartments
+package uj.roomme.app.fragments.home.apartment
 
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,21 +9,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.adapters.FlatsAdapter
+import uj.roomme.app.adapters.ApartmentsAdapter
 import uj.roomme.app.consts.Toasts
-import uj.roomme.domain.flat.FlatNameModel
+import uj.roomme.domain.flat.FlatShortModel
 import uj.roomme.services.service.UserService
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.services.service.FlatService
 import javax.inject.Inject
-import uj.roomme.app.fragments.apartments.ApartmentsFragmentDirections as Directions
+import uj.roomme.app.fragments.home.apartment.SelectApartmentFragmentDirections as Directions
 
 @AndroidEntryPoint
-class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
+class SelectApartmentFragment : Fragment(R.layout.fragment_select_apartment) {
 
     private val TAG = "ApartmentsFragment"
 
     @Inject
     lateinit var userService: UserService
+    @Inject
+    lateinit var flatService: FlatService
 
     private lateinit var recyclerView: RecyclerView
     private val sessionViewModel: SessionViewModel by activityViewModels()
@@ -36,12 +39,12 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
 
         val createNewApartmentButton = view?.findViewById<Button>(R.id.buttonCreateNewApartment)
         createNewApartmentButton?.setOnClickListener {
-            findNavController().navigate(Directions.actionApartmentsToCreateApartment())
+            findNavController().navigate(Directions.actionSelectApartmentToCreateApartment())
         }
     }
 
-    private fun displayData(body: List<FlatNameModel>) {
-        recyclerView.adapter = FlatsAdapter(requireContext(), body)
+    private fun displayData(body: List<FlatShortModel>) {
+        recyclerView.adapter = ApartmentsAdapter(sessionViewModel, flatService, body)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
@@ -52,7 +55,7 @@ class ApartmentsFragment : Fragment(R.layout.fragment_apartments) {
                     Log.d(TAG, "Unauthorized request")
                 }
                 if (body == null) {
-                    Toasts.toastOnSendingRequestFailure(context)
+                    Toasts.sendingRequestFailure(context)
                 } else {
                     displayData(body)
                 }
