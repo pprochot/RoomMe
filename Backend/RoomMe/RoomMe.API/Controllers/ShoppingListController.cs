@@ -32,10 +32,10 @@ namespace RoomMe.API.Controllers
             _sessionHelper = sessionHelper;
         }
 
-        [HttpGet("{flatId}", Name = nameof(GetShoppingLists))]
-        public async Task<ActionResult<IEnumerable<ShoppingListGetModel>>> GetShoppingLists(int flatId)
+        [HttpGet("{listId}", Name = nameof(GetShoppingList))]
+        public async Task<ActionResult<ShoppingListGetModel>> GetShoppingList(int listId)
         {
-            var lists = await _sqlContext.ShoppingLists
+            var list = await _sqlContext.ShoppingLists
                 .Include(x => x.Products)
                 .ThenInclude(y => y.CommonCost)
                 .ThenInclude(z => z.User)
@@ -44,16 +44,15 @@ namespace RoomMe.API.Controllers
                 .Include(x => x.Completor)
                 .Include(x => x.Flat)
                 .ThenInclude(y => y.Users)
-                .Where(x => x.FlatId == flatId)
-                .ToListAsync()
+                .SingleOrDefaultAsync(x => x.Id == listId)
                 .ConfigureAwait(false);
 
-            if (lists.Any() && !_sessionHelper.IsUserOfFlat(lists.First().Flat))
+            if (list == null || !_sessionHelper.IsUserOfFlat(list.Flat))
             {
                 return new BadRequestResult();
             }
 
-            return lists.Select(x => x.ToShoppingListGetModel()).ToList();
+            return list.ToShoppingListGetModel();
         }
 
         [HttpPost("", Name = nameof(CreateNewShoppingList))]

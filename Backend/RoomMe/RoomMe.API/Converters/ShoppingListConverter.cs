@@ -125,6 +125,17 @@ namespace RoomMe.API.Converters
             };
         }
 
+        public static ShoppingListShortModel ToShoppingListShortModel(this ShoppingList list)
+        {
+            return new ShoppingListShortModel()
+            {
+                Id = list.Id,
+                Name = list.Name,
+                Description = list.Description,
+                Completed = list.CompletorId != null
+            };
+        }
+
         public static Receipt ToReceipt(this IFormFile file, Guid guid, int listId, string path)
         {
             return new Receipt

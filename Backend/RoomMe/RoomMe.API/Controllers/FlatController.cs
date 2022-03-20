@@ -191,5 +191,23 @@ namespace RoomMe.API.Controllers
 
             return entity.ToRentCostPostReturnModel();
         }
+
+        [HttpGet("{flatId}/shopping-lists", Name = nameof(GetFlatShoppingLists))]
+        public async Task<ActionResult<IEnumerable<ShoppingListShortModel>>> GetFlatShoppingLists(int flatId)
+        {
+            var lists = await _sqlContext.ShoppingLists
+                .Include(x => x.Flat)
+                .ThenInclude(y => y.Users)
+                .Where(x => x.FlatId == flatId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            if (lists.Any() && !_sessionHelper.IsUserOfFlat(lists.First().Flat))
+            {
+                return new BadRequestResult();
+            }
+
+            return lists.Select(x => x.ToShoppingListShortModel()).ToList();
+        }
     }
 }
