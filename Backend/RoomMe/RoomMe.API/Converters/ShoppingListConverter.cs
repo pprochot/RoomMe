@@ -1,4 +1,5 @@
-﻿using RoomMe.API.Models;
+﻿using Microsoft.AspNetCore.Http;
+using RoomMe.API.Models;
 using RoomMe.SQLContext.Models;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace RoomMe.API.Converters
             return new ProductListPostReturnModel()
             {
                 ProductIds = products.Select(x => x.Id).ToList(),
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 
@@ -112,7 +113,7 @@ namespace RoomMe.API.Converters
         {
             return new ShoppingListGetModel()
             {
-                Id = list.FlatId,
+                Id = list.Id,
                 FlatId = list.FlatId,
                 CompletorId = list.CompletorId,
                 CompletorName = list.Completor?.Nickname,
@@ -124,15 +125,25 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static Receipt ToReceipt(this ReceiptFileModel fileModel, int listId, string path, Guid guid)
+        public static ShoppingListShortModel ToShoppingListShortModel(this ShoppingList list)
         {
-            return new Receipt()
+            return new ShoppingListShortModel()
             {
+                Id = list.Id,
+                Name = list.Name,
+                Description = list.Description,
+                Completed = list.CompletorId != null
+            };
+        }
+
+        public static Receipt ToReceipt(this IFormFile file, Guid guid, int listId, string path)
+        {
+            return new Receipt
+            {
+                Guid = guid,
                 ShoppingListId = listId,
-                Path = path,
-                Name = fileModel.fileName,
-                Extension = fileModel.Extension,
-                Guid = guid
+                Name = file.FileName,
+                Path = path
             };
         }
     }
