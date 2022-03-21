@@ -17,19 +17,19 @@ namespace RoomMe.API.Converters
                 Housework = schedule.Housework.ToHouseworkModel(),
                 User = schedule.User.ToUserNicknameModel(),
                 Date = schedule.Date,
-                Status = schedule.HouseworkStatus.ToHouseworkStatusModel(),
+                Status = schedule.Status.ToHouseworkStatusModel(),
                 Settings = schedule.Housework.HouseworkSettings.ToHouseworkSettingsModel()
             };
         }
 
-        public static HouseworkSchedule ToScheduleModel(this SchedulePutModel schedule, Housework housework)
+        public static HouseworkSchedule ToScheduleModel(this SchedulePutModel schedule, Housework housework, int userId)
         {
             return new HouseworkSchedule()
             {
                 HouseworkId = schedule.HouseworkId,
                 Housework = housework,
-                UserId = 1,
-                //UserId from sessionHelper
+                StatusId = 1,
+                UserId = userId,
                 Date = schedule.Date,
             };
         }
@@ -59,7 +59,7 @@ namespace RoomMe.API.Converters
                 Id = schedule.Id,
                 HouseworkName = schedule.Housework.Name,
                 Date = schedule.Date,
-                Status = schedule.HouseworkStatus.ToHouseworkStatusModel(),
+                Status = schedule.Status.ToHouseworkStatusModel(),
                 UserId = schedule.UserId,
                 UserName = schedule.User.Nickname
             };

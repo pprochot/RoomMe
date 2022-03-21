@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RoomMe.API.Helpers;
 
 namespace RoomMe.API.Controllers
 {
@@ -21,13 +22,15 @@ namespace RoomMe.API.Controllers
     {
         private readonly ILogger<HouseworkController> _logger;
         private readonly SqlContext _sqlContext;
-        public HouseworkController(ILogger<HouseworkController> logger, SqlContext sqlContext)
+        private readonly ISessionHelper _sessionHelper;
+        public HouseworkController(ILogger<HouseworkController> logger, SqlContext sqlContext, ISessionHelper sessionHelper)
         {
             _logger = logger;
             _sqlContext = sqlContext;
+            _sessionHelper = sessionHelper;
         }
 
-        [HttpGet("{houseworkId}/full", Name = nameof(GetHouseworkFull))]
+        [HttpGet("{houseworkId}", Name = nameof(GetHouseworkFull))]
         public async Task<ActionResult<HouseworkFullGetModel>> GetHouseworkFull(int houseworkId)
         {
             var housework = await _sqlContext.Houseworks
@@ -91,7 +94,7 @@ namespace RoomMe.API.Controllers
 
             if (houseworkEntity == null)
             {
-                houseworkEntity = housework.ToHouseworkModel();
+                houseworkEntity = housework.ToHouseworkModel(_sessionHelper.UserId);
                 await _sqlContext.Houseworks.AddAsync(houseworkEntity).ConfigureAwait(false);
                 await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
@@ -109,7 +112,7 @@ namespace RoomMe.API.Controllers
             }
             else
             {
-                houseworkEntity.UpdateHousework(housework, users);
+                houseworkEntity.UpdateHousework(housework, users, _sessionHelper.UserId);
                 _sqlContext.Houseworks.Update(houseworkEntity);
                 await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 

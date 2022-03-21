@@ -23,14 +23,13 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static Housework ToHouseworkModel(this HouseworkPutModel housework)
+        public static Housework ToHouseworkModel(this HouseworkPutModel housework, int authorId)
         {
             return new Housework()
             {
                 Name = housework.Name,
                 FlatId = housework.FlatId,
-                //TODO: When JWT authorization is implemented this should be received through the token
-                AuthorId = 1,
+                AuthorId = authorId,
                 Description = housework.Description,
             };
         }
@@ -85,10 +84,9 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static void UpdateHousework(this Housework houseworkEntity, HouseworkPutModel housework, List<User> users)
+        public static void UpdateHousework(this Housework houseworkEntity, HouseworkPutModel housework, List<User> users, int authorId)
         {
-            //TODO: receive id through JWT token
-            houseworkEntity.AuthorId = 1;
+            houseworkEntity.AuthorId = authorId;
             houseworkEntity.Name = housework.Name;
             houseworkEntity.Description = housework.Description;
             houseworkEntity.FlatId = housework.FlatId;
