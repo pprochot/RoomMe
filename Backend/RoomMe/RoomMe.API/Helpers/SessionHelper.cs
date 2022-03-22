@@ -24,5 +24,15 @@ namespace RoomMe.API.Helpers
         public int UserId => Session.Id;
 
         public List<int> FriendsIds => Session.Friends.Select(x => x.FriendId).ToList();
+
+        public bool IsUserOfFlat(Flat flat)
+        {
+            return flat.Users.Any(x => x.Id == UserId);
+        }
+
+        public bool IsCreatorOfFlat(Flat flat)
+        {
+            return flat.CreatorId == UserId;
+        }
     }
 }

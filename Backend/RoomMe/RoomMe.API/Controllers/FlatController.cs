@@ -40,7 +40,7 @@ namespace RoomMe.API.Controllers
                 .FirstOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if (flat == null || !IsLoggedUserInFlat(flat))
+            if (flat == null || !_sessionHelper.IsUserOfFlat(flat))
             {
                 _logger.LogError($"Flat not found for id {flatId}");
                 return new BadRequestResult();
@@ -58,7 +58,7 @@ namespace RoomMe.API.Controllers
                 .FirstOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !IsLoggedUserInFlat(flat))
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
             {
                 _logger.LogError($"Flat not found for id {flatId}");
                 return new BadRequestResult();
@@ -102,7 +102,7 @@ namespace RoomMe.API.Controllers
                 .SingleOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !IsCreatorOfFlat(flat) || flat.Users.Any(x => x.Id == userId))
+            if(flat == null || !_sessionHelper.IsCreatorOfFlat(flat) || flat.Users.Any(x => x.Id == userId))
             {
                 return new BadRequestResult();
             }
@@ -129,7 +129,7 @@ namespace RoomMe.API.Controllers
                 .SingleOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !IsCreatorOfFlat(flat))
+            if(flat == null || !_sessionHelper.IsCreatorOfFlat(flat))
             {
                 return new BadRequestResult();
             }
@@ -192,194 +192,22 @@ namespace RoomMe.API.Controllers
             return entity.ToRentCostPostReturnModel();
         }
 
-        [HttpPost("{flatId}/shopping-lists", Name = nameof(CreateNewShoppingList))]
-        public async Task<ActionResult<ShoppingListPostReturnModel>> CreateNewShoppingList(int flatId, ShoppingListPostModel list)
-        {
-            var flat = await _sqlContext.Flats
-                .Include(x => x.Users)
-                .SingleOrDefaultAsync(x => x.Id == flatId)
-                .ConfigureAwait(false);
-
-            if(flat == null || IsLoggedUserInFlat(flat))
-            {
-                return new BadRequestResult();
-            }
-
-            var entity = list.ToShoppingList(flatId);
-            await _sqlContext.AddAsync(entity);
-            await _sqlContext.SaveChangesAsync();
-
-            return entity.ToShoppingListPostReturnModel();
-        }
-
-        [HttpGet("{flatId}/shopping-lists", Name = nameof(GetShoppingLists))]
-        public async Task<ActionResult<IEnumerable<ShoppingListGetModel>>> GetShoppingLists(int flatId)
+        [HttpGet("{flatId}/shopping-lists", Name = nameof(GetFlatShoppingLists))]
+        public async Task<ActionResult<IEnumerable<ShoppingListShortModel>>> GetFlatShoppingLists(int flatId)
         {
             var lists = await _sqlContext.ShoppingLists
-                .Include(x => x.Products)
-                .ThenInclude(y => y.CommonCost)
-                .ThenInclude(z => z.User)
-                .Include(x => x.Products)
-                .ThenInclude(y => y.Author)
-                .Include(x => x.Completor)
+                .Include(x => x.Flat)
+                .ThenInclude(y => y.Users)
                 .Where(x => x.FlatId == flatId)
-                .Select(x => x.ToShoppingListGetModel())
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            return lists;
-        }
-
-        [HttpPost("{flatId}/shopping-lists/{listId}/products", Name = nameof(AddShoppingListProducts))]
-        public async Task<ActionResult<ProductListPostReturnModel>> AddShoppingListProducts(int flatId, int listId, IEnumerable<ProductPostModel> products)
-        {
-            var list = await _sqlContext.ShoppingLists
-                .Include(x => x.Products)
-                .Where(x => x.FlatId == flatId)
-                .Where(x => x.Id == listId)
-                .SingleOrDefaultAsync()
-                .ConfigureAwait(false);
-
-            if(list == null)
+            if (lists.Any() && !_sessionHelper.IsUserOfFlat(lists.First().Flat))
             {
-                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
                 return new BadRequestResult();
             }
 
-            List<Product> addedProducts = new();
-
-            foreach(var product in products)
-            {
-                var tempProduct = product.ToProduct(_sessionHelper.UserId);
-                list.Products.Add(tempProduct);
-                addedProducts.Add(tempProduct);
-            }
-
-            _sqlContext.ShoppingLists.Update(list);
-
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return addedProducts.ToProductListPostReturnModel();
-        }
-        
-        [HttpDelete("{flatId}/shopping-lists/{listId}/products", Name = nameof(RemoveProductsFromShoppingList))]
-        public async Task<ActionResult<DateTime>> RemoveProductsFromShoppingList(int flatId, int listId, IEnumerable<int> productsIds)
-        {
-            var list = await _sqlContext.ShoppingLists
-                .Include(x => x.Products)
-                .Where(x => x.FlatId == flatId)
-                .FirstOrDefaultAsync(x => x.Id == listId)
-                .ConfigureAwait(false); 
-
-            if(list == null)
-            {
-                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
-                return new BadRequestResult();
-            }
-
-            var deletedProducts = list.Products.Where(x => productsIds.Any(y => y == x.Id)).ToList();
-
-            _sqlContext.Products.RemoveRange(deletedProducts);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return DateTime.Now;
-        }
-
-        [HttpPatch("{flatId}/shopping-lists/{listId}/products/", Name = nameof(SetProductsAsBought))]
-        public async Task<ActionResult<ProductPatchReturnModel>> SetProductsAsBought(int flatId, int listId, List<ProductPatchModel> products)
-        {
-            var list = await _sqlContext.ShoppingLists
-                .Include(x => x.Products)
-                .Where(x => x.FlatId == flatId)
-                .SingleOrDefaultAsync(x => x.Id == listId)
-                .ConfigureAwait(false);
-
-            if(list == null)
-            {
-                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
-                return new BadRequestResult();
-            }
-
-            var boughtProducts = new List<Product>();
-
-            foreach(var product in products)
-            {
-                var productEntity = list.Products.SingleOrDefault(x => x.Id == product.Id);
-
-                if(productEntity == null || productEntity.Bought)
-                {
-                    _logger.LogError($"Error occured when setting product as bought. ProductId: {product.Id}");
-                    return new BadRequestResult();
-                }
-
-                boughtProducts.Add(productEntity);
-
-                productEntity.SetToBoughtState(product, flatId, _sessionHelper.UserId);
-            }
-
-            _sqlContext.Update(list);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return boughtProducts.ToProductPatchReturnModel();
-        }
-
-        [HttpPatch("{flatId}/shopping-lists/{listId}/completion", Name = nameof(SetShoppingListAsCompleted))]
-        public async Task<ActionResult<ShoppingListCompletionPatchReturnModel>> SetShoppingListAsCompleted (int flatId, int listId, IEnumerable<ReceiptFileModel> receiptFiles)
-        {
-            var list = await _sqlContext.ShoppingLists
-                .Include(x => x.Products)
-                .Include(x => x.Receipts)
-                .Where(x => x.FlatId == flatId)
-                .SingleOrDefaultAsync(x => x.Id == listId)
-                .ConfigureAwait(false);
-
-            if (list == null)
-            {
-                _logger.LogError($"Not found shopping list for given FlatId {flatId} and Id {listId}");
-                return new BadRequestResult();
-            }
-
-            if (list.Products.Any(x => !x.Bought))
-            {
-                _logger.LogError($"When setting shopping list as completed every product must be bought. ListId: {listId}");
-                return new BadRequestResult();
-            }
-
-            var guids = new List<Guid>();
-
-            list.CompletionDate = DateTime.Now;
-            list.CompletorId = _sessionHelper.UserId;
-
-            foreach(var receiptFile in receiptFiles)
-            {
-                //TODO: Change this basic path
-                Guid guid = Guid.NewGuid();
-                string path = Consts.FilePath + guid.ToString() + "." + receiptFile.Extension;
-
-                await System.IO.File.WriteAllBytesAsync(path, Convert.FromBase64String(receiptFile.fileContent)).ConfigureAwait(false);
-               
-                guids.Add(guid);
-                list.Receipts.Add(receiptFile.ToReceipt(listId, path, guid));
-            }
-
-            _sqlContext.ShoppingLists.Update(list);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return new ShoppingListCompletionPatchReturnModel()
-            {
-                TimeStamp = DateTime.Now,
-                FileGuids = guids
-            };
-        }
-
-        private bool IsLoggedUserInFlat(Flat flat)
-        {
-            return flat.Users.Any(x => x.Id == _sessionHelper.UserId);
-        }
-
-        private bool IsCreatorOfFlat(Flat flat)
-        {
-            return flat.CreatorId == _sessionHelper.UserId;
+            return lists.Select(x => x.ToShoppingListShortModel()).ToList();
         }
     }
 }
