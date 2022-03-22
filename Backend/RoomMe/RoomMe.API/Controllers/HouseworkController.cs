@@ -36,11 +36,11 @@ namespace RoomMe.API.Controllers
             var housework = await _sqlContext.Houseworks
                             .Include(x => x.Author)
                             .Include(y => y.Flat)
+                            .ThenInclude(z => z.Users)
                             .Include(z => z.Users)
                             .Include(p => p.HouseworkSchedules)
                             .FirstOrDefaultAsync(x => x.Id == houseworkId)
                             .ConfigureAwait(false);
-
 
 
             if (housework == null)
@@ -49,9 +49,9 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
             
-            if (!IsLoggedUserInHousework(housework))
+            if (!_sessionHelper.IsUserOfFlat(housework.Flat))
             {
-                _logger.LogError($"User is not in user list for housework id {houseworkId}");
+                _logger.LogError($"User is not in flat for housework id {houseworkId}");
                 return new BadRequestResult();
             }
 
@@ -77,11 +77,17 @@ namespace RoomMe.API.Controllers
                 }
             }
 
-            var existsFlat = await _sqlContext.Flats.AnyAsync(x => x.Id == housework.FlatId).ConfigureAwait(false);
+            var flat = await _sqlContext.Flats.FirstOrDefaultAsync(x => x.Id == housework.FlatId).ConfigureAwait(false);
 
-            if (!existsFlat)
+            if (flat == null)
             {
                 _logger.LogError($"Flat not found for id {housework.FlatId}");
+                return new BadRequestResult();
+            }
+
+            if (!_sessionHelper.IsUserOfFlat(flat))
+            {
+                _logger.LogError($"User is not in flat for housework id {housework.Id}");
                 return new BadRequestResult();
             }
 
@@ -136,6 +142,8 @@ namespace RoomMe.API.Controllers
             var housework = await _sqlContext.Houseworks
                .Include(x => x.HouseworkSettings)
                .ThenInclude(y => y.Frequency)
+               .Include(x => x.Flat)
+               .ThenInclude(y => y.Users)
                .FirstOrDefaultAsync(x => x.Id == houseworkId)
                .ConfigureAwait(false);
 
@@ -145,9 +153,9 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            if (!IsLoggedUserInHousework(housework))
+            if (!_sessionHelper.IsUserOfFlat(housework.Flat))
             {
-                _logger.LogError($"User is not in user list for housework id {houseworkId}");
+                _logger.LogError($"User is not in flat for housework id {houseworkId}");
                 return new BadRequestResult();
             }
 
@@ -164,11 +172,6 @@ namespace RoomMe.API.Controllers
             }
 
             return housework.HouseworkSettings.ToHouseworkSettingsModel();
-        }
-
-        private bool IsLoggedUserInHousework(Housework housework)
-        {
-            return housework.Users.Any(x => x.Id == _sessionHelper.UserId);
         }
 
     }

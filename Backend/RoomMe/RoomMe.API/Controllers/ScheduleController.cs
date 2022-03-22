@@ -37,7 +37,8 @@ namespace RoomMe.API.Controllers
                 .Include(x => x.User)
                 .Include(x => x.Status)
                 .Include(x => x.Housework)
-                .ThenInclude(y => y.Users)
+                .ThenInclude(y => y.Flat)
+                .ThenInclude(z => z.Users)
                 .Include(x => x.Housework)
                 .ThenInclude(y => y.HouseworkSettings)
                 .ThenInclude(z => z.Frequency)
@@ -51,9 +52,9 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            if (!IsLoggedUserInHousework(schedule.Housework))
+            if (!_sessionHelper.IsUserOfFlat(schedule.Housework.Flat))
             {
-                _logger.LogError($"User is not in housework user list for schedule {scheduleId}");
+                _logger.LogError($"User is not in flat for schedule {scheduleId}");
                 return new BadRequestResult();
             }
 
@@ -110,7 +111,8 @@ namespace RoomMe.API.Controllers
                 .ConfigureAwait(false);
 
             var housework = await _sqlContext.Houseworks
-                .Include(x => x.Users)
+                .Include(x => x.Flat)
+                .ThenInclude(y => y.Users)
                 .FirstOrDefaultAsync(x => x.Id == houseworkId)
                 .ConfigureAwait(false);
 
@@ -120,18 +122,14 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            if (!IsLoggedUserInHousework(housework))
+            if (!_sessionHelper.IsUserOfFlat(housework.Flat))
             {
-                _logger.LogError($"User is not in user list for housework {houseworkId}");
+                _logger.LogError($"User is not in flat for housework {houseworkId}");
                 return new BadRequestResult();
             }
 
             return schedules.Select(x => x.ToScheduleListModel()).ToList();
         }
 
-        private bool IsLoggedUserInHousework(Housework housework)
-        {
-            return housework.Users.Any(x => x.Id == _sessionHelper.UserId);
-        }
     }
 }
