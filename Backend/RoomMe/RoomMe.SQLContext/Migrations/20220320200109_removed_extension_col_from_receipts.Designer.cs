@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220320200109_removed_extension_col_from_receipts")]
+    partial class removed_extension_col_from_receipts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,38 +186,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HouseworkFrequencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Once",
-                            Value = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Daily",
-                            Value = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Weekly",
-                            Value = 7
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Twice a week",
-                            Value = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Monthly",
-                            Value = 30
-                        });
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.HouseworkSchedule", b =>
@@ -231,6 +201,12 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<int>("HouseworkId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("HouseworkSettingsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HouseworkStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
@@ -241,7 +217,9 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.HasIndex("HouseworkId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("HouseworkSettingsId");
+
+                    b.HasIndex("HouseworkStatusId");
 
                     b.HasIndex("UserId");
 
@@ -268,8 +246,7 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.HasIndex("FrequencyId");
 
-                    b.HasIndex("HouseworkId")
-                        .IsUnique();
+                    b.HasIndex("HouseworkId");
 
                     b.ToTable("HouseworkSettings");
                 });
@@ -287,28 +264,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HouseworkStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "In Progress"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Done"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Expired"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Delayed"
-                        });
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.NotificationFrequency", b =>
@@ -690,11 +645,13 @@ namespace RoomMe.SQLContext.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoomMe.SQLContext.Models.HouseworkStatus", "Status")
+                    b.HasOne("RoomMe.SQLContext.Models.HouseworkSettings", "HouseworkSettings")
                         .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HouseworkSettingsId");
+
+                    b.HasOne("RoomMe.SQLContext.Models.HouseworkStatus", "HouseworkStatus")
+                        .WithMany()
+                        .HasForeignKey("HouseworkStatusId");
 
                     b.HasOne("RoomMe.SQLContext.Models.User", "User")
                         .WithMany()
@@ -704,7 +661,9 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.Navigation("Housework");
 
-                    b.Navigation("Status");
+                    b.Navigation("HouseworkSettings");
+
+                    b.Navigation("HouseworkStatus");
 
                     b.Navigation("User");
                 });
@@ -718,8 +677,8 @@ namespace RoomMe.SQLContext.Migrations
                         .IsRequired();
 
                     b.HasOne("RoomMe.SQLContext.Models.Housework", "Housework")
-                        .WithOne("HouseworkSettings")
-                        .HasForeignKey("RoomMe.SQLContext.Models.HouseworkSettings", "HouseworkId")
+                        .WithMany()
+                        .HasForeignKey("HouseworkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -922,8 +881,6 @@ namespace RoomMe.SQLContext.Migrations
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>
                 {
                     b.Navigation("HouseworkSchedules");
-
-                    b.Navigation("HouseworkSettings");
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.ShoppingList", b =>
