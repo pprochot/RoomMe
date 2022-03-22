@@ -37,6 +37,8 @@ namespace RoomMe.API.Controllers
                 .Include(x => x.User)
                 .Include(x => x.Status)
                 .Include(x => x.Housework)
+                .ThenInclude(y => y.Users)
+                .Include(x => x.Housework)
                 .ThenInclude(y => y.HouseworkSettings)
                 .ThenInclude(z => z.Frequency)
                 .FirstOrDefaultAsync(x => x.Id == scheduleId)
@@ -46,6 +48,12 @@ namespace RoomMe.API.Controllers
             if(schedule == null)
             {
                 _logger.LogError($"Schedule not found for id {scheduleId}");
+                return new BadRequestResult();
+            }
+
+            if (!IsLoggedUserInHousework(schedule.Housework))
+            {
+                _logger.LogError($"User is not in housework user list for schedule {scheduleId}");
                 return new BadRequestResult();
             }
 
@@ -101,9 +109,29 @@ namespace RoomMe.API.Controllers
                 .ToListAsync()
                 .ConfigureAwait(false);
 
+            var housework = await _sqlContext.Houseworks
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == houseworkId)
+                .ConfigureAwait(false);
+
+            if (housework == null)
+            {
+                _logger.LogError($"Housework not found for id {houseworkId}");
+                return new BadRequestResult();
+            }
+
+            if (!IsLoggedUserInHousework(housework))
+            {
+                _logger.LogError($"User is not in user list for housework {houseworkId}");
+                return new BadRequestResult();
+            }
+
             return schedules.Select(x => x.ToScheduleListModel()).ToList();
         }
 
-
+        private bool IsLoggedUserInHousework(Housework housework)
+        {
+            return housework.Users.Any(x => x.Id == _sessionHelper.UserId);
+        }
     }
 }

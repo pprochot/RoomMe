@@ -41,9 +41,17 @@ namespace RoomMe.API.Controllers
                             .FirstOrDefaultAsync(x => x.Id == houseworkId)
                             .ConfigureAwait(false);
 
+
+
             if (housework == null)
             {
                 _logger.LogError($"Housework not found for id {houseworkId}");
+                return new BadRequestResult();
+            }
+            
+            if (!IsLoggedUserInHousework(housework))
+            {
+                _logger.LogError($"User is not in user list for housework id {houseworkId}");
                 return new BadRequestResult();
             }
 
@@ -137,6 +145,12 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
+            if (!IsLoggedUserInHousework(housework))
+            {
+                _logger.LogError($"User is not in user list for housework id {houseworkId}");
+                return new BadRequestResult();
+            }
+
             if (housework.HouseworkSettings == null)
             {
                 _logger.LogError($"Settings not found for housework id {houseworkId}");
@@ -150,6 +164,11 @@ namespace RoomMe.API.Controllers
             }
 
             return housework.HouseworkSettings.ToHouseworkSettingsModel();
+        }
+
+        private bool IsLoggedUserInHousework(Housework housework)
+        {
+            return housework.Users.Any(x => x.Id == _sessionHelper.UserId);
         }
 
     }
