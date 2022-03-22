@@ -53,48 +53,9 @@ interface FlatService {
         @Body cost: RentCostPutModel
     ): RoomMeCall<RentCostPostReturnModel>
 
-    @POST("/flat/{flatId}/shopping-lists")
-    fun createNewShoppingList(
-        @Header("Authorization") accessToken: String,
-        @Path("flatId") flatId: Int,
-        @Body shoppingListPostModel: ShoppingListPostModel
-    ): RoomMeCall<ShoppingListPostReturnModel>
-
     @GET("/flat/{flatId}/shopping-lists")
     fun getShoppingLists(
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int
     ): RoomMeCall<List<ShoppingListGetModel>>
-
-    @POST("/flat/{flatId}/shopping-lists/{listId}/products")
-    fun addShoppingListProducts(
-        @Header("Authorization") accessToken: String,
-        @Path("flatId") flatId: Int,
-        @Path("listId") listId: Int,
-        @Body products: List<ProductPostModel>
-    ): RoomMeCall<ProductListPostReturnModel>
-
-    @DELETE("/flat/{flatId}/shopping-lists/{listId}/products")
-    fun removeProductsFromShoppingList(
-        @Header("Authorization") accessToken: String,
-        @Path("flatId") flatId: Int,
-        @Path("listId") listId: Int,
-        @Body productIds: List<Int>
-    ): RoomMeCall<ProductListPostReturnModel>
-
-    @PATCH("/flat/{flatId}/shopping-lists/{listId}/products")
-    fun setProductsAsBought(
-        @Header("Authorization") accessToken: String,
-        @Path("flatId") flatId: Int,
-        @Path("listId") listId: Int,
-        @Body products: List<ProductPatchModel>
-    ): RoomMeCall<ProductPatchReturnModel>
-
-    @PATCH("/flat/{flatId}/shopping-lists/{listId}/completion")
-    fun setShoppingListAsCompleted(
-        @Header("Authorization") accessToken: String,
-        @Path("flatId") flatId: Int,
-        @Path("listId") listId: Int,
-        @Body products: List<ReceiptFileModel>
-    ): RoomMeCall<ShoppingListCompletionPatchReturnModel>
 }
