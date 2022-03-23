@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220321170748_renamed_status_in_schedules")]
+    partial class renamed_status_in_schedules
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -457,6 +459,9 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
@@ -830,7 +835,7 @@ namespace RoomMe.SQLContext.Migrations
                         .HasForeignKey("CompletorId");
 
                     b.HasOne("RoomMe.SQLContext.Models.Flat", "Flat")
-                        .WithMany("ShoppingLists")
+                        .WithMany()
                         .HasForeignKey("FlatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -915,8 +920,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("RentCosts");
-
-                    b.Navigation("ShoppingLists");
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>
