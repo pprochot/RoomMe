@@ -10,5 +10,5 @@ data class CommonCostModel(
     val userName: String,
     val value: BigDecimal,
     val description: String,
-    val date: LocalDateTime
+    val date: OffsetDateTime
 )

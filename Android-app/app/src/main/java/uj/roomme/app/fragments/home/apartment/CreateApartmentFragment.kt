@@ -68,6 +68,7 @@ class CreateApartmentFragment : Fragment(R.layout.fragment_create_apartment) {
                 if (body == null) {
                     Toasts.sendingRequestFailure(context)
                     createNewApartmentButton.isEnabled = true
+                    sessionViewModel.apartmentData = body
                 } else {
                     Toasts.createdApartment(context)
                     findNavController().navigate(Directions.actionCreateApartmentToHome())

@@ -8,12 +8,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import uj.roomme.services.service.AuthService
 import uj.roomme.services.BuildConfig
-import uj.roomme.services.service.FlatService
-import uj.roomme.services.service.UserService
 import uj.roomme.services.factory.RoomMeCallAdapterFactory
-import uj.roomme.services.service.ShoppingListService
+import uj.roomme.services.service.*
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -51,6 +48,12 @@ class ServicesModule {
 
     @Provides
     fun flatService(gson: GsonConverterFactory) = createService<FlatService>(gson)
+
+    @Provides
+    fun houseworkService(gson: GsonConverterFactory) = createService<HouseworkService>(gson)
+
+    @Provides
+    fun scheduleService(gson: GsonConverterFactory) = createService<ScheduleService>(gson)
 
     @Provides
     fun shoppingListService(gson: GsonConverterFactory) = createService<ShoppingListService>(gson)
