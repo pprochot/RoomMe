@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -31,7 +32,11 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
     lateinit var flatService: FlatService
     private val session: SessionViewModel by activityViewModels()
     private lateinit var createNewShoppingListButton: Button
+    private lateinit var ongoingCategory: TextView
+    private lateinit var completedCategory: TextView
     private lateinit var navController: NavController
+    private var ongoingListsAdapter: ShoppingListsAdapter? = null
+    private var completedListsAdapter: ShoppingListsAdapter? = null
 
     private lateinit var recyclerView: RecyclerView
 
@@ -42,13 +47,16 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
         createNewShoppingListButton.setOnClickListener {
             navController.navigate(Directions.actionShoppingListsToNewShoppingList())
         }
-
+        ongoingCategory.setOnClickListener(this::onOngoingCategoryClick)
+        completedCategory.setOnClickListener(this::onCompletedCategoryClick)
         getShoppingListsFromService()
     }
 
     private fun findViews(view: View) = view.apply {
         recyclerView = findViewById(R.id.rvShoppingLists)
         createNewShoppingListButton = findViewById(R.id.buttonShoppingListsCreateNewList)
+        ongoingCategory = findViewById(R.id.textCategoryOngoing)
+        completedCategory = findViewById(R.id.textCategoryCompleted)
         navController = findNavController()
     }
 
@@ -59,7 +67,7 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
                     code == 401 -> Log.d(TAG, "Unauthorized.")
                     code == 200 && body != null -> {
                         Log.d(TAG, "Successfully fetched shopping lists.")
-                        recyclerView.adapter = ShoppingListsAdapter(body)
+                        attachAdapters(body)
                     }
                     else -> {
                         Log.d(TAG, "Failed to fetch shopping lists.", error)
@@ -67,5 +75,31 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
                     }
                 }
             }
+    }
+
+    private fun attachAdapters(shoppingLists: List<ShoppingListGetModel>) {
+        val ongoingLists = shoppingLists.filter { it.completorId == null }
+        val completedLists = shoppingLists.filter { it.completorId != null }
+
+        ongoingListsAdapter = ShoppingListsAdapter(ongoingLists)
+        completedListsAdapter = ShoppingListsAdapter(completedLists)
+
+        recyclerView.adapter = ongoingListsAdapter
+    }
+
+    private fun onOngoingCategoryClick(view: View) {
+        if (ongoingListsAdapter != null) {
+            ongoingCategory.setBackgroundResource(R.drawable.shape_selected)
+            completedCategory.setBackgroundResource(R.drawable.shape_unselected)
+            recyclerView.adapter = ongoingListsAdapter
+        }
+    }
+
+    private fun onCompletedCategoryClick(view: View) {
+        if (completedListsAdapter != null) {
+            ongoingCategory.setBackgroundResource(R.drawable.shape_unselected)
+            completedCategory.setBackgroundResource(R.drawable.shape_selected)
+            recyclerView.adapter = completedListsAdapter
+        }
     }
 }

@@ -5,5 +5,5 @@ import java.time.OffsetDateTime
 
 data class ProductListPostReturnModel(
     val productsIds: List<Int>,
-    val creationDate: LocalDateTime
+    val creationDate: OffsetDateTime
 )

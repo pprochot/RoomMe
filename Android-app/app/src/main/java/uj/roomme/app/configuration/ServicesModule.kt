@@ -13,6 +13,7 @@ import uj.roomme.services.BuildConfig
 import uj.roomme.services.service.FlatService
 import uj.roomme.services.service.UserService
 import uj.roomme.services.factory.RoomMeCallAdapterFactory
+import uj.roomme.services.service.ShoppingListService
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -50,6 +51,9 @@ class ServicesModule {
 
     @Provides
     fun flatService(gson: GsonConverterFactory) = createService<FlatService>(gson)
+
+    @Provides
+    fun shoppingListService(gson: GsonConverterFactory) = createService<ShoppingListService>(gson)
 
     private inline fun <reified T> createService(gsonConverterFactory: GsonConverterFactory): T {
         return Retrofit.Builder()

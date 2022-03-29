@@ -28,7 +28,7 @@
             app:popUpTo="@id/destProductsFragment"
             app:popUpToInclusive="false" />
         <argument
-            android:name="flatId"
+            android:name="listId"
             app:argType="integer" />
     </fragment>
     <fragment
@@ -50,7 +50,7 @@
             android:id="@+id/actionProductsToNewProduct"
             app:destination="@id/destNewProductFragment" />
         <argument
-            android:name="flatId"
+            android:name="listId"
             app:argType="integer" />
     </fragment>
 </navigation>

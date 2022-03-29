@@ -15,10 +15,10 @@ interface ShoppingListService {
     ): RoomMeCall<ShoppingListPostReturnModel>
 
     @GET("/shoppinglist/{listId}")
-    fun getShoppingLists(
+    fun getShoppingList(
         @Header("Authorization") accessToken: String,
         @Path("listId") flatId: Int
-    ): RoomMeCall<List<ShoppingListGetModel>>
+    ): RoomMeCall<ShoppingListGetModel>
 
     @POST("/shoppinglist/{listId}/products")
     fun addShoppingListProducts(
@@ -27,12 +27,12 @@ interface ShoppingListService {
         @Body products: List<ProductPostModel>
     ): RoomMeCall<ProductListPostReturnModel>
 
-    @DELETE("/shoppinglist/{listId}/products")
+    @HTTP(method = "DELETE", path = "/shoppinglist/{listId}/products", hasBody = true)
     fun removeProductsFromShoppingList(
         @Header("Authorization") accessToken: String,
         @Path("listId") listId: Int,
         @Body productIds: List<Int>
-    ): RoomMeCall<ProductListPostReturnModel>
+    ): RoomMeCall<Void>
 
     @PATCH("/shoppinglist/{listId}/products")
     fun setProductsAsBought(
@@ -40,14 +40,14 @@ interface ShoppingListService {
         @Path("listId") listId: Int,
         @Body products: List<ProductPatchModel>
     ): RoomMeCall<ProductPatchReturnModel>
+/*
 
-    /*
     @PATCH("/shoppinglist/{listId}/completion")
     fun setShoppingListAsCompleted(
         @Header("Authorization") accessToken: String,
         @Path("listId") listId: Int,
-        @Body products: List<IFormFile>
+        @Part products: List<IFormFile>
     ): RoomMeCall<ShoppingListCompletionPatchReturnModel>
 
-     */
+ */
 }

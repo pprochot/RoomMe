@@ -17,6 +17,7 @@ import uj.roomme.app.consts.Toasts
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.shoppinglist.ShoppingListPostModel
 import uj.roomme.services.service.FlatService
+import uj.roomme.services.service.ShoppingListService
 import javax.inject.Inject
 import uj.roomme.app.fragments.shoppinglists.CreateShoppingListFragmentDirections as Directions
 
@@ -28,7 +29,7 @@ class CreateShoppingListFragment : Fragment(R.layout.fragment_createshoppinglist
     }
 
     @Inject
-    lateinit var flatService: FlatService
+    lateinit var shoppingListService: ShoppingListService
 
     private val session: SessionViewModel by activityViewModels()
     private lateinit var nameView: TextInputEditText
@@ -54,7 +55,7 @@ class CreateShoppingListFragment : Fragment(R.layout.fragment_createshoppinglist
     }
 
     private fun createNewShoppingListByService(body: ShoppingListPostModel) = session.apply {
-        flatService.createNewShoppingList(userData!!.accessToken, apartmentData!!.id, body)
+        shoppingListService.createNewShoppingList(userData!!.accessToken, body)
             .processAsync { code, body, error ->
                 when {
                     code == 401 -> Log.d(TAG, "Unauthorized.")
@@ -72,6 +73,7 @@ class CreateShoppingListFragment : Fragment(R.layout.fragment_createshoppinglist
 
     private fun getDataFromViews() = ShoppingListPostModel(
         name = nameView.text.toString(),
-        description = descriptionView.text.toString()
+        description = descriptionView.text.toString(),
+        flatId = session.apartmentData!!.id
     )
 }
