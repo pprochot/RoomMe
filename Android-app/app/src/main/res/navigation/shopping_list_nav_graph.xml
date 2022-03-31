@@ -15,7 +15,10 @@
             app:destination="@id/destCreateShoppingListFragment" />
         <action
             android:id="@+id/actionShoppingListsToProducts"
-            app:destination="@id/destProductsFragment" />
+            app:destination="@id/destOngoingShoppingList" />
+        <action
+            android:id="@+id/action_destShoppingListsFragment_to_completedShoppingListFragment"
+            app:destination="@id/destCompletedShoppingList" />
     </fragment>
     <fragment
         android:id="@+id/destNewProductFragment"
@@ -24,8 +27,8 @@
         tools:layout="@layout/fragment_newproduct">
         <action
             android:id="@+id/actionNewProductToProducts"
-            app:destination="@id/destProductsFragment"
-            app:popUpTo="@id/destProductsFragment"
+            app:destination="@id/destOngoingShoppingList"
+            app:popUpTo="@id/destOngoingShoppingList"
             app:popUpToInclusive="false" />
         <argument
             android:name="listId"
@@ -38,19 +41,39 @@
         tools:layout="@layout/fragment_createshoppinglist">
         <action
             android:id="@+id/actionCreateShoppingListToProducts"
-            app:destination="@id/destProductsFragment"
+            app:destination="@id/destOngoingShoppingList"
             app:popUpTo="@id/destShoppingListsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/destProductsFragment"
+        android:id="@+id/destOngoingShoppingList"
         android:name="uj.roomme.app.fragments.shoppinglists.ProductsFragment"
         android:label="Products"
-        tools:layout="@layout/fragment_products">
+        tools:layout="@layout/fragment_ongoing_shoppinglist">
         <action
             android:id="@+id/actionProductsToNewProduct"
             app:destination="@id/destNewProductFragment" />
         <argument
             android:name="listId"
             app:argType="integer" />
+        <action
+            android:id="@+id/actionProductsToCompleteShoppingList"
+            app:destination="@id/destCompleteShoppingListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/destCompleteShoppingListFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.CompleteShoppingListFragment"
+        android:label="CompleteShoppingListFragment"
+        tools:layout="@layout/fragment_complete_shoppinglist">
+        <action
+            android:id="@+id/action_destCompleteShoppingListFragment_to_completedShoppingListFragment"
+            app:destination="@id/destCompletedShoppingList"
+            app:popUpTo="@id/destShoppingListsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/destCompletedShoppingList"
+        android:name="uj.roomme.app.fragments.shoppinglists.FinishedShoppingListFragment"
+        android:label="CompletedShoppingListFragment"
+        tools:layout="@layout/fragment_finished_shoppinglist" >
     </fragment>
 </navigation>

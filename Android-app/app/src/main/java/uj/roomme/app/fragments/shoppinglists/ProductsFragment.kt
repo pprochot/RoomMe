@@ -1,13 +1,10 @@
 package uj.roomme.app.fragments.shoppinglists
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -26,7 +23,7 @@ import javax.inject.Inject
 import uj.roomme.app.fragments.shoppinglists.ProductsFragmentDirections as Directions
 
 @AndroidEntryPoint
-class ProductsFragment : Fragment(R.layout.fragment_products) {
+class ProductsFragment : Fragment(R.layout.fragment_ongoing_shoppinglist) {
 
     private companion object {
         const val TAG = "ProductsFragment"
@@ -50,7 +47,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
         findViews(view)
 
         completeListButton.setOnClickListener {
-
+            findNavController().navigate(Directions.actionProductsToCompleteShoppingList())
         }
         newProductButton.setOnClickListener {
             findNavController().navigate(Directions.actionProductsToNewProduct(args.listId))
