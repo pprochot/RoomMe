@@ -27,6 +27,7 @@ class CategoryView(context: Context, attrs: AttributeSet) : AppCompatTextView(co
             try {
                 isSelectedCategory =
                     attrs.getAttributeBooleanValue(R.styleable.CategoryView_isSelectedCategory, false)
+                isClickable = true
             } finally {
                 recycle()
             }

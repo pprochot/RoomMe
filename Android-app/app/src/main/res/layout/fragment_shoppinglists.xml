@@ -9,24 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <uj.roomme.app.views.CategoryView
             android:id="@+id/textCategoryOngoing"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="0.5"
-            android:background="@drawable/shape_selected"
-            android:clickable="true"
             android:gravity="center"
             android:textStyle="bold"
             android:text="Ongoing" />
 
-        <TextView
+        <uj.roomme.app.views.CategoryView
             android:id="@+id/textCategoryCompleted"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="0.5"
-            android:background="@drawable/shape_unselected"
-            android:clickable="true"
             android:gravity="center"
             android:textStyle="bold"
             android:text="Completed" />
@@ -38,7 +34,6 @@
         android:layout_height="match_parent"
         android:layout_above="@id/buttonShoppingListsCreateNewList"
         android:layout_below="@+id/layoutShoppingListCategory"
-        android:layout_marginTop="10dp"
         android:scrollbars="vertical"
         android:verticalScrollbarPosition="right" />
 

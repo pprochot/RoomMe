@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,13 +16,14 @@ import uj.roomme.app.adapters.BoughtProductsAdapter
 import uj.roomme.app.adapters.ProductsToBuyAdapter
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.views.CategoryView
 import uj.roomme.domain.shoppinglist.ShoppingListGetModel
 import uj.roomme.services.service.ShoppingListService
 import javax.inject.Inject
-import uj.roomme.app.fragments.shoppinglists.ProductsFragmentDirections as Directions
+import uj.roomme.app.fragments.shoppinglists.OngoingShoppingListFragmentDirections as Directions
 
 @AndroidEntryPoint
-class ProductsFragment : Fragment(R.layout.fragment_ongoing_shoppinglist) {
+class OngoingShoppingListFragment : Fragment(R.layout.fragment_ongoing_shoppinglist) {
 
     private companion object {
         const val TAG = "ProductsFragment"
@@ -33,12 +33,12 @@ class ProductsFragment : Fragment(R.layout.fragment_ongoing_shoppinglist) {
     lateinit var shoppingListService: ShoppingListService
 
     private val session: SessionViewModel by activityViewModels()
-    private val args: ProductsFragmentArgs by navArgs()
+    private val args: OngoingShoppingListFragmentArgs by navArgs()
     private lateinit var recyclerView: RecyclerView
     private lateinit var completeListButton: Button
     private lateinit var newProductButton: Button
-    private lateinit var toBuyCategory: TextView
-    private lateinit var boughtCategory: TextView
+    private lateinit var toBuyCategory: CategoryView
+    private lateinit var boughtCategory: CategoryView
     private var productsToBuyAdapter: ProductsToBuyAdapter? = null
     private var boughtProductsAdapter: BoughtProductsAdapter? = null
 
@@ -56,6 +56,7 @@ class ProductsFragment : Fragment(R.layout.fragment_ongoing_shoppinglist) {
         toBuyCategory.setOnClickListener(this::onToBuyCategoryClick)
         boughtCategory.setOnClickListener(this::onBoughtCategoryClick)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        setSelectedCategory(selectedToBuy = true, selectedBought = false)
         getListInfoFromService()
     }
 
@@ -101,17 +102,20 @@ class ProductsFragment : Fragment(R.layout.fragment_ongoing_shoppinglist) {
 
     private fun onToBuyCategoryClick(view: View) {
         if (productsToBuyAdapter != null) {
-            toBuyCategory.setBackgroundResource(R.drawable.shape_selected)
-            boughtCategory.setBackgroundResource(R.drawable.shape_unselected)
+            setSelectedCategory(selectedToBuy = true, selectedBought = false)
             recyclerView.adapter = productsToBuyAdapter
         }
     }
 
     private fun onBoughtCategoryClick(view: View) {
         if (boughtProductsAdapter != null) {
-            toBuyCategory.setBackgroundResource(R.drawable.shape_unselected)
-            boughtCategory.setBackgroundResource(R.drawable.shape_selected)
+            setSelectedCategory(selectedToBuy = false, selectedBought = true)
             recyclerView.adapter = boughtProductsAdapter
         }
+    }
+
+    private fun setSelectedCategory(selectedToBuy: Boolean, selectedBought: Boolean) {
+        toBuyCategory.isSelectedCategory = selectedToBuy
+        boughtCategory.isSelectedCategory = selectedBought
     }
 }

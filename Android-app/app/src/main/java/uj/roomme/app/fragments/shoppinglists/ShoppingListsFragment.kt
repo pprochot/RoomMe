@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.adapters.CompletedShoppingListsAdapter
+import uj.roomme.app.adapters.OngoingShoppingListsAdapter
 import uj.roomme.app.adapters.ShoppingListsAdapter
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.views.CategoryView
 import uj.roomme.domain.shoppinglist.ShoppingListGetModel
 import uj.roomme.services.service.FlatService
 import javax.inject.Inject
@@ -32,11 +35,11 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
     lateinit var flatService: FlatService
     private val session: SessionViewModel by activityViewModels()
     private lateinit var createNewShoppingListButton: Button
-    private lateinit var ongoingCategory: TextView
-    private lateinit var completedCategory: TextView
+    private lateinit var ongoingCategory: CategoryView
+    private lateinit var completedCategory: CategoryView
     private lateinit var navController: NavController
-    private var ongoingListsAdapter: ShoppingListsAdapter? = null
-    private var completedListsAdapter: ShoppingListsAdapter? = null
+    private var ongoingListsAdapter: OngoingShoppingListsAdapter? = null
+    private var completedListsAdapter: CompletedShoppingListsAdapter? = null
 
     private lateinit var recyclerView: RecyclerView
 
@@ -49,6 +52,7 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
         }
         ongoingCategory.setOnClickListener(this::onOngoingCategoryClick)
         completedCategory.setOnClickListener(this::onCompletedCategoryClick)
+        setSelectedCategory(selectedOngoing = true, selectedCompleted = false)
         getShoppingListsFromService()
     }
 
@@ -81,25 +85,28 @@ class ShoppingListsFragment : Fragment(R.layout.fragment_shoppinglists) {
         val ongoingLists = shoppingLists.filter { it.completorId == null }
         val completedLists = shoppingLists.filter { it.completorId != null }
 
-        ongoingListsAdapter = ShoppingListsAdapter(ongoingLists)
-        completedListsAdapter = ShoppingListsAdapter(completedLists)
+        ongoingListsAdapter = OngoingShoppingListsAdapter(ongoingLists)
+        completedListsAdapter = CompletedShoppingListsAdapter(completedLists)
 
         recyclerView.adapter = ongoingListsAdapter
     }
 
     private fun onOngoingCategoryClick(view: View) {
         if (ongoingListsAdapter != null) {
-            ongoingCategory.setBackgroundResource(R.drawable.shape_selected)
-            completedCategory.setBackgroundResource(R.drawable.shape_unselected)
+            setSelectedCategory(selectedOngoing = true, selectedCompleted = false)
             recyclerView.adapter = ongoingListsAdapter
         }
     }
 
     private fun onCompletedCategoryClick(view: View) {
         if (completedListsAdapter != null) {
-            ongoingCategory.setBackgroundResource(R.drawable.shape_unselected)
-            completedCategory.setBackgroundResource(R.drawable.shape_selected)
+            setSelectedCategory(selectedOngoing = false, selectedCompleted = true)
             recyclerView.adapter = completedListsAdapter
         }
+    }
+
+    private fun setSelectedCategory(selectedOngoing: Boolean, selectedCompleted: Boolean) {
+        ongoingCategory.isSelectedCategory = selectedOngoing
+        completedCategory.isSelectedCategory = selectedCompleted
     }
 }

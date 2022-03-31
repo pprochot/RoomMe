@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/destOngoingShoppingList"
-        android:name="uj.roomme.app.fragments.shoppinglists.ProductsFragment"
+        android:name="uj.roomme.app.fragments.shoppinglists.OngoingShoppingListFragment"
         android:label="Products"
         tools:layout="@layout/fragment_ongoing_shoppinglist">
         <action
@@ -75,5 +75,8 @@
         android:name="uj.roomme.app.fragments.shoppinglists.FinishedShoppingListFragment"
         android:label="CompletedShoppingListFragment"
         tools:layout="@layout/fragment_finished_shoppinglist" >
+        <argument
+            android:name="listId"
+            app:argType="integer" />
     </fragment>
 </navigation>
