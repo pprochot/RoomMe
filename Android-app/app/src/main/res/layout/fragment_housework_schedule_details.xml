@@ -7,6 +7,7 @@
     <include layout="@layout/row_housework_schedule"/>
 
     <Button
+        android:id="@+id/buttonUpdateHouseworkSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"

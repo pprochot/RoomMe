@@ -11,13 +11,13 @@
         android:label="HouseworkCalendarFragment"
         tools:layout="@layout/fragment_housework_calendar" >
         <action
-            android:id="@+id/action_destHouseworkCalendarFragment_to_destHouseworkFragment"
+            android:id="@+id/actionToHouseworkFragment"
             app:destination="@id/destHouseworkFragment" />
         <action
-            android:id="@+id/action_destHouseworkCalendarFragment_to_destHouseworkScheduleDetailsFragment"
+            android:id="@+id/actionToHouseworkScheduleDetailsFragment"
             app:destination="@id/destHouseworkScheduleDetailsFragment" />
         <action
-            android:id="@+id/action_destHouseworkCalendarFragment_to_destHouseworkDetailsFragment"
+            android:id="@+id/actionToHouseworkDetailsFragment"
             app:destination="@id/destHouseworkDetailsFragment" />
     </fragment>
     <fragment
@@ -26,7 +26,7 @@
         android:label="HouseworkFragment"
         tools:layout="@layout/fragment_housework" >
         <action
-            android:id="@+id/action_destHouseworkFragment_to_destHouseworkUpdatePart1Fragment"
+            android:id="@+id/actionToHouseworkUpdatePart1Fragment"
             app:destination="@id/destHouseworkUpdatePart1Fragment" />
     </fragment>
     <fragment
@@ -35,7 +35,7 @@
         android:label="HouseworkDetailsFragment"
         tools:layout="@layout/fragment_housework_details" >
         <action
-            android:id="@+id/action_destHouseworkDetailsFragment_to_destHouseworkFragment"
+            android:id="@+id/actionToHouseworkFragment"
             app:destination="@id/destHouseworkFragment" />
     </fragment>
     <fragment
@@ -44,10 +44,9 @@
         android:label="HouseworkScheduleUpdateFragment"
         tools:layout="@layout/fragment_housework_schedule_update" >
         <action
-            android:id="@+id/action_destHouseworkScheduleUpdateFragment_to_destHouseworkDetailsFragment"
-            app:destination="@id/destHouseworkDetailsFragment"
-            app:popUpTo="@id/destHouseworkDetailsFragment"
-            app:popUpToInclusive="false" />
+            android:id="@+id/actionToHouseworkScheduleDetailsFragment"
+            app:destination="@id/destHouseworkScheduleDetailsFragment"
+            app:popUpTo="@id/destHouseworkScheduleDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkScheduleDetailsFragment"
@@ -55,8 +54,8 @@
         android:label="HouseworkScheduleDetailsFragment"
         tools:layout="@layout/fragment_housework_schedule_details" >
         <action
-            android:id="@+id/action_destHouseworkScheduleDetailsFragment_to_destHouseworkUpdatePart2Fragment"
-            app:destination="@id/destHouseworkUpdatePart2Fragment" />
+            android:id="@+id/actionToHouseworkScheduleUpdateFragment"
+            app:destination="@id/destHouseworkScheduleUpdateFragment" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkUpdatePart1Fragment"
@@ -64,8 +63,8 @@
         android:label="HouseworkUpdatePart1Fragment"
         tools:layout="@layout/fragment_housework_update_part1" >
         <action
-            android:id="@+id/action_destHouseworkUpdatePart1Fragment_to_destHouseworkScheduleUpdateFragment"
-            app:destination="@id/destHouseworkScheduleUpdateFragment" />
+            android:id="@+id/actionToHouseworkUpdatePart2Fragment"
+            app:destination="@id/destHouseworkUpdatePart2Fragment" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkUpdatePart2Fragment"
@@ -73,8 +72,8 @@
         android:label="HouseworkUpdatePart2Fragment"
         tools:layout="@layout/fragment_housework_update_part2" >
         <action
-            android:id="@+id/action_destHouseworkUpdatePart2Fragment_to_destHouseworkScheduleDetailsFragment"
-            app:destination="@id/destHouseworkScheduleDetailsFragment"
+            android:id="@+id/actionToHouseworkDetailsFragment"
+            app:destination="@id/destHouseworkDetailsFragment"
             app:popUpTo="@id/destHouseworkScheduleDetailsFragment" />
     </fragment>
 </navigation>

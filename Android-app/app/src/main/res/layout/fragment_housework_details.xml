@@ -24,6 +24,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/textHouseworkName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
@@ -46,6 +47,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/textHouseworkDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
@@ -68,6 +70,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/textHouseworkAuthor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
@@ -77,8 +80,49 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="15dp" />
 
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:paddingEnd="20dp"
+                    android:text="Day of week"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textHouseworkDayOfWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:text="Monday"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:paddingEnd="20dp"
+                    android:text="Frequency"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textHouseworkFrequency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:text="Once"
+                    android:textSize="16sp" />
+            </TableRow>
         </TableLayout>
 
        <include layout="@layout/layout_space_divider"/>
@@ -89,7 +133,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttonAddNewProduct"
+                android:id="@+id/buttonUpdateHousework"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="10dp"
@@ -97,7 +141,7 @@
                 android:text="Update" />
 
             <Button
-                android:id="@+id/buttonCloseList"
+                android:id="@+id/buttonCloseHousework"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="10dp"
@@ -128,6 +172,7 @@
             android:textSize="20dp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHouseworkParticipants"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

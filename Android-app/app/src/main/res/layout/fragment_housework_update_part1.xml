@@ -19,6 +19,7 @@
                 android:layout_column="1" />
 
             <EditText
+                android:id="@+id/editTextHouseworkName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
@@ -38,25 +39,14 @@
                 android:layout_column="1" />
 
             <EditText
+                android:id="@+id/editTextHouseworkDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"/>
         </TableRow>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="?android:attr/listDivider" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
+        <include layout="@layout/layout_space_divider"/>
 
         <TableRow>
             <TextView
@@ -67,7 +57,7 @@
                 android:layout_column="1" />
 
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/spinnerDayOfWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>
@@ -85,7 +75,7 @@
                 android:layout_column="1" />
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/spinnerFrequency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>

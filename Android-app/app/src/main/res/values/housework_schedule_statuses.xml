@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="housework_schedule_statuses">
+        <item>Progress</item>
+        <item>Done</item>
+        <item>Expired</item>
+        <item>Delayed</item>
+    </string-array>
+</resources>
