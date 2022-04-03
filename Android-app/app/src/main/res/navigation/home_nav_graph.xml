@@ -10,7 +10,7 @@
         app:destination="@id/product_list_nav_graph" />
     <action
         android:id="@+id/actionGlobalToHouseWorks"
-        app:destination="@id/destHouseWorksFragment" />
+        app:destination="@id/houseworkNavGraph" />
     <action
         android:id="@+id/actionGlobalToRoommates"
         app:destination="@id/destRoommatesFragment" />
@@ -48,11 +48,6 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/destHouseWorksFragment"
-        android:name="uj.roomme.app.fragments.home.HouseWorksFragment"
-        android:label="House works"
-        tools:layout="@layout/fragment_houseworks"/>
-    <fragment
         android:id="@+id/destRoommatesFragment"
         android:name="uj.roomme.app.fragments.home.RoommatesFragment"
         android:label="Roommates"
@@ -64,5 +59,6 @@
         tools:layout="@layout/fragment_statistics"/>
 
     <include app:graph="@navigation/shopping_list_nav_graph" />
+    <include app:graph="@navigation/housework_nav_graph"/>
 
 </navigation>
