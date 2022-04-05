@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomMe.API.Tests", "RoomMe.API.Tests\RoomMe.API.Tests.csproj", "{76594606-41C5-4CB2-A510-1227B0EB08F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomMe.API.Tests", "RoomMe.API.Tests\RoomMe.API.Tests.csproj", "{76594606-41C5-4CB2-A510-1227B0EB08F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomMe.API", "RoomMe.API\RoomMe.API.csproj", "{A2650273-18C6-468B-8985-1D0730D36A43}"
 EndProject
