@@ -71,6 +71,16 @@ namespace RoomMe.API.Controllers
                         currCostId++;
                     }
 
+                    if (args.frequencyId == Consts.MonthlyStatsId)
+                    {
+                        var rent = await _sqlContext.RentCosts.FirstOrDefaultAsync(x => x.FlatId == flatId).ConfigureAwait(false);
+
+                        if (rent != null)
+                        {
+                            value += rent.Value;
+                        }
+                    }
+
                     res.Add(StatisticsConverter.ToStatisticsReturnModel(ranges[i], value));
                 }
             }
@@ -122,13 +132,6 @@ namespace RoomMe.API.Controllers
             }
 
             return res;
-        }
-
-        [AllowAnonymous]
-        [HttpGet("frequencies", Name = nameof(GetStatisticsFrequencies))]
-        public async Task<IEnumerable<StatisticsFrequency>> GetStatisticsFrequencies()
-        {
-            return await _sqlContext.StatisticsFrequencies.ToListAsync().ConfigureAwait(false);
         }
 
         private List<DateTime> GenerateDaysTimeRanges(DateTime from, DateTime to, int lengthOfRange)
