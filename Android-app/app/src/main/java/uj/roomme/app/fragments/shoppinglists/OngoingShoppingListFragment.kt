@@ -47,7 +47,7 @@ class OngoingShoppingListFragment : Fragment(R.layout.fragment_ongoing_shoppingl
         findViews(view)
 
         completeListButton.setOnClickListener {
-            findNavController().navigate(Directions.actionProductsToCompleteShoppingList())
+            findNavController().navigate(Directions.actionProductsToCompleteShoppingList(args.listId))
         }
         newProductButton.setOnClickListener {
             findNavController().navigate(Directions.actionProductsToNewProduct(args.listId))
@@ -57,11 +57,6 @@ class OngoingShoppingListFragment : Fragment(R.layout.fragment_ongoing_shoppingl
         boughtCategory.setOnClickListener(this::onBoughtCategoryClick)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         setSelectedCategory(selectedToBuy = true, selectedBought = false)
-        getListInfoFromService()
-    }
-
-    override fun onStart() {
-        super.onStart()
         getListInfoFromService()
     }
 
@@ -93,9 +88,9 @@ class OngoingShoppingListFragment : Fragment(R.layout.fragment_ongoing_shoppingl
         val productsToBuyLists = shoppingList.products.filter { !it.bought }
         val boughtProductsLists = shoppingList.products.filter { it.bought }
 
-        productsToBuyAdapter =
-            ProductsToBuyAdapter(session, shoppingListService, productsToBuyLists, shoppingList.id, childFragmentManager)
         boughtProductsAdapter = BoughtProductsAdapter(boughtProductsLists)
+        productsToBuyAdapter =
+            ProductsToBuyAdapter(session, shoppingListService, productsToBuyLists, shoppingList.id, childFragmentManager, boughtProductsAdapter!!)
 
         recyclerView.adapter = productsToBuyAdapter
     }

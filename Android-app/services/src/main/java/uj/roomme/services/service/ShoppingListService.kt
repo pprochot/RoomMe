@@ -47,6 +47,6 @@ interface ShoppingListService {
     fun setShoppingListAsCompleted(
         @Header("Authorization") accessToken: String,
         @Path("listId") listId: Int,
-        @Part receipts: List<MultipartBody.Part>
+        @Part receiptFiles: List<MultipartBody.Part>
     ): RoomMeCall<ShoppingListCompletionPatchReturnModel>
 }

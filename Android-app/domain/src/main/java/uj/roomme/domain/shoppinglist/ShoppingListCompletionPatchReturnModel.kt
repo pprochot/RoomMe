@@ -5,5 +5,5 @@ import java.util.*
 
 data class ShoppingListCompletionPatchReturnModel(
     val timeStamp: OffsetDateTime,
-    val fileGuids: UUID
+    val fileGuids: List<UUID>
 )

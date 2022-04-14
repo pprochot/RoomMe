@@ -23,7 +23,8 @@ class ProductsToBuyAdapter(
     private val shoppingListService: ShoppingListService,
     products: List<ProductModel>,
     private val listId: Int,
-    private val childFragmentManager: FragmentManager
+    private val childFragmentManager: FragmentManager,
+    private val boughtProductsAdapter: BoughtProductsAdapter
 ) : RecyclerView.Adapter<ProductsToBuyAdapter.ViewHolder>() {
 
     private companion object {
@@ -53,7 +54,7 @@ class ProductsToBuyAdapter(
             removeProductFromListViaService(holder.itemView.context, data.id, position)
         }
         holder.buyProductButton.setOnClickListener {
-            BuyProductDialogFragment(data.id, this::setProductAsBoughtViaService).show(childFragmentManager, "BuyProduct")
+            BuyProductDialogFragment(data.id, position, this::setProductAsBoughtViaService).show(childFragmentManager, "BuyProduct")
         }
     }
 
@@ -76,7 +77,7 @@ class ProductsToBuyAdapter(
         }
     }
 
-    private fun setProductAsBoughtViaService(context: Context, request: ProductPatchModel) =
+    private fun setProductAsBoughtViaService(context: Context, request: ProductPatchModel, position: Int) =
         session.userData.let {
             shoppingListService.setProductsAsBought(it!!.accessToken, listId, listOf(request))
                 .processAsync { code, body, error ->
@@ -84,7 +85,8 @@ class ProductsToBuyAdapter(
                         401 -> Log.d(TAG, "Unauthorized")
                         200 -> {
                             Log.d(TAG, "Product set as bought")
-//                        recyclerView.adapter = ProductsToBuyAdapter(body!!.products)
+                            removeItem(position)
+//                            boughtProductsAdapter.addProduct(body)
                         }
                         else -> {
                             Log.d(TAG, "Failed to fetch list info.", error)
@@ -101,7 +103,8 @@ class ProductsToBuyAdapter(
 
     class BuyProductDialogFragment(
         private val productId: Int,
-        private val callback: (Context, ProductPatchModel) -> Unit
+        private val position: Int,
+        private val callback: (Context, ProductPatchModel, Int) -> Unit
     ) : DialogFragment() {
 
         private lateinit var descriptionText: TextView
@@ -121,7 +124,7 @@ class ProductsToBuyAdapter(
                 dialog?.cancel()
             }
             view.findViewById<TextView>(R.id.textOk).setOnClickListener {
-                callback(requireContext(), getBody())
+                callback(requireContext(), getBody(), position)
                 dialog?.cancel()
             }
         }

@@ -13,12 +13,10 @@ import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.product.ProductModel
 import uj.roomme.services.service.ShoppingListService
 
-class BoughtProductsAdapter(private val products: List<ProductModel>) :
+class BoughtProductsAdapter(products: List<ProductModel>) :
     RecyclerView.Adapter<BoughtProductsAdapter.ViewHolder>() {
 
-    private companion object {
-        const val TAG = "BoughtProductsAdapter"
-    }
+    private val visibleProducts = products.toMutableList()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var productId: Int? = null
@@ -32,12 +30,17 @@ class BoughtProductsAdapter(private val products: List<ProductModel>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = products[position]
+        val data = visibleProducts[position]
         holder.productId = data.id
         holder.nameView.text = data.name
     }
 
     override fun getItemCount(): Int {
-        return products.size
+        return visibleProducts.size
+    }
+
+    fun addProduct(product: ProductModel) {
+        visibleProducts.add(product)
+        notifyItemInserted(visibleProducts.lastIndex)
     }
 }

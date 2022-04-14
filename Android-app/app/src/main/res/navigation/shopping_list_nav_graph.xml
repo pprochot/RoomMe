@@ -69,6 +69,9 @@
             app:destination="@id/destCompletedShoppingList"
             app:popUpTo="@id/destShoppingListsFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="listId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/destCompletedShoppingList"
