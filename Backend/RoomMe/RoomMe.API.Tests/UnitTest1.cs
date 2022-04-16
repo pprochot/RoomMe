@@ -2,6 +2,7 @@ using NUnit.Framework;
 using RoomMe.SQLContext;
 using RoomMe.SQLContext.Models;
 using RoomMe.API.Models;
+using BCryptNet = BCrypt.Net;
 using RoomMe.API.Converters;
 using Moq;
 using System;
@@ -14,6 +15,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using RoomMe.API.Authorization;
 
 namespace RoomMe.API.Tests
 {
@@ -25,8 +30,9 @@ namespace RoomMe.API.Tests
             .Options;
 
         SqlContext context;
-        ISessionHelper sessionHelper;
+        SessionHelper sessionHelper;
         FlatController flatController;
+        //AuthController authController;
 
 
         [OneTimeSetUp]
@@ -35,12 +41,27 @@ namespace RoomMe.API.Tests
             context = new SqlContext(options);
             context.Database.EnsureCreated();
 
-            sessionHelper = new Mock<ISessionHelper>().Object;
-
             SeedDatabase();
 
-            flatController = new FlatController(new NullLogger<FlatController>(), context, sessionHelper);
+            //Mock IHttpContextAccessor
+            var mockHttpContextAccesor = new Mock<IHttpContextAccessor>();
+            var httpContext = new DefaultHttpContext();
+            //var fakeToken = "FakeToken";
+            //httpContext.Request.Headers["Authorization"] = fakeToken;
 
+            //mockHttpContextAccesor.Setup(_ => _.HttpContext).Returns(httpContext);
+            mockHttpContextAccesor.Setup(_ => _.HttpContext.Items["User"])
+                .Returns(new User()
+                {
+                    Id = 1,
+                });
+
+            //Mock HeaderConfiguration
+            var mockHeaderConfiguration = new Mock<IConfiguration>();
+
+            sessionHelper = new SessionHelper(mockHttpContextAccesor.Object, mockHeaderConfiguration.Object);
+            
+            flatController = new FlatController(new NullLogger<FlatController>(), context, sessionHelper);
         }
 
         [Test]
@@ -59,7 +80,7 @@ namespace RoomMe.API.Tests
                 Id = 1,
                 Nickname = "TestUser1",
                 Email = "Mail1",
-                Password = "pass123",
+                Password = user.Password,
                 Firstname = "somename",
                 Lastname = "lastname",
                 PhoneNumber = "123456789"
@@ -87,28 +108,30 @@ namespace RoomMe.API.Tests
         {
             //Add database content for testing
 
-            var User = new User()
+            var user = new User()
             {
                 Id = 1,
                 Nickname = "TestUser1",
                 Email = "Mail1",
-                Password = "pass123",
+                Password = BCryptNet.BCrypt.EnhancedHashPassword("pass123"),
                 Firstname = "somename",
                 Lastname = "lastname",
                 PhoneNumber = "123456789"
             };
 
-            context.Users.Add(User);
+            context.Users.Add(user);
+            //AuthController SignIn
 
-            var Flat = new Flat()
+            var flat = new Flat()
             {
                 Id = 1,
                 Name = "TestFlat1",
                 Address = "SomeAddress1",
-                CreatorId = 1
+                CreatorId = 1,
+                Users = new List<User> { user}
             };
 
-            context.Flats.Add(Flat);
+            context.Flats.Add(flat);
 
             context.SaveChanges();
         }
