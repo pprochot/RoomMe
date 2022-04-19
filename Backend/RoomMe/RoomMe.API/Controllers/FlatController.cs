@@ -141,6 +141,11 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
+            if (!flat.Users.Contains(user))
+            {
+                return new BadRequestResult();
+            }
+
             flat.Users.Remove(user);
 
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
