@@ -1,22 +1,17 @@
-package uj.roomme.app.adapters
+package uj.roomme.app.fragments.shoppinglist.adapter
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
-import uj.roomme.app.consts.Toasts
-import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.fragments.shoppinglist.viewmodel.OngoingShoppingListViewModel
 import uj.roomme.domain.product.ProductModel
-import uj.roomme.services.service.ShoppingListService
 
-class BoughtProductsAdapter(products: List<ProductModel>) :
-    RecyclerView.Adapter<BoughtProductsAdapter.ViewHolder>() {
+class BoughtProductsAdapter : RecyclerView.Adapter<BoughtProductsAdapter.ViewHolder>() {
 
-    private val visibleProducts = products.toMutableList()
+    private var visibleProducts = listOf<ProductModel>()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var productId: Int? = null
@@ -39,8 +34,8 @@ class BoughtProductsAdapter(products: List<ProductModel>) :
         return visibleProducts.size
     }
 
-    fun addProduct(product: ProductModel) {
-        visibleProducts.add(product)
-        notifyItemInserted(visibleProducts.lastIndex)
+    fun updateProducts(products: List<ProductModel>) {
+        visibleProducts = products
+        notifyDataSetChanged()
     }
 }

@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.shoppinglists
+package uj.roomme.app.fragments.shoppinglist
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
@@ -7,7 +7,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -20,9 +19,10 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.app.ActivityCompat
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,18 +32,26 @@ import okhttp3.RequestBody
 import uj.roomme.app.R
 import uj.roomme.app.adapters.GridAdapter
 import uj.roomme.app.consts.PermissionCheckers
+import uj.roomme.app.fragments.shoppinglist.viewmodel.CompleteShoppingListViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.services.service.ShoppingListService
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppinglist) {
 
     @Inject
-    lateinit var shoppingListService: ShoppingListService
+    lateinit var slService: ShoppingListService
     private val session: SessionViewModel by activityViewModels()
     private val args: CompleteShoppingListFragmentArgs by navArgs()
+    private val viewModel: CompleteShoppingListViewModel by viewModels {
+        CompleteShoppingListViewModel.Factory(session, slService, args.listId)
+    }
 
     private lateinit var takePhotoButton: ImageButton
     private lateinit var uploadPhotosButton: ImageButton
@@ -70,7 +78,13 @@ class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppin
         gridView.adapter = gridAdapter
         uploadPhotosButton.setOnClickListener(uploadPhotosProvider::uploadPhotos)
         takePhotoButton.setOnClickListener(takePhotoProvider::takePhoto)
-        completeButton.setOnClickListener(this::completeShoppingListViaService)
+        completeButton.setOnClickListener {
+            val receipts = gridAdapter.getAllItems()
+                .map { createMultipartBody(it.first, it.second) }
+                .toList()
+            viewModel.completeShoppingListViaService(receipts)
+        }
+        setUpNavigation(view)
     }
 
     private fun findViews(view: View) = view.apply {
@@ -80,20 +94,15 @@ class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppin
         completeButton = findViewById(R.id.buttonCompleteShoppingList)
     }
 
-    private fun completeShoppingListViaService(view: View) {
-        val receipts = gridAdapter.getAllItems()
-            .map { createMultipartBody(it.first, it.second) }
-            .toList()
-
-        shoppingListService.setShoppingListAsCompleted(
-            session.userData!!.accessToken, args.listId, receipts
-        ).processAsync { code, body, error ->
-            when (code) {
-                401 -> Log.d("MyTag", "Unauthorized")
-                200 -> Log.d("MyTag", "Done")
-                else -> Log.d("MyTag", error.toString())
-            }
-        }
+    private fun setUpNavigation(view: View) {
+        val navController = findNavController()
+        viewModel.completedShoppingListEvent.observe(viewLifecycleOwner, EventObserver {
+            navController.navigate(
+                CompleteShoppingListFragmentDirections.actionDestCompleteShoppingListFragmentToCompletedShoppingListFragment(
+                    args.listId
+                )
+            )
+        })
     }
 
     private fun createMultipartBody(bitmap: Bitmap, uri: Uri): MultipartBody.Part {
@@ -101,16 +110,11 @@ class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppin
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
         val bitmapData = bos.toByteArray()
-        var fos: FileOutputStream? = null
         try {
-            fos = FileOutputStream(file)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-        try {
-            fos?.write(bitmapData)
-            fos?.flush()
-            fos?.close()
+            FileOutputStream(file).use {
+                it.write(bitmapData)
+                it.flush()
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }

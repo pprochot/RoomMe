@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import uj.roomme.app.R
 import uj.roomme.app.viewmodels.SessionViewModel
 

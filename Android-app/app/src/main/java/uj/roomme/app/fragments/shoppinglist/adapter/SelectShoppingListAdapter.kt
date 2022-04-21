@@ -1,6 +1,5 @@
-package uj.roomme.app.adapters
+package uj.roomme.app.fragments.shoppinglist.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,12 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
 import uj.roomme.domain.shoppinglist.ShoppingListGetModel
+import uj.roomme.domain.shoppinglist.ShoppingListShortModel
 import kotlin.properties.Delegates
-import uj.roomme.app.fragments.shoppinglists.ShoppingListsFragmentDirections as Directions
+import uj.roomme.app.fragments.shoppinglist.SelectShoppingListFragmentDirections as Directions
 
-abstract class ShoppingListsAdapter(private val shoppingLists: List<ShoppingListGetModel>) :
-    RecyclerView.Adapter<ShoppingListsAdapter.ViewHolder>() {
+abstract class SelectShoppingListAdapter(private val shoppingLists: List<ShoppingListShortModel>) :
+    RecyclerView.Adapter<SelectShoppingListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var shoppingListId by Delegates.notNull<Int>()
@@ -33,9 +33,7 @@ abstract class ShoppingListsAdapter(private val shoppingLists: List<ShoppingList
             shoppingListId = shoppingList.id
             nameView.text = shoppingList.name
             descriptionView.text = shoppingList.description
-            itemView.setOnClickListener {
-                onViewClick(holder)
-            }
+            itemView.setOnClickListener { onViewClick(holder) }
         }
     }
 
@@ -44,8 +42,8 @@ abstract class ShoppingListsAdapter(private val shoppingLists: List<ShoppingList
     abstract fun onViewClick(viewHolder: ViewHolder)
 }
 
-class OngoingShoppingListsAdapter(shoppingLists: List<ShoppingListGetModel>) :
-    ShoppingListsAdapter(shoppingLists) {
+class OngoingShoppingListsAdapter(shoppingLists: List<ShoppingListShortModel>) :
+    SelectShoppingListAdapter(shoppingLists) {
 
     override fun onViewClick(viewHolder: ViewHolder) {
         viewHolder.itemView.findNavController().navigate(
@@ -54,8 +52,8 @@ class OngoingShoppingListsAdapter(shoppingLists: List<ShoppingListGetModel>) :
     }
 }
 
-class CompletedShoppingListsAdapter(shoppingLists: List<ShoppingListGetModel>) :
-    ShoppingListsAdapter(shoppingLists) {
+class CompletedShoppingListsAdapter(shoppingLists: List<ShoppingListShortModel>) :
+    SelectShoppingListAdapter(shoppingLists) {
 
     override fun onViewClick(viewHolder: ViewHolder) {
         viewHolder.itemView.findNavController().navigate(

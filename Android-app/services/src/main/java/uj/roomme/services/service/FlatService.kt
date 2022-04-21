@@ -57,5 +57,5 @@ interface FlatService {
     fun getShoppingLists(
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int
-    ): RoomMeCall<List<ShoppingListGetModel>>
+    ): RoomMeCall<List<ShoppingListShortModel>>
 }

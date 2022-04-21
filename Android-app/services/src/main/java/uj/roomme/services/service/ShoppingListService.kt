@@ -18,7 +18,7 @@ interface ShoppingListService {
     @GET("/shoppinglist/{listId}")
     fun getShoppingList(
         @Header("Authorization") accessToken: String,
-        @Path("listId") flatId: Int
+        @Path("listId") listId: Int
     ): RoomMeCall<ShoppingListGetModel>
 
     @POST("/shoppinglist/{listId}/products")

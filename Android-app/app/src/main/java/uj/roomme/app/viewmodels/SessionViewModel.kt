@@ -17,6 +17,8 @@ class SessionViewModel @Inject constructor() : ViewModel() {
         apartmentData = null
     }
 
-    fun hasSelectedApartment() = userData != null && apartmentData != null
+    fun isLoggedIn() = userData != null
+
+    fun hasSelectedApartment() = isLoggedIn() && apartmentData != null
 
 }

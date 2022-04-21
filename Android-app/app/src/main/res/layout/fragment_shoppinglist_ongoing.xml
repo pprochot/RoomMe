@@ -2,42 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/layoutProductsCategory"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
 
-        <uj.roomme.app.views.CategoryView
-            android:id="@+id/textCategoryToBuy"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="To buy" />
-
-        <uj.roomme.app.views.CategoryView
-            android:id="@+id/textCategoryBought"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="0.5"
-            android:background="@drawable/shape_unselected"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="Bought" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProductList"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/shoppingListViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttonsProductsFragment"
-        android:layout_below="@+id/layoutProductsCategory"
-        android:scrollbars="vertical"
-        android:verticalScrollbarPosition="right" />
+        android:layout_above="@id/buttonsProductsFragment"
+        android:layout_below="@id/tab_layout" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonsProductsFragment"
+        android:layout_below="@id/tab_layout"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/buttonsProductsFragment"

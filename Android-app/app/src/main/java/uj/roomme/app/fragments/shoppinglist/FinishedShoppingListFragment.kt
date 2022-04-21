@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.shoppinglists
+package uj.roomme.app.fragments.shoppinglist
 
 import android.os.Bundle
 import android.view.View
