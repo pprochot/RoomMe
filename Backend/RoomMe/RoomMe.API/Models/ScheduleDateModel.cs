@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class ProductPatchModel
+    public class ScheduleDateModel
     {
         public int Id { get; set; }
-        public double Value { get; set; }
-        public string Description { get; set; }
+        public DateTime Date { get; set; }
     }
 }

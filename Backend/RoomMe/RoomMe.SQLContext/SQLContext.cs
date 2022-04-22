@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using RoomMe.SQLContext.Dictionaries;
 using RoomMe.SQLContext.Models;
 
 namespace RoomMe.SQLContext
@@ -30,6 +31,8 @@ namespace RoomMe.SQLContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            DictionaryBuilder.AddDictionaries(modelBuilder);
+
             modelBuilder.Entity<Housework>().HasOne(x => x.Author).WithOne().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Housework>().HasMany(x => x.Users).WithMany(x => x.Houseworks);
 

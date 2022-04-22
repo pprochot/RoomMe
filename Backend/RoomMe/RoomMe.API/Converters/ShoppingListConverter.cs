@@ -78,7 +78,6 @@ namespace RoomMe.API.Converters
                 UserId = userId,
                 Value = product.Value,
                 Description = product.Description,
-                IsDivided = product.IsDivided,
                 Date = DateTime.UtcNow
             };
         }

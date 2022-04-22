@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220118145357_change_navigation_to_settings")]
+    partial class change_navigation_to_settings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,15 +92,10 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
 
                     b.ToTable("Flats");
                 });
@@ -181,38 +178,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HouseworkFrequencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Once",
-                            Value = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Daily",
-                            Value = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Weekly",
-                            Value = 7
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Twice a week",
-                            Value = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Monthly",
-                            Value = 30
-                        });
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.HouseworkSchedule", b =>
@@ -228,6 +193,9 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<int>("HouseworkId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("HouseworkStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
@@ -238,7 +206,7 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.HasIndex("HouseworkId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("HouseworkStatusId");
 
                     b.HasIndex("UserId");
 
@@ -284,28 +252,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HouseworkStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "In Progress"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Done"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Expired"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Delayed"
-                        });
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.NotificationFrequency", b =>
@@ -454,12 +400,6 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
@@ -558,21 +498,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RoomMe.SQLContext.Models.UserFriend", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("UserFriends");
-                });
-
             modelBuilder.Entity("FlatUser", b =>
                 {
                     b.HasOne("RoomMe.SQLContext.Models.Flat", null)
@@ -620,17 +545,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.Navigation("Flat");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RoomMe.SQLContext.Models.Flat", b =>
-                {
-                    b.HasOne("RoomMe.SQLContext.Models.User", "Creator")
-                        .WithMany("OwnedFlats")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.FlatNotification", b =>
@@ -687,11 +601,9 @@ namespace RoomMe.SQLContext.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoomMe.SQLContext.Models.HouseworkStatus", "Status")
+                    b.HasOne("RoomMe.SQLContext.Models.HouseworkStatus", "HouseworkStatus")
                         .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HouseworkStatusId");
 
                     b.HasOne("RoomMe.SQLContext.Models.User", "User")
                         .WithMany()
@@ -701,7 +613,7 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.Navigation("Housework");
 
-                    b.Navigation("Status");
+                    b.Navigation("HouseworkStatus");
 
                     b.Navigation("User");
                 });
@@ -827,7 +739,7 @@ namespace RoomMe.SQLContext.Migrations
                         .HasForeignKey("CompletorId");
 
                     b.HasOne("RoomMe.SQLContext.Models.Flat", "Flat")
-                        .WithMany("ShoppingLists")
+                        .WithMany()
                         .HasForeignKey("FlatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -835,72 +747,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.Navigation("Completor");
 
                     b.Navigation("Flat");
-                });
-
-            modelBuilder.Entity("RoomMe.SQLContext.Models.User", b =>
-                {
-                    b.OwnsMany("RoomMe.SQLContext.Models.RefreshToken", "RefreshTokens", b1 =>
-                        {
-                            b1.Property<int>("UserId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<DateTime>("Created")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<string>("CreatedByIp")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<DateTime>("Expires")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<string>("ReasonRevoked")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("ReplacedByToken")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<DateTime?>("Revoked")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<string>("RevokedByIp")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Token")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("UserId", "Id");
-
-                            b1.ToTable("RefreshTokens");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("RoomMe.SQLContext.Models.UserFriend", b =>
-                {
-                    b.HasOne("RoomMe.SQLContext.Models.User", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RoomMe.SQLContext.Models.User", "User")
-                        .WithMany("Friends")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Friend");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.Flat", b =>
@@ -912,8 +758,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("RentCosts");
-
-                    b.Navigation("ShoppingLists");
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>
@@ -935,10 +779,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.Navigation("CommonCosts");
 
                     b.Navigation("FlatNotifications");
-
-                    b.Navigation("Friends");
-
-                    b.Navigation("OwnedFlats");
 
                     b.Navigation("PrivateCosts");
 

@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class ProductPatchModel
+    public class HouseworkSettingsModel
     {
         public int Id { get; set; }
-        public double Value { get; set; }
-        public string Description { get; set; }
+        public HouseworkFrequencyModel Frequency { get; set; }
+        public int Day { get; set; }
     }
 }

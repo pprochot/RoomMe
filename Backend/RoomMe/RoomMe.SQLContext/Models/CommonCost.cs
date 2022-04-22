@@ -16,6 +16,5 @@ namespace RoomMe.SQLContext.Models
         public double Value { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public bool IsDivided { get; set; }
     }
 }
