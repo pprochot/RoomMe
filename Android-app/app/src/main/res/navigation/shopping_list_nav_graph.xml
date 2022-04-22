@@ -77,7 +77,7 @@
         android:id="@+id/destCompletedShoppingList"
         android:name="uj.roomme.app.fragments.shoppinglist.FinishedShoppingListFragment"
         android:label="CompletedShoppingListFragment"
-        tools:layout="@layout/fragment_finished_shoppinglist">
+        tools:layout="@layout/fragment_shoppinglist_finished">
         <argument
             android:name="listId"
             app:argType="integer" />
