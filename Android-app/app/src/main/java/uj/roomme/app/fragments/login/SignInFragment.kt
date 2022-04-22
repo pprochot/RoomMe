@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.activity.MainActivity
 import uj.roomme.app.activity.NavViewDataSetter
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.validators.SignInValidator
