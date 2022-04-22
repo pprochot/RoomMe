@@ -8,6 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import uj.roomme.domain.statistics.StatisticsFrequency
+import uj.roomme.domain.statistics.StatisticsFrequencySerializer
 import uj.roomme.services.BuildConfig
 import uj.roomme.services.factory.RoomMeCallAdapterFactory
 import uj.roomme.services.service.*
@@ -35,6 +37,7 @@ class ServicesModule {
         }
         val gson = GsonBuilder()
             .registerTypeAdapter(OffsetDateTime::class.java, offsetDateTimeDeserializer)
+            .registerTypeAdapter(StatisticsFrequency::class.java, StatisticsFrequencySerializer())
             .setLenient()
             .create()
         return GsonConverterFactory.create(gson)
@@ -57,6 +60,9 @@ class ServicesModule {
 
     @Provides
     fun shoppingListService(gson: GsonConverterFactory) = createService<ShoppingListService>(gson)
+
+    @Provides
+    fun statisticsService(gson: GsonConverterFactory) = createService<StatisticsService>(gson)
 
     private inline fun <reified T> createService(gsonConverterFactory: GsonConverterFactory): T {
         return Retrofit.Builder()
