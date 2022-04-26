@@ -140,7 +140,7 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpPatch("{listId}/products/", Name = nameof(SetProductsAsBought))]
-        public async Task<ActionResult<ProductPatchReturnModel>> SetProductsAsBought(int listId, List<ProductPatchModel> products)
+        public async Task<ActionResult<List<ProductModel>>> SetProductsAsBought(int listId, List<ProductPatchModel> products)
         {
             var productsIds = products.Select(x => x.Id).ToList();
 
@@ -181,7 +181,7 @@ namespace RoomMe.API.Controllers
 
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            return boughtProducts.ToProductPatchReturnModel();
+            return boughtProducts.Select(x => x.ToProductModel()).ToList();
         }
 
         [HttpPatch("{listId}/completion", Name = nameof(SetShoppingListAsCompleted))]
