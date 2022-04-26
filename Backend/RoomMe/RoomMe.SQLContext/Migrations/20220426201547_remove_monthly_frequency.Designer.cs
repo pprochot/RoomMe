@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220426201547_remove_monthly_frequency")]
+    partial class remove_monthly_frequency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,7 +162,8 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
 
                     b.HasIndex("FlatId");
 
@@ -659,8 +662,8 @@ namespace RoomMe.SQLContext.Migrations
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>
                 {
                     b.HasOne("RoomMe.SQLContext.Models.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
+                        .WithOne()
+                        .HasForeignKey("RoomMe.SQLContext.Models.Housework", "AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

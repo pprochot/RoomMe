@@ -9,20 +9,19 @@ namespace RoomMe.API.Converters
 {
     public static class ScheduleConverter
     {
-        public static ScheduleFullGetModel ToScheduleFullGetModel(this HouseworkSchedule schedule)
+        public static ScheduleModel ToScheduleModel(this HouseworkSchedule schedule)
         {
-            return new ScheduleFullGetModel()
+            return new ScheduleModel()
             {
                 Id = schedule.Id,
-                Housework = schedule.Housework.ToHouseworkModel(),
+                Housework = schedule.Housework.ToHouseworkShortModel(),
                 User = schedule.User.ToUserNicknameModel(),
                 Date = schedule.Date,
                 Status = schedule.Status.ToHouseworkStatusModel(),
-                Settings = schedule.Housework.HouseworkSettings.ToHouseworkSettingsModel()
             };
         }
 
-        public static HouseworkSchedule ToScheduleModel(this SchedulePutModel schedule, Housework housework, int userId)
+        public static HouseworkSchedule ToHouseworkSchedule(this SchedulePostModel schedule, Housework housework, int userId)
         {
             return new HouseworkSchedule()
             {
@@ -34,36 +33,24 @@ namespace RoomMe.API.Converters
             };
         }
 
-        public static SchedulePutReturnModel ToSchedulePutReturnModel(this HouseworkSchedule schedule)
+        public static SchedulePostReturnModel ToSchedulePostReturnModel(this HouseworkSchedule schedule)
         {
-            return new SchedulePutReturnModel()
+            return new SchedulePostReturnModel()
             {
                 Id = schedule.Id,
-                TimeStamp = DateTime.UtcNow
-            };
-        }
-
-        public static ScheduleDateModel ToScheduleDateModel(this HouseworkSchedule schedule)
-        {
-            return new ScheduleDateModel()
-            {
-                Id = schedule.Id,
-                Date = schedule.Date
-            };
-        }
-
-        public static ScheduleListModel ToScheduleListModel(this HouseworkSchedule schedule)
-        {
-            return new ScheduleListModel()
-            {
-                Id = schedule.Id,
-                HouseworkName = schedule.Housework.Name,
                 Date = schedule.Date,
-                Status = schedule.Status.ToHouseworkStatusModel(),
-                UserId = schedule.UserId,
-                UserName = schedule.User.Nickname
             };
         }
 
+        public static ScheduleShortModel ToScheduleShortModel(this HouseworkSchedule schedule)
+        {
+            return new ScheduleShortModel()
+            {
+                Id = schedule.Id,
+                User = schedule.User.ToUserNicknameModel(),
+                Date = schedule.Date,
+                StatusId = schedule.StatusId
+            };
+        }
     }
 }

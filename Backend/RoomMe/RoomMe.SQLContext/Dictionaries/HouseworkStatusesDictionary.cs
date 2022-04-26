@@ -13,7 +13,7 @@ namespace RoomMe.SQLContext.Dictionaries
         public static void AddRecords(ModelBuilder modelbuilder)
         {
             modelbuilder.Entity<HouseworkStatus>().HasData(
-                new { Id = 1, Name = "In Progress" },
+                new { Id = 1, Name = "Todo" },
                 new { Id = 2, Name = "Done" },
                 new { Id = 3, Name = "Expired" },
                 new { Id = 4, Name = "Delayed" }

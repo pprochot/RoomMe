@@ -13,5 +13,20 @@ namespace RoomMe.API.Helpers
         public const int MaxPasswordLength = 24;
 
         public const string FilePath = "/receipts/";
+
+        public enum HouseworkFrequencies { 
+            Once = 1,
+            Daily = 2,
+            Weekly = 3,
+            TwiceAWeek = 4,
+        }
+
+        public enum HouseworkStatuses
+        {
+            ToDo = 1,
+            Done = 2,
+            Expired = 3,
+            Delayed = 4,
+        }
     }
 }

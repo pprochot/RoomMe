@@ -209,5 +209,37 @@ namespace RoomMe.API.Controllers
 
             return lists.Select(x => x.ToShoppingListShortModel()).ToList();
         }
+
+        [HttpGet("{flatId}/available-locators", Name = nameof(GetAvailableLocators))]
+        public async Task<ActionResult<IEnumerable<UserNicknameModel>>> GetAvailableLocators(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .SingleOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || _sessionHelper.IsCreatorOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var friends = await _sqlContext.UserFriends
+                .Include(x => x.Friend)
+                .Where(x => x.UserId == _sessionHelper.UserId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            var res = new List<UserNicknameModel>();
+
+            foreach(var friend in friends)
+            {
+                if(!flat.Users.Contains(friend.Friend))
+                {
+                    res.Add(friend.Friend.ToUserNicknameModel());
+                }
+            }
+
+            return res;
+        }
     }
 }
