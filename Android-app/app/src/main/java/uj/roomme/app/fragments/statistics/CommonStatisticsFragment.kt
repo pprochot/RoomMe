@@ -46,7 +46,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics_common) {
 
     private fun setUpChart(view: View) {
         val barChart = view.findViewById<BarChart>(R.id.barChart)
-        barChart.xAxis.apply {
+        barChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             setDrawAxisLine(true)
             setDrawGridLines(false)
@@ -56,25 +56,13 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics_common) {
             spaceMax = 0.5f
             spaceMin = 0.5f
         }
-        barChart.animateY(2000)
-        barChart.setFitBars(true)
-        barChart.description.text = "Apartment statistics"
 
         viewModel.statisticsLiveData.observe(viewLifecycleOwner) { statistics ->
             val labels = statistics.map { it.timeStamp }
             val entries = statistics.mapIndexed { index, model ->
                 BarEntry(index.toFloat(), model.value.toFloat())
             }
-
-            val barDataSet = BarDataSet(entries, "Statistics")
-            barDataSet.colors = ColorTemplate.MATERIAL_COLORS.toMutableList()
-            barDataSet.valueTextColor = Color.BLACK
-            barDataSet.valueTextSize = 16f
-
-            val barData = BarData(barDataSet)
-            barChart.data = barData
-
-            barChart.xAxis.apply {
+            barChart.xAxis.run {
                 labelCount = labels.size
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
@@ -82,8 +70,20 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics_common) {
                     }
                 }
             }
+
+            val barDataSet = BarDataSet(entries, "Statistics")
+            barDataSet.colors = ColorTemplate.MATERIAL_COLORS.toMutableList()
+            barDataSet.valueTextColor = Color.BLACK
+            barDataSet.valueTextSize = 10f
+
+            val barData = BarData(barDataSet)
+            barChart.setFitBars(true)
+            barChart.data = barData
+            barChart.description.text = "Bar Chart example"
+            barChart.animateY(2000)
         }
     }
+
 
     private fun setRefreshButton(view: View) {
         val refreshButton = view.findViewById<Button>(R.id.buttonRefresh)
