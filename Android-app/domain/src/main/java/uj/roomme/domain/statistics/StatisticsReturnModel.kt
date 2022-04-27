@@ -1,6 +1,6 @@
 package uj.roomme.domain.statistics
 
 import java.math.BigDecimal
-import java.time.LocalDate
+import java.time.OffsetDateTime
 
-data class StatisticsReturnModel(val date: LocalDate, val value: BigDecimal)
+data class StatisticsReturnModel(val timeStamp: OffsetDateTime, val value: BigDecimal)
