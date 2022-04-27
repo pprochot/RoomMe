@@ -16,7 +16,7 @@
         app:destination="@id/destRoommatesFragment" />
     <action
         android:id="@+id/actionGlobalToStatistics"
-        app:destination="@id/destStatisticsFragment" />
+        app:destination="@id/destCommonStatisticsFragment" />
 
     <fragment
         android:id="@+id/destSelectApartmentFragment"
@@ -62,10 +62,10 @@
             app:destination="@id/destAddRoommateFragment" />
     </fragment>
     <fragment
-        android:id="@+id/destStatisticsFragment"
-        android:name="uj.roomme.app.fragments.home.StatisticsFragment"
+        android:id="@+id/destCommonStatisticsFragment"
+        android:name="uj.roomme.app.fragments.statistics.CommonStatisticsFragment"
         android:label="Statistics"
-        tools:layout="@layout/fragment_statistics"/>
+        tools:layout="@layout/fragment_statistics_common"/>
 
     <include app:graph="@navigation/shopping_list_nav_graph" />
     <fragment
