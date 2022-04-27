@@ -17,21 +17,22 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.fragments.statistics.viewmodel.CommonStatisticsViewModel
+import uj.roomme.app.fragments.statistics.viewmodel.PrivateStatisticsViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.statistics.StatisticsFrequency
 import uj.roomme.services.service.StatisticsService
 import java.time.LocalDate
 import javax.inject.Inject
 
+// TODO to common class
 @AndroidEntryPoint
-class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
+class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
     @Inject
     lateinit var statisticsService: StatisticsService
     private val session: SessionViewModel by activityViewModels()
-    private val viewModel: CommonStatisticsViewModel by viewModels {
-        CommonStatisticsViewModel.Factory(session, statisticsService, session.apartmentData!!.id)
+    private val viewModel: PrivateStatisticsViewModel by viewModels {
+        PrivateStatisticsViewModel.Factory(session, statisticsService)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,7 +41,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
         setRefreshButton(view)
         assignFrequenciesSpinnerAdapter(view)
         setUpChart(view)
-        viewModel.fetchCommonStatisticsFromService()
+        viewModel.fetchPrivateStatisticsFromService()
     }
 
     private fun setUpChart(view: View) {
@@ -87,7 +88,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
     private fun setRefreshButton(view: View) {
         val refreshButton = view.findViewById<Button>(R.id.buttonRefresh)
         refreshButton.setOnClickListener {
-            viewModel.fetchCommonStatisticsFromService()
+            viewModel.fetchPrivateStatisticsFromService()
         }
     }
 

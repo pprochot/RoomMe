@@ -17,6 +17,9 @@
     <action
         android:id="@+id/actionGlobalToStatistics"
         app:destination="@id/destCommonStatisticsFragment" />
+    <action
+        android:id="@+id/actionGlobalToPrivateStatistics"
+        app:destination="@id/destPrivateStatisticsFragment" />
 
     <fragment
         android:id="@+id/destSelectApartmentFragment"
@@ -65,7 +68,7 @@
         android:id="@+id/destCommonStatisticsFragment"
         android:name="uj.roomme.app.fragments.statistics.CommonStatisticsFragment"
         android:label="Statistics"
-        tools:layout="@layout/fragment_statistics_common"/>
+        tools:layout="@layout/fragment_statistics"/>
 
     <include app:graph="@navigation/shopping_list_nav_graph" />
     <fragment
@@ -73,5 +76,10 @@
         android:name="uj.roomme.app.fragments.home.roommates.AddRoommateFragment"
         android:label="Add roommate"
         tools:layout="@layout/fragment_add_roommate"/>
+    <fragment
+        android:id="@+id/destPrivateStatisticsFragment"
+        android:name="uj.roomme.app.fragments.statistics.PrivateStatisticsFragment"
+        android:label="PrivateStatisticsFragment"
+        tools:layout="@layout/fragment_statistics"/>
 
 </navigation>
