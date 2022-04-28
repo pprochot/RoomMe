@@ -69,7 +69,8 @@ namespace RoomMeAPI
 
             services.AddDbContext<SqlContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("MSSQL")
+                    Configuration.GetConnectionString("MSSQL"),
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery)
                 )
             );
 

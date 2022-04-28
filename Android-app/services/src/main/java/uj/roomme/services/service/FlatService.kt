@@ -4,45 +4,58 @@ import retrofit2.http.*
 import uj.roomme.domain.flat.FlatGetModel
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
+import uj.roomme.domain.flat.FlatUsersGetReturnModel
 import uj.roomme.domain.product.ProductListPostReturnModel
 import uj.roomme.domain.product.ProductPostModel
-import uj.roomme.domain.shoppinglist.ShoppingListGetModel
-import uj.roomme.domain.shoppinglist.ShoppingListPostModel
-import uj.roomme.domain.shoppinglist.ShoppingListPostReturnModel
+import uj.roomme.domain.rent.RentCostPostReturnModel
+import uj.roomme.domain.rent.RentCostPutModel
+import uj.roomme.domain.shoppinglist.*
 import uj.roomme.services.call.RoomMeCall
 
 interface FlatService {
 
-    @POST("/flat")
-    fun createNewFlat(
-        @Header("Authorization") token: String,
-        @Body flat: FlatPostModel
-    ): RoomMeCall<FlatPostReturnModel>
-
     @GET("/flat/{flatId}")
     fun getFlatFull(
-        @Header("Authorization") token: String,
+        @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int
     ): RoomMeCall<FlatGetModel>
 
-    @POST("/flat/{flatId}/shopping-lists")
-    fun createNewShoppingList(
-        @Header("Authorization") token: String,
+    @POST("/flat")
+    fun createNewFlat(
+        @Header("Authorization") accessToken: String,
+        @Body flat: FlatPostModel
+    ): RoomMeCall<FlatPostReturnModel>
+
+    @GET("/flat/{flatId}/users")
+    fun getFlatUsers(
+        @Header("Authorization") accessToken: String,
+        @Path("flatId") flatId: Int
+    ): RoomMeCall<FlatUsersGetReturnModel>
+
+    @POST("/flat/{flatId}/user/{userId}")
+    fun addUserToFlat(
+        @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int,
-        @Body shoppingListPostModel: ShoppingListPostModel
-    ): RoomMeCall<ShoppingListPostReturnModel>
+        @Path("userId") userId: Int
+    ): RoomMeCall<Void>
+
+    @DELETE("/flat/{flatId}/user/{userId}")
+    fun removeUserFromFlat(
+        @Header("Authorization") accessToken: String,
+        @Path("flatId") flatId: Int,
+        @Path("userId") userId: Int
+    ): RoomMeCall<Void>
+
+    @DELETE("/flat/{flatId}/rent")
+    fun setFlatRentCost(
+        @Header("Authorization") accessToken: String,
+        @Path("flatId") flatId: Int,
+        @Body cost: RentCostPutModel
+    ): RoomMeCall<RentCostPostReturnModel>
 
     @GET("/flat/{flatId}/shopping-lists")
     fun getShoppingLists(
-        @Header("Authorization") token: String,
+        @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int
-    ): RoomMeCall<List<ShoppingListGetModel>>
-
-    @POST("/flat/{flatId}/shopping-lists/{listId}/products")
-    fun addShoppingListProducts(
-        @Header("Authorization") token: String,
-        @Path("flatId") flatId: Int,
-        @Path("listId") listId: Int,
-        @Body products: List<ProductPostModel>
-    ): RoomMeCall<ProductListPostReturnModel>
+    ): RoomMeCall<List<ShoppingListShortModel>>
 }

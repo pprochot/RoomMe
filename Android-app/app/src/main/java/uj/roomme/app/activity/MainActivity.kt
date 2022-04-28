@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSette
 
     companion object {
         val topLevelDestinations = setOf(
-            R.id.destShoppingListsFragment, R.id.destSignInFragment, R.id.destHomeFragment,
+            R.id.destSelectShoppingListFragment, R.id.destSignInFragment, R.id.destHomeFragment,
             R.id.destProfileFragment, R.id.destFriendsFragments, R.id.destSelectApartmentFragment,
             R.id.destHouseworkCalendarFragment, R.id.destRoommatesFragment, R.id.destStatisticsFragment
         )

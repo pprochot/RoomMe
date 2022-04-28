@@ -10,10 +10,15 @@ import javax.inject.Inject
 class SessionViewModel @Inject constructor() : ViewModel() {
 
     var userData: SignInReturnModel? = null
-    var apartmentInfo: FlatGetModel? = null
+    var apartmentData: FlatGetModel? = null
 
     fun clear() {
         userData = null
-        apartmentInfo = null
+        apartmentData = null
     }
+
+    fun isLoggedIn() = userData != null
+
+    fun hasSelectedApartment() = isLoggedIn() && apartmentData != null
+
 }
