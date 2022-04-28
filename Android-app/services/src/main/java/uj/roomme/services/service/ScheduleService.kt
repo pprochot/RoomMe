@@ -1,35 +1,30 @@
 package uj.roomme.services.service
 
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
-import uj.roomme.domain.schedule.ScheduleDateModel
-import uj.roomme.domain.schedule.ScheduleFullGetModel
-import uj.roomme.domain.schedule.ScheduleListModel
+import retrofit2.http.*
+import uj.roomme.domain.schedule.*
 import uj.roomme.services.call.RoomMeCall
 import java.time.OffsetDateTime
 
 interface ScheduleService {
 
-    @GET("/schedule/{scheduleId}")
+    @POST("/schedule")
     fun getScheduleFull(
         @Header("Authorization") accessToken: String,
-        @Path("scheduleId") scheduleId: Int
-    ): RoomMeCall<ScheduleFullGetModel>
+        @Body schedulePostModel: SchedulePostModel
+    ): RoomMeCall<SchedulePostReturnModel>
 
-    @GET("/schedule/date")
-    fun getScheduleDate(
+    @POST("/schedule/{flatId}")
+    fun getSchedulesByMonth(
         @Header("Authorization") accessToken: String,
-        @Query("from") fromDate: OffsetDateTime,
-        @Query("to") toDate: OffsetDateTime
-    ): RoomMeCall<ScheduleDateModel>
+        @Path("flatId") schedulePostModel: SchedulePostModel,
+        @Query("year") year: Int,
+        @Query("month") month: Int
+    ): RoomMeCall<Map<OffsetDateTime, List<ScheduleModel>>>
 
-    @GET("/schedule/{houseworkId}/list")
-    fun getScheduleDate(
+    @PATCH("/schedule/{scheduleId}")
+    fun patchSchedule(
         @Header("Authorization") accessToken: String,
-        @Path("houseworkId") scheduleId: Int,
-        @Query("from") fromDate: OffsetDateTime,
-        @Query("to") toDate: OffsetDateTime
+        @Path("scheduleId") scheduleId: Int,
+        @Body model: SchedulePatchModel
     ): RoomMeCall<List<ScheduleListModel>>
 }

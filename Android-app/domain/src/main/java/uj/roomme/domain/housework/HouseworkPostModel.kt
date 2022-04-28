@@ -1,11 +1,11 @@
 package uj.roomme.domain.housework
 
-data class HouseworkPutModel(
+data class HouseworkPostModel(
     val id: Int,
     val name: String,
     val flatId: Int,
     val description: String,
     val users: List<Int>,
     val frequencyId: Int,
-    val day: Int
+    val days: List<Int>
 )
