@@ -14,7 +14,7 @@ abstract class ServiceViewModel(protected val session: SessionViewModel) : ViewM
         const val FAILED_TO_PROCEED = "Failed to proceed!"
     }
 
-    private val _messageUIEvent = MutableLiveData<Event<String>>()
+    protected val _messageUIEvent = MutableLiveData<Event<String>>()
     val messageUIEvent: LiveData<Event<String>>
         get() = _messageUIEvent
     protected val accessToken: String

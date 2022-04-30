@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/houseworkNavGraph"
-    app:startDestination="@id/destHouseworkCalendarFragment">
+    app:startDestination="@id/destHouseworkUpdatePart1Fragment">
 
     <fragment
         android:id="@+id/destHouseworkCalendarFragment"
@@ -59,21 +59,11 @@
     </fragment>
     <fragment
         android:id="@+id/destHouseworkUpdatePart1Fragment"
-        android:name="uj.roomme.app.fragments.home.housework.HouseworkUpdatePart1Fragment"
+        android:name="uj.roomme.app.fragments.home.housework.HouseworkCreateFragment"
         android:label="HouseworkUpdatePart1Fragment"
-        tools:layout="@layout/fragment_housework_update_part1" >
+        tools:layout="@layout/fragment_housework_create" >
         <action
-            android:id="@+id/actionToHouseworkUpdatePart2Fragment"
-            app:destination="@id/destHouseworkUpdatePart2Fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/destHouseworkUpdatePart2Fragment"
-        android:name="uj.roomme.app.fragments.home.housework.HouseworkUpdatePart2Fragment"
-        android:label="HouseworkUpdatePart2Fragment"
-        tools:layout="@layout/fragment_housework_update_part2" >
-        <action
-            android:id="@+id/actionToHouseworkDetailsFragment"
-            app:destination="@id/destHouseworkDetailsFragment"
-            app:popUpTo="@id/destHouseworkScheduleDetailsFragment" />
+            android:id="@+id/action_destHouseworkUpdatePart1Fragment_to_destHouseworkDetailsFragment"
+            app:destination="@id/destHouseworkDetailsFragment" />
     </fragment>
 </navigation>

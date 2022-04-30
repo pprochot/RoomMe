@@ -12,8 +12,8 @@ interface HouseworkService {
         @Path("houseworkId") houseworkId: Int
     ): RoomMeCall<HouseworkModel>
 
-    @PUT("/housework")
-    fun putHouseWork(
+    @POST("/housework")
+    fun postHousework(
         @Header("Authorization") accessToken: String,
         @Body body: HouseworkPostModel
     ): RoomMeCall<HouseworkPostReturnModel>

@@ -1,7 +1,6 @@
 package uj.roomme.domain.housework
 
 data class HouseworkPostModel(
-    val id: Int,
     val name: String,
     val flatId: Int,
     val description: String,
