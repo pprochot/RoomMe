@@ -16,6 +16,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/textDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -36,6 +37,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/textCompletor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -56,6 +58,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/textStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"

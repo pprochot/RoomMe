@@ -26,7 +26,7 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_calendar)
         val navController = findNavController()
         val seeAllHouseworkButton = findViewById<Button>(R.id.buttonSeeAllHousework)
         seeAllHouseworkButton.setOnClickListener {
-            navController.navigate(actionToHouseworkDetailsFragment())
+            navController.navigate(actionToHouseworkDetailsFragment(0)) // TODO change
         }
     }
 }

@@ -23,4 +23,10 @@ interface HouseworkService {
         @Header("Authorization") accessToken: String,
         @Path("houseworkId") houseworkId: Int
     ): RoomMeCall<HouseworkSettingsModel>
+
+    @DELETE("/housework/{houseworkId}")
+    fun removeHousework(
+        @Header("Authorization") accessToken: String,
+        @Path("houseworkId") houseworkId: Int
+    ): RoomMeCall<Void>
 }

@@ -128,7 +128,7 @@ class HouseworkCreateFragment : Fragment(R.layout.fragment_housework_create) {
         val navController = findNavController()
         viewModel.createdHouseworkEvent.observe(viewLifecycleOwner, EventObserver {
             navController.navigate(
-                actionDestHouseworkUpdatePart1FragmentToDestHouseworkDetailsFragment()
+                actionDestHouseworkUpdatePart1FragmentToDestHouseworkDetailsFragment(it.id)
             )
         })
     }

@@ -37,6 +37,13 @@
         <action
             android:id="@+id/actionToHouseworkFragment"
             app:destination="@id/destHouseworkFragment" />
+        <argument
+            android:name="houseworkId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/actionToHouseworkCalendarFragment"
+            app:destination="@id/destHouseworkCalendarFragment"
+            app:popUpTo="@id/destHouseworkCalendarFragment" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkScheduleUpdateFragment"
