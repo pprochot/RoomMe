@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/houseworkNavGraph"
-    app:startDestination="@id/destHouseworkUpdatePart1Fragment">
+    app:startDestination="@id/houseworkMenuFragment">
 
     <fragment
         android:id="@+id/destHouseworkCalendarFragment"
@@ -72,5 +72,17 @@
         <action
             android:id="@+id/action_destHouseworkUpdatePart1Fragment_to_destHouseworkDetailsFragment"
             app:destination="@id/destHouseworkDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/houseworkMenuFragment"
+        android:name="uj.roomme.app.fragments.home.housework.HouseworkMenuFragment"
+        android:label="HouseworkMenuFragment"
+        tools:layout="@layout/fragment_housework_menu">
+        <action
+            android:id="@+id/action_houseworkMenuFragment_to_destHouseworkCalendarFragment"
+            app:destination="@id/destHouseworkCalendarFragment" />
+        <action
+            android:id="@+id/action_houseworkMenuFragment_to_destHouseworkFragment"
+            app:destination="@id/destHouseworkFragment" />
     </fragment>
 </navigation>

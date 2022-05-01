@@ -13,10 +13,10 @@ interface ScheduleService {
         @Body schedulePostModel: SchedulePostModel
     ): RoomMeCall<SchedulePostReturnModel>
 
-    @POST("/schedule/{flatId}")
+    @GET("/schedule/{flatId}")
     fun getSchedulesByMonth(
         @Header("Authorization") accessToken: String,
-        @Path("flatId") schedulePostModel: SchedulePostModel,
+        @Path("flatId") flatId: Int,
         @Query("year") year: Int,
         @Query("month") month: Int
     ): RoomMeCall<Map<OffsetDateTime, List<ScheduleModel>>>
