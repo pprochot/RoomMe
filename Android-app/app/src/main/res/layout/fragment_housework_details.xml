@@ -7,8 +7,8 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/layoutButtons">
+        android:layout_above="@id/layoutButtons"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -29,7 +29,9 @@
                     android:text="Next schedule"
                     android:textSize="20dp" />
 
-                <include layout="@layout/row_housework_schedule" />
+                <include
+                    android:id="@+id/nextSchedule"
+                    layout="@layout/row_housework_schedule" />
 
                 <include layout="@layout/layout_space_divider" />
             </LinearLayout>

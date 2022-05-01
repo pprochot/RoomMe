@@ -58,10 +58,11 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_calendar)
     private var currData: Map<LocalDate, List<ScheduleModel>>? = null
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
     private lateinit var binding: FragmentHouseworkCalendarBinding
-    private val schedulesAdapter = CalendarSchedulesAdapter()
+    private lateinit var schedulesAdapter: CalendarSchedulesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
         binding = FragmentHouseworkCalendarBinding.bind(view)
+        schedulesAdapter = CalendarSchedulesAdapter()
         setUpCalendarView()
         binding.rvScheduledHousework.adapter = schedulesAdapter
         binding.rvScheduledHousework.layoutManager = LinearLayoutManager(context)

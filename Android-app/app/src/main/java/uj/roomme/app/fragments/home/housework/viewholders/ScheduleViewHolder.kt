@@ -1,12 +1,16 @@
 package uj.roomme.app.fragments.home.housework.viewholders
 
 import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import uj.roomme.app.R
+import uj.roomme.app.databinding.RowCalendarScheduleBinding
+import uj.roomme.app.databinding.RowHouseworkScheduleBinding
 
-class ScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val dateView: TextView = itemView.findViewById(R.id.textDate)
-    val completorView: TextView = itemView.findViewById(R.id.textCompletor)
-    val statusView: TextView = itemView.findViewById(R.id.textStatus)
+class ScheduleViewHolder(itemView: View) {
+
+    val binding = RowHouseworkScheduleBinding.bind(itemView)
+}
+
+class CalendarScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    val binding = RowCalendarScheduleBinding.bind(itemView)
 }

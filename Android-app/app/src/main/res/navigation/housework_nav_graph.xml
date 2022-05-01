@@ -11,14 +11,11 @@
         android:label="HouseworkCalendarFragment"
         tools:layout="@layout/fragment_housework_calendar" >
         <action
-            android:id="@+id/actionToHouseworkFragment"
-            app:destination="@id/destHouseworkFragment" />
-        <action
-            android:id="@+id/actionToHouseworkScheduleDetailsFragment"
-            app:destination="@id/destHouseworkScheduleDetailsFragment" />
-        <action
             android:id="@+id/actionToHouseworkDetailsFragment"
             app:destination="@id/destHouseworkDetailsFragment" />
+        <action
+            android:id="@+id/action_destHouseworkCalendarFragment_to_destHouseworkScheduleUpdateFragment"
+            app:destination="@id/destHouseworkScheduleUpdateFragment" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkFragment"
@@ -51,18 +48,12 @@
         android:label="HouseworkScheduleUpdateFragment"
         tools:layout="@layout/fragment_housework_schedule_update" >
         <action
-            android:id="@+id/actionToHouseworkScheduleDetailsFragment"
-            app:destination="@id/destHouseworkScheduleDetailsFragment"
-            app:popUpTo="@id/destHouseworkScheduleDetailsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/destHouseworkScheduleDetailsFragment"
-        android:name="uj.roomme.app.fragments.home.housework.HouseworkScheduleDetailsFragment"
-        android:label="HouseworkScheduleDetailsFragment"
-        tools:layout="@layout/fragment_housework_schedule_details" >
-        <action
-            android:id="@+id/actionToHouseworkScheduleUpdateFragment"
-            app:destination="@id/destHouseworkScheduleUpdateFragment" />
+            android:id="@+id/action_destHouseworkScheduleUpdateFragment_to_destHouseworkCalendarFragment"
+            app:destination="@id/destHouseworkCalendarFragment"
+            app:popUpTo="@id/destHouseworkCalendarFragment"
+            app:popUpToInclusive="true" />
+        <argument android:name="scheduleId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkUpdatePart1Fragment"

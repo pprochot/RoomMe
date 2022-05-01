@@ -58,7 +58,7 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
     }
 
     private fun findViews(view: View) = view.run {
-        nextScheduleViewHolder = ScheduleViewHolder(view)
+        nextScheduleViewHolder = ScheduleViewHolder(findViewById(R.id.nextSchedule))
         nameTextView = findViewById(R.id.textHouseworkName)
         descriptionTextView = findViewById(R.id.textHouseworkDescription)
         authorTextView = findViewById(R.id.textHouseworkAuthor)

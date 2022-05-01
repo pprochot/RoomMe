@@ -8,9 +8,10 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.fragments.home.housework.HouseworkScheduleUpdateFragmentDirections.Companion.actionToHouseworkScheduleDetailsFragment
+import uj.roomme.app.fragments.home.housework.HouseworkScheduleUpdateFragmentDirections.Companion.actionDestHouseworkScheduleUpdateFragmentToDestHouseworkCalendarFragment
 
 @AndroidEntryPoint
 class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_schedule_update) {
@@ -26,9 +27,11 @@ class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_sch
         setDayOfWeekSpinnerAdapter()
 
         val navController = findNavController()
-        val updateHouseworkScheduleButton = findViewById<Button>(R.id.buttonUpdateHouseworkSchedule)
+        val updateHouseworkScheduleButton = findViewById<FloatingActionButton>(R.id.floatingActionButtonUpdateHousework)
         updateHouseworkScheduleButton.setOnClickListener {
-            navController.navigate(actionToHouseworkScheduleDetailsFragment())
+            navController.navigate(
+                actionDestHouseworkScheduleUpdateFragmentToDestHouseworkCalendarFragment()
+            )
         }
     }
 
