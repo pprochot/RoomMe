@@ -60,6 +60,8 @@ namespace RoomMe.API.Controllers
 
             housework.GenerateSchedules(DateTime.UtcNow.AddDays(31), _sqlContext);
 
+            _sqlContext.SaveChanges();
+
             return housework.ToHouseworkModel();
         }
 
@@ -152,6 +154,8 @@ namespace RoomMe.API.Controllers
 
             houseworkEntity.HouseworkSettings = settings;
             houseworkEntity.GenerateSchedules(DateTime.UtcNow.AddDays(31), _sqlContext);
+
+            _sqlContext.SaveChanges();
 
             return houseworkEntity.ToHouseworkPutReturnModel(settings.Id);
         }

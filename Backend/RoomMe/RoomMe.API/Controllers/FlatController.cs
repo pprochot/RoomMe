@@ -241,5 +241,26 @@ namespace RoomMe.API.Controllers
 
             return res;
         }
+
+        [HttpGet("{flatId}/houseworks", Name = nameof(GetFlatHouseworks))]
+        public async Task<ActionResult<IEnumerable<HouseworkShortModel>>> GetFlatHouseworks(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var houseworks = await _sqlContext.Houseworks
+                .Where(x => x.FlatId == flatId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return houseworks.Select(x => x.ToHouseworkShortModel()).ToList();
+        }
     }
 }

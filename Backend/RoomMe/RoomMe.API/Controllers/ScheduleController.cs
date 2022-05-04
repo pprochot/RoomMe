@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RoomMe.API.Helpers;
+using RoomMe.API.Extensions;
 
 namespace RoomMe.API.Controllers
 {
@@ -55,9 +56,33 @@ namespace RoomMe.API.Controllers
         [HttpGet("{flatId}", Name = nameof(GetSchedulesByMonth))]
         public async Task<ActionResult<Dictionary<DateTime, List<ScheduleModel>>>> GetSchedulesByMonth(int flatId, [FromQuery] SchedulesByMonthModel model)
         {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
             var startDate = new DateTime(model.Year, model.Month, 1);
             var endDate = startDate.AddMonths(1).AddDays(-1);
 
+            var houseworks = await _sqlContext.Houseworks
+                .Include(x => x.HouseworkSchedules)
+                .Include(x => x.HouseworkSettings)
+                .Where(x => x.FlatId == flatId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            foreach(var housework in houseworks)
+            {
+                housework.GenerateSchedules(endDate, _sqlContext);
+            }
+
+            _sqlContext.SaveChanges();
+            
             var schedules = await _sqlContext.HouseworkSchedules
                 .Include(x => x.Housework)
                 .Include(x => x.User)

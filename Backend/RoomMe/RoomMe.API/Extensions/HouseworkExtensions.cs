@@ -96,8 +96,6 @@ namespace RoomMe.API.Extensions
                     currDate = currDate.AddDays(diffDate);
                 }
             }
-
-            sqlContext.SaveChanges();
         }
     }
 }
