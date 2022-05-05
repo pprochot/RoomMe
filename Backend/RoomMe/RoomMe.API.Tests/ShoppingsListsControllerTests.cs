@@ -329,8 +329,8 @@ namespace RoomMe.API.Tests
             Assert.AreEqual(3, actionResult2.Value.Products.Count);
         }
 
-        [Test, Order(6)]
-        public async Task RemoveProductsFromShoppingList_ValidProductId_ShouldDeleteOneProducts()
+        [Test, Order(7)]
+        public async Task RemoveProductsFromShoppingList_ValidProductId_ShouldDeleteOneProduct()
         {
             var actionResult = await shoppingListController.RemoveProductsFromShoppingList(2, new List<int>() { 3 });
 
