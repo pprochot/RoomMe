@@ -60,16 +60,6 @@ namespace RoomMe.API.Converters
                 CreationDate = DateTime.UtcNow
             };
         }
-
-        public static ProductPatchReturnModel ToProductPatchReturnModel(this IEnumerable<Product> products)
-        {
-            return new ProductPatchReturnModel()
-            {
-                TimeStamp = DateTime.UtcNow,
-                CommonCostIds = products.Select(x => x.Id).ToList()
-            };
-        }
-
         public static CommonCost CreateCommonCost(this ProductPatchModel product, int flatId, int userId)
         {
             return new CommonCost()
@@ -78,7 +68,6 @@ namespace RoomMe.API.Converters
                 UserId = userId,
                 Value = product.Value,
                 Description = product.Description,
-                IsDivided = product.IsDivided,
                 Date = DateTime.UtcNow
             };
         }
