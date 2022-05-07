@@ -27,23 +27,25 @@ class HouseworkScheduleUpdateViewModel(
     val locators = MutableLiveData<List<UserNicknameModel>>()
 
     fun fetchApartmentLocatorsViaService() {
+        val logTag = "$TAG.fetchApartmentLocatorsViaService()"
         flatService.getFlatUsers(accessToken, session.apartmentData!!.id)
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> updateLocatorsLiveData(body!!)
-                    401 -> unauthorizedCall(TAG)
-                    else -> unknownError(TAG, error)
+                    401 -> unauthorizedCall(logTag)
+                    else -> unknownError(logTag, error)
                 }
             }
     }
 
     fun updateScheduleViaService(model: SchedulePatchModel) {
+        val logTag = "$TAG.updateScheduleViaService()"
         scheduleService.patchSchedule(accessToken, scheduleId, model)
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> updatedScheduleModel.value = Event("Updated schedule")
-                    401 -> unauthorizedCall(TAG)
-                    else -> unknownError(TAG, error)
+                    401 -> unauthorizedCall(logTag)
+                    else -> unknownError(logTag, error)
                 }
             }
     }

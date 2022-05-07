@@ -7,26 +7,21 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.databinding.FragmentHouseworkScheduleUpdateBinding
-import uj.roomme.app.fragments.home.housework.HouseworkScheduleUpdateFragmentDirections.Companion.actionDestHouseworkScheduleUpdateFragmentToDestHouseworkCalendarFragment
+import uj.roomme.app.fragments.home.housework.HouseworkScheduleUpdateFragmentDirections.Companion.actionToHouseworkCalendarFragment
 import uj.roomme.app.fragments.home.housework.adapters.SelectOneUserAdapter
 import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkScheduleUpdateViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
-import uj.roomme.domain.housework.HouseworkFrequencyModel
 import uj.roomme.domain.schedule.SchedulePatchModel
 import uj.roomme.services.service.FlatService
 import uj.roomme.services.service.ScheduleService
 import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,12 +29,18 @@ class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_sch
 
     @Inject
     lateinit var scheduleService: ScheduleService
+
     @Inject
     lateinit var flatService: FlatService
     private val args: HouseworkScheduleUpdateFragmentArgs by navArgs()
     private val session: SessionViewModel by activityViewModels()
     private val viewModel: HouseworkScheduleUpdateViewModel by viewModels {
-        HouseworkScheduleUpdateViewModel.Factory(session, scheduleService, flatService, args.schedule.id)
+        HouseworkScheduleUpdateViewModel.Factory(
+            session,
+            scheduleService,
+            flatService,
+            args.schedule.id
+        )
     }
 
     private lateinit var binding: FragmentHouseworkScheduleUpdateBinding
@@ -59,7 +60,7 @@ class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_sch
     private fun setUpUpdateButton() {
         val navController = findNavController()
         viewModel.updatedScheduleModel.observe(viewLifecycleOwner, EventObserver {
-            navController.navigate(HouseworkScheduleUpdateFragmentDirections.actionDestHouseworkScheduleUpdateFragmentToDestHouseworkCalendarFragment())
+            navController.navigate(actionToHouseworkCalendarFragment())
         })
         binding.buttonUpdateHousework.setOnClickListener {
             val model = getModelFromViews()

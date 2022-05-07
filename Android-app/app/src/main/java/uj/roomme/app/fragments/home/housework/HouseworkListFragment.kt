@@ -37,7 +37,9 @@ class HouseworkListFragment : Fragment(R.layout.fragment_housework_list) {
 
     private fun setUpRecyclerView() {
         val adapter = HouseworkListAdapter()
+        binding.progressBar.visibility = View.VISIBLE
         viewModel.houseworkList.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = View.GONE
             adapter.dataList = it
         }
         viewModel.fetchHouseworkListViaService()

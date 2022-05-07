@@ -8,23 +8,23 @@
     <fragment
         android:id="@+id/destHouseworkCalendarFragment"
         android:name="uj.roomme.app.fragments.home.housework.HouseworkCalendarFragment"
-        android:label="HouseworkCalendarFragment"
-        tools:layout="@layout/fragment_housework_calendar" >
+        android:label="Schedules calendar"
+        tools:layout="@layout/fragment_housework_schedule_calendar" >
         <action
             android:id="@+id/actionToHouseworkDetailsFragment"
             app:destination="@id/destHouseworkDetailsFragment" />
         <action
-            android:id="@+id/action_destHouseworkCalendarFragment_to_destHouseworkScheduleUpdateFragment"
+            android:id="@+id/actionToHouseworkScheduleUpdateFragment"
             app:destination="@id/destHouseworkScheduleUpdateFragment" />
     </fragment>
     <fragment
-        android:id="@+id/destHouseworkFragment"
+        android:id="@+id/destHouseworkListFragment"
         android:name="uj.roomme.app.fragments.home.housework.HouseworkListFragment"
-        android:label="HouseworkFragment"
+        android:label="Housework list"
         tools:layout="@layout/fragment_housework_list" >
         <action
             android:id="@+id/actionToHouseworkUpdatePart1Fragment"
-            app:destination="@id/destHouseworkUpdatePart1Fragment" />
+            app:destination="@id/destHouseworkCreateFragment" />
         <action
             android:id="@+id/action_destHouseworkFragment_to_destHouseworkDetailsFragment"
             app:destination="@id/destHouseworkDetailsFragment" />
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/destHouseworkDetailsFragment"
         android:name="uj.roomme.app.fragments.home.housework.HouseworkDetailsFragment"
-        android:label="HouseworkDetailsFragment"
+        android:label="Housework details"
         tools:layout="@layout/fragment_housework_details" >
         <argument
             android:name="houseworkId"
@@ -45,10 +45,10 @@
     <fragment
         android:id="@+id/destHouseworkScheduleUpdateFragment"
         android:name="uj.roomme.app.fragments.home.housework.HouseworkScheduleUpdateFragment"
-        android:label="HouseworkScheduleUpdateFragment"
+        android:label="Update schedule"
         tools:layout="@layout/fragment_housework_schedule_update" >
         <action
-            android:id="@+id/action_destHouseworkScheduleUpdateFragment_to_destHouseworkCalendarFragment"
+            android:id="@+id/actionToHouseworkCalendarFragment"
             app:destination="@id/destHouseworkCalendarFragment"
             app:popUpTo="@id/destHouseworkCalendarFragment"
             app:popUpToInclusive="true" />
@@ -56,24 +56,24 @@
             app:argType="uj.roomme.domain.schedule.ScheduleModel" />
     </fragment>
     <fragment
-        android:id="@+id/destHouseworkUpdatePart1Fragment"
+        android:id="@+id/destHouseworkCreateFragment"
         android:name="uj.roomme.app.fragments.home.housework.HouseworkCreateFragment"
-        android:label="HouseworkUpdatePart1Fragment"
+        android:label="Create housework"
         tools:layout="@layout/fragment_housework_create" >
         <action
-            android:id="@+id/action_destHouseworkUpdatePart1Fragment_to_destHouseworkDetailsFragment"
+            android:id="@+id/actionToHouseworkDetailsFragment"
             app:destination="@id/destHouseworkDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/houseworkMenuFragment"
         android:name="uj.roomme.app.fragments.home.housework.HouseworkMenuFragment"
-        android:label="HouseworkMenuFragment"
+        android:label="Housework menu"
         tools:layout="@layout/fragment_housework_menu">
         <action
-            android:id="@+id/action_houseworkMenuFragment_to_destHouseworkCalendarFragment"
+            android:id="@+id/actionToHouseworkCalendarFragment"
             app:destination="@id/destHouseworkCalendarFragment" />
         <action
-            android:id="@+id/action_houseworkMenuFragment_to_destHouseworkFragment"
-            app:destination="@id/destHouseworkFragment" />
+            android:id="@+id/actionToHouseworkListFragment"
+            app:destination="@id/destHouseworkListFragment" />
     </fragment>
 </navigation>

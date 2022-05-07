@@ -24,12 +24,13 @@ class HouseworkCalendarViewModel(
     val data = MutableLiveData<Event<Map<OffsetDateTime, List<ScheduleModel>>>>()
 
     fun getSchedulesForMonthViaService(date: YearMonth) {
+        val logTag = "$TAG.getSchedulesForMonthViaService()"
         scheduleService.getSchedulesByMonth(accessToken, flatId, date.year, date.monthValue)
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> data.value = Event(body!!)
-                    401 -> unauthorizedCall(TAG)
-                    else -> unknownError(TAG, error)
+                    401 -> unauthorizedCall(logTag)
+                    else -> unknownError(logTag, error)
                 }
             }
     }

@@ -7,7 +7,6 @@ import uj.roomme.app.viewmodels.ServiceViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.housework.HouseworkShortModel
 import uj.roomme.services.service.FlatService
-import uj.roomme.services.service.HouseworkService
 
 class HouseworkListViewModel(
     session: SessionViewModel,
@@ -21,12 +20,13 @@ class HouseworkListViewModel(
     val houseworkList = MutableLiveData<List<HouseworkShortModel>>()
 
     fun fetchHouseworkListViaService() {
+        val logTag = "$TAG.fetchHouseworkListViaService()"
         flatService.getHouseworkList(accessToken, session.apartmentData!!.id)
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> houseworkList.value = body
-                    401 -> unauthorizedCall(TAG)
-                    else -> unknownError(TAG, error)
+                    401 -> unauthorizedCall(logTag)
+                    else -> unknownError(logTag, error)
                 }
             }
     }

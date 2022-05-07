@@ -21,12 +21,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.databinding.CalendarDayBinding
 import uj.roomme.app.databinding.CalendarHeaderBinding
-import uj.roomme.app.databinding.FragmentHouseworkCalendarBinding
+import uj.roomme.app.databinding.FragmentHouseworkScheduleCalendarBinding
 import uj.roomme.app.fragments.home.housework.adapters.CalendarSchedulesAdapter
 import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkCalendarViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
-import uj.roomme.app.views.DayViewContainer
 import uj.roomme.domain.schedule.ScheduleModel
 import uj.roomme.services.service.ScheduleService
 import java.time.DayOfWeek
@@ -39,7 +38,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_calendar) {
+class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_calendar) {
 
     @Inject
     lateinit var scheduleService: ScheduleService
@@ -57,11 +56,11 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_calendar)
     private var currYearMonth: YearMonth? = null
     private var currData: Map<LocalDate, List<ScheduleModel>>? = null
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
-    private lateinit var binding: FragmentHouseworkCalendarBinding
+    private lateinit var binding: FragmentHouseworkScheduleCalendarBinding
     private lateinit var schedulesAdapter: CalendarSchedulesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
-        binding = FragmentHouseworkCalendarBinding.bind(view)
+        binding = FragmentHouseworkScheduleCalendarBinding.bind(view)
         schedulesAdapter = CalendarSchedulesAdapter()
         setUpCalendarView()
         binding.rvScheduledHousework.adapter = schedulesAdapter

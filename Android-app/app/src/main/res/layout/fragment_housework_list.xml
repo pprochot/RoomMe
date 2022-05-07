@@ -4,6 +4,16 @@
     android:layout_height="match_parent"
     android:layout_marginHorizontal="10dp">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/createNewHousework"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHousework"
         android:layout_width="match_parent"
@@ -17,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Create new housework"/>
+        android:text="Create new housework"
+        android:layout_marginBottom="5dp"/>
 
 </RelativeLayout>

@@ -28,22 +28,24 @@ class HouseworkCreateViewModel(
     val apartmentLocators = MutableLiveData<FlatUsersGetReturnModel>()
 
     fun fetchApartmentLocatorsFromService() {
+        val logTag = "$TAG.fetchApartmentLocatorsFromService()"
         flatService.getFlatUsers(accessToken, flatId).processAsync { code, body, error ->
             when (code) {
                 200 -> apartmentLocators.value = body!!
-                401 -> unauthorizedCall(TAG)
-                else -> unknownError(TAG, error)
+                401 -> unauthorizedCall(logTag)
+                else -> unknownError(logTag, error)
             }
         }
     }
 
     fun createHouseworkViaService(model: HouseworkCreateModel) {
+        val logTag = "$TAG.createHouseworkViaService()"
         houseworkService.postHousework(accessToken, model.toServiceModel())
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> createdHouseworkEvent.value = Event(body!!)
-                    401 -> unauthorizedCall(TAG)
-                    else -> unknownError(TAG, error)
+                    401 -> unauthorizedCall(logTag)
+                    else -> unknownError(logTag, error)
                 }
             }
     }

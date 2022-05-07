@@ -7,7 +7,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.findNavController
 import uj.roomme.app.R
 import uj.roomme.app.adapters.ReplaceableRvAdapter
-import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections
+import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections.Companion.actionToHouseworkDetailsFragment
+import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections.Companion.actionToHouseworkScheduleUpdateFragment
 import uj.roomme.app.fragments.home.housework.viewholders.CalendarScheduleViewHolder
 import uj.roomme.domain.schedule.ScheduleModel
 
@@ -40,9 +41,9 @@ class CalendarSchedulesAdapter : ReplaceableRvAdapter<ScheduleModel, CalendarSch
         return AlertDialog.Builder(viewGroup.context)
             .setView(inflater.inflate(R.layout.row_housework_schedule, viewGroup, false))
             .setPositiveButton("Update") { _, _ ->
-                navController.navigate(HouseworkCalendarFragmentDirections.actionDestHouseworkCalendarFragmentToDestHouseworkScheduleUpdateFragment(schedule))
+                navController.navigate(actionToHouseworkScheduleUpdateFragment(schedule))
             }.setNeutralButton("See housework") { _, _ ->
-                navController.navigate(HouseworkCalendarFragmentDirections.actionToHouseworkDetailsFragment(houseworkId))
+                navController.navigate(actionToHouseworkDetailsFragment(houseworkId))
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()

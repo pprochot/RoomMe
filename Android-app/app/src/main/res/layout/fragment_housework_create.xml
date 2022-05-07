@@ -11,19 +11,20 @@
         android:stretchColumns="1,2">
 
         <TableRow>
+
             <TextView
-                android:text="Name"
-                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="1" />
+                android:layout_column="1"
+                android:text="Name"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/editTextHouseworkName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"/>
+                android:inputType="text" />
         </TableRow>
 
         <Space
@@ -31,30 +32,32 @@
             android:layout_height="15dp" />
 
         <TableRow>
+
             <TextView
-                android:text="Description"
-                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="1" />
+                android:layout_column="1"
+                android:text="Description"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/editTextHouseworkDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"/>
+                android:inputType="text" />
         </TableRow>
 
-        <include layout="@layout/layout_space_divider"/>
+        <include layout="@layout/layout_space_divider" />
 
         <TableRow>
+
             <TextView
-                android:text="Frequency"
-                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="1" />
+                android:layout_column="1"
+                android:text="Frequency"
+                android:textSize="16sp" />
 
             <Spinner
                 android:id="@+id/spinnerFrequency"
@@ -72,32 +75,50 @@
         android:id="@+id/spinnerDays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_gravity="center"
         android:layout_marginStart="10dp"
-        android:layout_gravity="center"/>
+        android:layout_marginEnd="10dp" />
 
-    <androidx.legacy.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
+    <include layout="@layout/layout_space_divider" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textCompletors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:text="Completors"
+            android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/buttonCreateHousework"
+            android:layout_below="@id/textCompletors"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHouseworkLocators"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/buttonCreateHousework"
-            android:layout_alignParentTop="true" />
+            android:layout_below="@id/textCompletors" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonCreateHousework"
-            android:src="@drawable/ic_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_check" />
 
     </RelativeLayout>
 </LinearLayout>

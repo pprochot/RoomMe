@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uj.roomme.app.R
 import uj.roomme.app.databinding.FragmentHouseworkMenuBinding
+import uj.roomme.app.fragments.home.housework.HouseworkMenuFragmentDirections.Companion.actionToHouseworkCalendarFragment
+import uj.roomme.app.fragments.home.housework.HouseworkMenuFragmentDirections.Companion.actionToHouseworkListFragment
 
 class HouseworkMenuFragment : Fragment(R.layout.fragment_housework_menu) {
 
@@ -14,12 +16,13 @@ class HouseworkMenuFragment : Fragment(R.layout.fragment_housework_menu) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
         binding = FragmentHouseworkMenuBinding.bind(view)
-
-        binding.cardAllHousework.setOnClickListener {
-            navController.navigate(HouseworkMenuFragmentDirections.actionHouseworkMenuFragmentToDestHouseworkFragment())
-        }
-        binding.cardCalendar.setOnClickListener {
-            navController.navigate(HouseworkMenuFragmentDirections.actionHouseworkMenuFragmentToDestHouseworkCalendarFragment())
+        binding.run {
+            cardAllHousework.setOnClickListener {
+                navController.navigate(actionToHouseworkListFragment())
+            }
+            cardCalendar.setOnClickListener {
+                navController.navigate(actionToHouseworkCalendarFragment())
+            }
         }
     }
 }
