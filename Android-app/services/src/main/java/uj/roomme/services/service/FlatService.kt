@@ -5,6 +5,7 @@ import uj.roomme.domain.flat.FlatGetModel
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.domain.flat.FlatPostReturnModel
 import uj.roomme.domain.flat.FlatUsersGetReturnModel
+import uj.roomme.domain.housework.HouseworkShortModel
 import uj.roomme.domain.rent.RentCostPostReturnModel
 import uj.roomme.domain.rent.RentCostPutModel
 import uj.roomme.domain.shoppinglist.*
@@ -63,4 +64,10 @@ interface FlatService {
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int
     ): RoomMeCall<List<UserNicknameModel>>
+
+    @GET("/flat/{flatId}/houseworks")
+    fun getHouseworkList(
+        @Header("Authorization") accessToken: String,
+        @Path("flatId") flatId: Int
+    ): RoomMeCall<List<HouseworkShortModel>>
 }

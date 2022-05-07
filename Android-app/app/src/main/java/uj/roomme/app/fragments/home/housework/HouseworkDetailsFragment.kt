@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.fragments.home.housework.HouseworkDetailsFragmentDirections.Companion.actionToHouseworkCalendarFragment
-import uj.roomme.app.fragments.home.housework.HouseworkDetailsFragmentDirections.Companion.actionToHouseworkFragment
 import uj.roomme.app.fragments.home.housework.adapters.UsersNicknameAdapter
 import uj.roomme.app.fragments.home.housework.viewholders.ScheduleViewHolder
 import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkDetailsViewModel
@@ -52,7 +51,6 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
         findViews(view)
         setUpLiveDataObservable()
         setUpRecyclerViews()
-        setUpUpdateButton(view)
         setUpCloseHouseworkButton(view)
         viewModel.fetchHouseworkDetailsFromService()
     }
@@ -78,14 +76,6 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
         }
     }
 
-    private fun setUpUpdateButton(view: View) {
-        val navController = findNavController()
-        val updateHouseworkButton = view.findViewById<Button>(R.id.buttonUpdateHousework)
-        updateHouseworkButton.setOnClickListener {
-            navController.navigate(actionToHouseworkFragment())
-        }
-    }
-
     private fun setUpCloseHouseworkButton(view: View) {
         val navController = findNavController()
         viewModel.deletedHouseworkEvent.observe(viewLifecycleOwner, EventObserver {
@@ -107,8 +97,8 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
             descriptionTextView.text = it.description
             authorTextView.text = it.author.nickname
             frequencyTextView.text = it.settings.frequency.name
-            daysAdapter.dataList = it.users
-            participantsAdapter.dataList = it.settings.days.map { UserNicknameModel(id, id.toString()) } // TODO Replace with new adapter
+            daysAdapter.dataList = it.settings.days.map { UserNicknameModel(id, id.toString()) } // TODO Replace with new adapter
+            participantsAdapter.dataList = it.users
         }
     }
 }

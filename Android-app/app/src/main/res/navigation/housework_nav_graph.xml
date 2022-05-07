@@ -19,21 +19,21 @@
     </fragment>
     <fragment
         android:id="@+id/destHouseworkFragment"
-        android:name="uj.roomme.app.fragments.home.housework.HouseworkFragment"
+        android:name="uj.roomme.app.fragments.home.housework.HouseworkListFragment"
         android:label="HouseworkFragment"
-        tools:layout="@layout/fragment_housework" >
+        tools:layout="@layout/fragment_housework_list" >
         <action
             android:id="@+id/actionToHouseworkUpdatePart1Fragment"
             app:destination="@id/destHouseworkUpdatePart1Fragment" />
+        <action
+            android:id="@+id/action_destHouseworkFragment_to_destHouseworkDetailsFragment"
+            app:destination="@id/destHouseworkDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkDetailsFragment"
         android:name="uj.roomme.app.fragments.home.housework.HouseworkDetailsFragment"
         android:label="HouseworkDetailsFragment"
         tools:layout="@layout/fragment_housework_details" >
-        <action
-            android:id="@+id/actionToHouseworkFragment"
-            app:destination="@id/destHouseworkFragment" />
         <argument
             android:name="houseworkId"
             app:argType="integer" />
