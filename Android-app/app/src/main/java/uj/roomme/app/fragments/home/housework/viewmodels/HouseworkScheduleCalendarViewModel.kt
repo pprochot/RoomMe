@@ -11,7 +11,7 @@ import uj.roomme.services.service.ScheduleService
 import java.time.OffsetDateTime
 import java.time.YearMonth
 
-class HouseworkCalendarViewModel(
+class HouseworkScheduleCalendarViewModel(
     session: SessionViewModel,
     private val scheduleService: ScheduleService,
     private val flatId: Int
@@ -42,8 +42,8 @@ class HouseworkCalendarViewModel(
         private val flatId: Int
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(HouseworkCalendarViewModel::class.java))
-                return HouseworkCalendarViewModel(session, scheduleService, flatId) as T
+            if (modelClass.isAssignableFrom(HouseworkScheduleCalendarViewModel::class.java))
+                return HouseworkScheduleCalendarViewModel(session, scheduleService, flatId) as T
             throw IllegalArgumentException("Invalid class!")
         }
     }

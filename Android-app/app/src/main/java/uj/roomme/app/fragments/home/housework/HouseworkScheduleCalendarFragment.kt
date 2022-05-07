@@ -23,7 +23,7 @@ import uj.roomme.app.databinding.CalendarDayBinding
 import uj.roomme.app.databinding.CalendarHeaderBinding
 import uj.roomme.app.databinding.FragmentHouseworkScheduleCalendarBinding
 import uj.roomme.app.fragments.home.housework.adapters.CalendarSchedulesAdapter
-import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkCalendarViewModel
+import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkScheduleCalendarViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.domain.schedule.ScheduleModel
@@ -43,8 +43,8 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
     @Inject
     lateinit var scheduleService: ScheduleService
     private val session: SessionViewModel by activityViewModels()
-    private val viewModel: HouseworkCalendarViewModel by viewModels {
-        HouseworkCalendarViewModel.Factory(
+    private val viewModel: HouseworkScheduleCalendarViewModel by viewModels {
+        HouseworkScheduleCalendarViewModel.Factory(
             session,
             scheduleService,
             session.apartmentData!!.id

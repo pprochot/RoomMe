@@ -37,10 +37,6 @@
         <argument
             android:name="houseworkId"
             app:argType="integer" />
-        <action
-            android:id="@+id/actionToHouseworkCalendarFragment"
-            app:destination="@id/destHouseworkCalendarFragment"
-            app:popUpTo="@id/destHouseworkCalendarFragment" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkScheduleUpdateFragment"
@@ -62,7 +58,9 @@
         tools:layout="@layout/fragment_housework_create" >
         <action
             android:id="@+id/actionToHouseworkDetailsFragment"
-            app:destination="@id/destHouseworkDetailsFragment" />
+            app:destination="@id/destHouseworkDetailsFragment"
+            app:popUpTo="@id/destHouseworkListFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/houseworkMenuFragment"

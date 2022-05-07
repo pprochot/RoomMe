@@ -2,20 +2,16 @@ package uj.roomme.app.fragments.home.housework
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.fragments.home.housework.HouseworkDetailsFragmentDirections.Companion.actionToHouseworkCalendarFragment
-import uj.roomme.app.fragments.home.housework.adapters.UsersNicknameAdapter
-import uj.roomme.app.fragments.home.housework.viewholders.ScheduleViewHolder
+import uj.roomme.app.databinding.FragmentHouseworkDetailsBinding
+import uj.roomme.app.fragments.home.housework. adapters.UsersNicknameAdapter
 import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkDetailsViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
@@ -34,66 +30,47 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
         HouseworkDetailsViewModel.Factory(session, houseworkService, args.houseworkId)
     }
 
-    private lateinit var nextScheduleViewHolder: ScheduleViewHolder
-    private lateinit var nameTextView: TextView
-    private lateinit var descriptionTextView: TextView
-    private lateinit var authorTextView: TextView
-    private lateinit var frequencyTextView: TextView
-    private lateinit var daysRecyclerView: RecyclerView
+    private lateinit var binding: FragmentHouseworkDetailsBinding
     private var daysAdapter = UsersNicknameAdapter()
-    private lateinit var participantsRecyclerView: RecyclerView
     private val participantsAdapter = UsersNicknameAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
-        findViews(view)
-        setUpLiveDataObservable()
+        binding = FragmentHouseworkDetailsBinding.bind(view)
         setUpRecyclerViews()
-        setUpCloseHouseworkButton(view)
-        viewModel.fetchHouseworkDetailsFromService()
-    }
-
-    private fun findViews(view: View) = view.run {
-        nextScheduleViewHolder = ScheduleViewHolder(findViewById(R.id.nextSchedule))
-        nameTextView = findViewById(R.id.textHouseworkName)
-        descriptionTextView = findViewById(R.id.textHouseworkDescription)
-        authorTextView = findViewById(R.id.textHouseworkAuthor)
-        frequencyTextView = findViewById(R.id.textHouseworkFrequency)
-        daysRecyclerView = findViewById(R.id.rvDays)
-        participantsRecyclerView = findViewById(R.id.rvHouseworkParticipants)
+        setUpCloseHouseworkButton()
+        fetchDataFromService()
     }
 
     private fun setUpRecyclerViews() {
-        daysRecyclerView.run {
+        binding.rvDays.run {
             adapter = daysAdapter
             layoutManager = LinearLayoutManager(context)
         }
-        participantsRecyclerView.run {
+        binding.rvHouseworkParticipants.run {
             adapter = participantsAdapter
             layoutManager = LinearLayoutManager(context)
         }
     }
 
-    private fun setUpCloseHouseworkButton(view: View) {
+    private fun setUpCloseHouseworkButton() {
         val navController = findNavController()
         viewModel.deletedHouseworkEvent.observe(viewLifecycleOwner, EventObserver {
-            navController.navigate(actionToHouseworkCalendarFragment())
+            navController.navigateUp()
         })
 
-        val closeHouseworkButton = view.findViewById<Button>(R.id.buttonCloseHousework)
-        closeHouseworkButton.setOnClickListener {
+        binding.buttonDeleteHousework.setOnClickListener {
             viewModel.deleteHouseworkViaService()
         }
     }
 
-    private fun setUpLiveDataObservable() {
+    private fun fetchDataFromService() {
+        showLoading()
         viewModel.houseworkDetails.observe(viewLifecycleOwner) {
-//            nextScheduleViewHolder.dateView.text = it.schedule.date.toString()
-//            nextScheduleViewHolder.completorView.text = it.schedule.user.nickname
-//            nextScheduleViewHolder.statusView.text = it.schedule.statusId.toString() // TODO replace id by some enum
-            nameTextView.text = it.name
-            descriptionTextView.text = it.description
-            authorTextView.text = it.author.nickname
-            frequencyTextView.text = it.settings.frequency.name
+            hideLoading()
+            binding.textHouseworkName.text = it.name
+            binding.textHouseworkDescription.text = it.description
+            binding.textHouseworkAuthor.text = it.author.nickname
+            binding.textHouseworkFrequency.text = it.settings.frequency.name
             daysAdapter.dataList = it.settings.days.map {
                 UserNicknameModel(
                     id,
@@ -102,5 +79,16 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
             } // TODO Replace with new adapter
             participantsAdapter.dataList = it.users
         }
+        viewModel.fetchHouseworkDetailsFromService()
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.layoutWholeDetails.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.GONE
+        binding.layoutWholeDetails.visibility = View.VISIBLE
     }
 }
