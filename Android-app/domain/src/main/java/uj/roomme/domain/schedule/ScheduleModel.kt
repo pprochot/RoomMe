@@ -4,6 +4,7 @@ import uj.roomme.domain.housework.HouseworkSettingsModel
 import uj.roomme.domain.housework.HouseworkShortModel
 import uj.roomme.domain.housework.HouseworkStatusModel
 import uj.roomme.domain.user.UserNicknameModel
+import java.io.Serializable
 import java.time.OffsetDateTime
 
 data class ScheduleModel(
@@ -13,4 +14,4 @@ data class ScheduleModel(
     val date: OffsetDateTime,
     val status: HouseworkStatusModel,
     val settings: HouseworkSettingsModel
-)
+) : Serializable

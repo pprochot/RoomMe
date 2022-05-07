@@ -26,5 +26,5 @@ interface ScheduleService {
         @Header("Authorization") accessToken: String,
         @Path("scheduleId") scheduleId: Int,
         @Body model: SchedulePatchModel
-    ): RoomMeCall<List<ScheduleListModel>>
+    ): RoomMeCall<Void>
 }

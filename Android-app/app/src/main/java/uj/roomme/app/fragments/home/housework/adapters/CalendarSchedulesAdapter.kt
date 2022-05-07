@@ -29,18 +29,18 @@ class CalendarSchedulesAdapter : ReplaceableRvAdapter<ScheduleModel, CalendarSch
         }
 
         holder.itemView.setOnClickListener {
-            buildDialog(holder.itemView, schedule.housework.id, schedule.id).show()
+            buildDialog(holder.itemView, schedule.housework.id, schedule).show()
         }
     }
 
-    private fun buildDialog(view: View, houseworkId: Int, scheduleId: Int): AlertDialog {
+    private fun buildDialog(view: View, houseworkId: Int, schedule: ScheduleModel): AlertDialog {
         val viewGroup = view as ViewGroup
         val inflater = LayoutInflater.from(viewGroup.context)
         val navController = view.findNavController()
         return AlertDialog.Builder(viewGroup.context)
             .setView(inflater.inflate(R.layout.row_housework_schedule, viewGroup, false))
             .setPositiveButton("Update") { _, _ ->
-                navController.navigate(HouseworkCalendarFragmentDirections.actionDestHouseworkCalendarFragmentToDestHouseworkScheduleUpdateFragment(scheduleId))
+                navController.navigate(HouseworkCalendarFragmentDirections.actionDestHouseworkCalendarFragmentToDestHouseworkScheduleUpdateFragment(schedule))
             }.setNeutralButton("See housework") { _, _ ->
                 navController.navigate(HouseworkCalendarFragmentDirections.actionToHouseworkDetailsFragment(houseworkId))
             }

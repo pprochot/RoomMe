@@ -1,9 +1,9 @@
 package uj.roomme.domain.schedule
 
-import java.time.OffsetDateTime
+import java.time.LocalDate
 
 data class SchedulePatchModel(
     val userId: Int?,
-    val date: OffsetDateTime?,
+    val date: LocalDate?,
     val statusId: Int?
 )

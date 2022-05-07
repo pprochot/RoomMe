@@ -52,8 +52,8 @@
             app:destination="@id/destHouseworkCalendarFragment"
             app:popUpTo="@id/destHouseworkCalendarFragment"
             app:popUpToInclusive="true" />
-        <argument android:name="scheduleId"
-            app:argType="integer" />
+        <argument android:name="schedule"
+            app:argType="uj.roomme.domain.schedule.ScheduleModel" />
     </fragment>
     <fragment
         android:id="@+id/destHouseworkUpdatePart1Fragment"
