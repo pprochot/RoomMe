@@ -31,28 +31,6 @@ namespace RoomMe.API.Controllers
             _sessionHelper = sessionHelper;
         }
 
-        [HttpPost("", Name = nameof(CreateNewSchedule))]
-        public async Task<ActionResult<SchedulePostReturnModel>> CreateNewSchedule(SchedulePostModel schedule)
-        {
-            var housework = await _sqlContext.Houseworks
-                .Include(x => x.Flat)
-                .ThenInclude(x => x.Users)
-                .FirstOrDefaultAsync(x => x.Id == schedule.HouseworkId)
-                .ConfigureAwait(false);
-
-            if(housework == null || !_sessionHelper.IsCreatorOfFlat(housework.Flat))
-            {
-                return new BadRequestResult();
-            }
-
-            var scheduleEntity = schedule.ToHouseworkSchedule(housework, _sessionHelper.UserId);
-
-            await _sqlContext.HouseworkSchedules.AddAsync(scheduleEntity).ConfigureAwait(false);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return scheduleEntity.ToSchedulePostReturnModel();
-        }
-
         [HttpGet("{flatId}", Name = nameof(GetSchedulesByMonth))]
         public async Task<ActionResult<Dictionary<DateTime, List<ScheduleModel>>>> GetSchedulesByMonth(int flatId, [FromQuery] SchedulesByMonthModel model)
         {

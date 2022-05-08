@@ -160,44 +160,6 @@ namespace RoomMe.API.Controllers
             return houseworkEntity.ToHouseworkPutReturnModel(settings.Id);
         }
 
-        [HttpGet("{houseworkId}/settings", Name = nameof(GetHouseworkSettings))]
-        public async Task<ActionResult<HouseworkSettingsModel>> GetHouseworkSettings(int houseworkId)
-        {
-            var housework = await _sqlContext.Houseworks
-               .Include(x => x.HouseworkSettings)
-               .ThenInclude(y => y.Frequency)
-               .Include(x => x.Flat)
-               .ThenInclude(y => y.Users)
-               .FirstOrDefaultAsync(x => x.Id == houseworkId)
-               .ConfigureAwait(false);
-
-            if (housework == null)
-            {
-                _logger.LogError($"Housework not found for id {houseworkId}");
-                return new BadRequestResult();
-            }
-
-            if (!_sessionHelper.IsUserOfFlat(housework.Flat))
-            {
-                _logger.LogError($"User is not in flat for housework id {houseworkId}");
-                return new BadRequestResult();
-            }
-
-            if (housework.HouseworkSettings == null)
-            {
-                _logger.LogError($"Settings not found for housework id {houseworkId}");
-                return new BadRequestResult();
-            }
-
-            if (housework.HouseworkSettings.Frequency == null)
-            {
-                _logger.LogError($"Frequency not found for settings in housework with Id {houseworkId}");
-                return new BadRequestResult();
-            }
-
-            return housework.HouseworkSettings.ToHouseworkSettingsModel();
-        }
-
         [HttpDelete("{houseworkId}", Name = nameof(RemoveHousework))]
         public async Task<ActionResult> RemoveHousework(int houseworkId)
         {
