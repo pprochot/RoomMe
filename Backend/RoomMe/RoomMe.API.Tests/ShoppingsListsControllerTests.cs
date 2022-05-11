@@ -249,8 +249,8 @@ namespace RoomMe.API.Tests
                 }
             });
 
-            Assert.IsInstanceOf<ProductPatchReturnModel>(actionResult.Value);
-            Assert.AreEqual(2, actionResult.Value.CommonCostIds.Count());
+            Assert.IsInstanceOf<List<ProductModel>>(actionResult.Value);
+            Assert.AreEqual(2, actionResult.Value.Count());
 
             var actionResult2 = await shoppingListController.GetShoppingList(2);
 
@@ -319,7 +319,12 @@ namespace RoomMe.API.Tests
         [Test, Order(6)]
         public async Task RemoveProductsFromShoppingList_InvalidProductId_ShouldNotDeleteAnyProducts()
         {
-            var actionResult = await shoppingListController.RemoveProductsFromShoppingList(2, new List<int>() { 100, 200, 300 });
+
+            var actionResult3 = await shoppingListController.GetShoppingList(2);
+
+            Assert.AreEqual(3, actionResult3.Value.Products.Count);
+
+            var actionResult = await shoppingListController.RemoveProductsFromShoppingList(2, new List<int>() { 99 });
 
             Assert.IsInstanceOf<OkResult>(actionResult);
 
