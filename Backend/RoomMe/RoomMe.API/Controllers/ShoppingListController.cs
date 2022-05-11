@@ -116,7 +116,7 @@ namespace RoomMe.API.Controllers
             var shoppingList = await _sqlContext.ShoppingLists
                 .Include(x => x.Flat)
                 .ThenInclude(y => y.Users)
-                .Include(x => x.Products.Where(y => productsIds.Contains(y.Id)))
+                .Include(x => x.Products)
                 .SingleOrDefaultAsync(x => x.Id == listId)
                 .ConfigureAwait(false);
 
@@ -131,7 +131,14 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var deletedProducts = shoppingList.Products;
+            var deletedProducts = new List<Product>();
+
+            foreach(var product in shoppingList.Products)
+            {
+                if (productsIds.Contains(product.Id)) {
+                    deletedProducts.Add(product);
+                }
+            }
 
             _sqlContext.Products.RemoveRange(deletedProducts);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
