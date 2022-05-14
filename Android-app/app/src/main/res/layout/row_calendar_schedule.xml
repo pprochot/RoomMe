@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#DFDFDF">
 
-    <TextView
+    <View
         android:id="@+id/itemHouseworkColorCategory"
-        android:layout_width="50dp"
+        android:layout_width="10dp"
         android:layout_height="match_parent"
         android:background="@color/red"
         android:gravity="center"
@@ -17,8 +16,7 @@
         android:textSize="12sp"
         app:layout_constraintDimensionRatio="H,1:1"
         app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.143"
-        tools:text="THU\nJUN 30\n14:00" />
+        app:layout_constraintWidth_percent="0.143" />
 
     <include
         android:id="@+id/scheduleLayout"

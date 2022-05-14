@@ -11,7 +11,7 @@
         android:layout_margin="1dp">
 
         <TextView
-            android:id="@+id/exFiveDayText"
+            android:id="@+id/dayText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
@@ -22,15 +22,15 @@
             tools:text="24" />
 
         <View
-            android:id="@+id/exFiveDayFlightTop"
+            android:id="@+id/viewNoUserHousework"
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="18dp"
-            android:background="#3F51B5" />
+            android:background="#737373" />
 
         <View
-            android:id="@+id/exFiveDayFlightBottom"
+            android:id="@+id/viewUserHousework"
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_gravity="bottom"

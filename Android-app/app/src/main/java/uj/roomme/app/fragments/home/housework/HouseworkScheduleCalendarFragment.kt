@@ -48,7 +48,7 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
             session,
             scheduleService,
             session.apartmentData!!.id
-        ) // TODO update flatId
+        )
     }
 
     private val daysOfWeek = daysOfWeekFromLocale()
@@ -61,7 +61,7 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
         binding = FragmentHouseworkScheduleCalendarBinding.bind(view)
-        schedulesAdapter = CalendarSchedulesAdapter()
+        schedulesAdapter = CalendarSchedulesAdapter(session.userData!!.id)
         setUpCalendarView()
         binding.rvScheduledHousework.adapter = schedulesAdapter
         binding.rvScheduledHousework.layoutManager = LinearLayoutManager(context)
@@ -72,7 +72,7 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
             val isSameMonth = data.keys.any { YearMonth.of(it.year, it.month) == currYearMonth }
             if (isSameMonth) {
                 currData = data.mapKeys { it.key.toLocalDate() }
-
+                bindCalendarDays()
             }
         })
         bindCalendarMonths()
@@ -153,36 +153,30 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
         }
     }
 
-    private fun bindCalendarDays() = binding.calendarHousework.run {
-        dayBinder = object : DayBinder<DayViewContainer> {
+    private fun bindCalendarDays() {
+        binding.calendarHousework.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
-                val textView = container.binding.exFiveDayText
+                val textView = container.binding.dayText
                 val layout = container.binding.exFiveDayLayout
                 textView.text = day.date.dayOfMonth.toString()
 
-                val flightTopView = container.binding.exFiveDayFlightTop
-                val flightBottomView = container.binding.exFiveDayFlightBottom
-                flightTopView.background = null
-                flightBottomView.background = null
 
                 if (day.owner == DayOwner.THIS_MONTH) {
-//                    textView.setTextColorRes(R.color.example_5_text_grey)
                     layout.setBackgroundResource(if (selectedDate == day.date) R.drawable.shape_selected else 0)
 
-// TODO here are colors
-//                    val flights = flights[day.date]
-//                    if (flights != null) {
-//                        if (flights.count() == 1) {
-//                            flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
-//                        } else {
-//                            flightTopView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
-//                            flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[1].color))
-//                        }
-//                    }
+                    val scheduledHouseworkList = currData?.get(day.date)
+                    if (scheduledHouseworkList?.none { it.user.id == session.userData!!.id } != false) {
+                        container.binding.viewUserHousework.background = null
+                    }
+                    if (scheduledHouseworkList?.none { it.user.id != session.userData!!.id } != false) {
+                        container.binding.viewNoUserHousework.background = null
+                    }
                 } else {
-//                    textView.setTextColorRes(R.color.example_5_text_grey_light)
+                    container.binding.viewNoUserHousework.background = null
+                    container.binding.viewUserHousework.background = null
+                    textView.visibility = View.GONE
                     layout.background = null
                 }
             }

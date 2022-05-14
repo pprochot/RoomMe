@@ -1,5 +1,6 @@
 package uj.roomme.app.fragments.home.housework.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,10 @@ import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirection
 import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections.Companion.actionToHouseworkScheduleUpdateFragment
 import uj.roomme.app.fragments.home.housework.viewholders.CalendarScheduleViewHolder
 import uj.roomme.domain.schedule.ScheduleModel
+import java.time.format.DateTimeFormatter
 
-class CalendarSchedulesAdapter : ReplaceableRvAdapter<ScheduleModel, CalendarScheduleViewHolder>() {
+class CalendarSchedulesAdapter(private val loggedUserId: Int) :
+    ReplaceableRvAdapter<ScheduleModel, CalendarScheduleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarScheduleViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -22,6 +25,12 @@ class CalendarSchedulesAdapter : ReplaceableRvAdapter<ScheduleModel, CalendarSch
 
     override fun onBindViewHolder(holder: CalendarScheduleViewHolder, position: Int) {
         val schedule = dataList[position]
+        holder.binding.itemHouseworkColorCategory.run {
+            when (schedule.user.id == loggedUserId) {
+                true -> setBackgroundColor(Color.parseColor("#737373"))
+                else -> setBackgroundColor(Color.parseColor("#FF1100"))
+            }
+        }
         holder.binding.scheduleLayout.run {
             textName.text = schedule.housework.name
             textDate.text = schedule.date.toString()
