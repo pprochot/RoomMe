@@ -28,7 +28,7 @@ abstract class ReplaceableRvAdapter<T, V : RecyclerView.ViewHolder> : RecyclerVi
 abstract class MutableAndReplaceableRvAdapter<T, V : RecyclerView.ViewHolder> :
     RecyclerView.Adapter<V>() {
 
-    var dataList: List<T> = mutableListOf()
+    var dataList: MutableList<T> = mutableListOf()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value

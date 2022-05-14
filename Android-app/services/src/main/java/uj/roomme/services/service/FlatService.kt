@@ -60,7 +60,7 @@ interface FlatService {
     ): RoomMeCall<List<ShoppingListShortModel>>
 
     @GET("/flat/{flatId}/available-locators")
-    fun userNicknameModel(
+    fun getAvailableLocators(
         @Header("Authorization") accessToken: String,
         @Path("flatId") flatId: Int
     ): RoomMeCall<List<UserNicknameModel>>

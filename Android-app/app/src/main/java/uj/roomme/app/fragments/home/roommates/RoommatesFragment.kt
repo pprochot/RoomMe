@@ -1,71 +1,85 @@
 package uj.roomme.app.fragments.home.roommates
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Button
+import androidx.core.view.allViews
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.adapters.RoommatesAdapter
-import uj.roomme.app.consts.Toasts
+import uj.roomme.app.databinding.FragmentRoommatesBinding
+import uj.roomme.app.fragments.home.roommates.adapters.RoommatesAdapter
+import uj.roomme.app.fragments.home.roommates.viewmodels.RoommatesViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.services.service.FlatService
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoommatesFragment : Fragment(R.layout.fragment_roommates) {
 
-    private companion object {
-        const val TAG = "RoommatesFragment"
-    }
-
     @Inject
     lateinit var flatService: FlatService
-
     private val session: SessionViewModel by activityViewModels()
-    private lateinit var addNewRoommateButton: Button
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var ownerEditText: TextInputEditText
+    private val viewModel: RoommatesViewModel by viewModels {
+        RoommatesViewModel.Factory(session, flatService)
+    }
+
+    private lateinit var binding: FragmentRoommatesBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        findViews(view)
+        binding = FragmentRoommatesBinding.bind(view)
+        setUpProgressBar()
+        setUpCreatorView()
+        setUpRecyclerView()
+        setUpAddNewRoommateButton()
+        viewModel.getRoommatesFromService()
+    }
 
-        addNewRoommateButton.setOnClickListener {
-            findNavController().navigate(RoommatesFragmentDirections.actionRoommatesToAddRoommate())
+    private fun setUpProgressBar() = binding.run {
+        root.forEach { it.visibility = View.INVISIBLE }
+        progressBar.visibility = View.VISIBLE
+        viewModel.roommates.observe(viewLifecycleOwner) {
+            root.forEach { it.visibility = View.VISIBLE }
+            progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun setUpCreatorView() = binding.run {
+        viewModel.roommates.observe(viewLifecycleOwner) {
+            viewCreator.textUsername.text = it.creator.nickname
+        }
+    }
+
+    private fun setUpRecyclerView() {
+        val roommatesAdapter = RoommatesAdapter(viewModel)
+        binding.rvRoommates.run {
+            layoutManager = LinearLayoutManager(context)
+            adapter = roommatesAdapter
         }
 
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        ownerEditText.isEnabled = false
-        getRoommatesFromService()
+        viewModel.roommates.observe(viewLifecycleOwner) {
+            roommatesAdapter.dataList = it.users.toMutableList()
+        }
+        viewModel.removedRoommateEvent.observe(viewLifecycleOwner, EventObserver { position ->
+            roommatesAdapter.dataList.removeAt(position)
+            roommatesAdapter.notifyItemChanged(position)
+        })
     }
 
-    private fun findViews(view: View) = view.apply {
-        ownerEditText = findViewById(R.id.inputEditTextApartmentOwner)
-        addNewRoommateButton = findViewById(R.id.buttonAddNewRoommate)
-        recyclerView = findViewById(R.id.rvRoommates)
-    }
-
-    private fun getRoommatesFromService() = session.apply {
-        flatService.getFlatUsers(userData!!.accessToken, apartmentData!!.id)
-            .processAsync { code, body, error ->
-                when {
-                    code == 401 -> Log.d(TAG, "Unauthorized")
-                    body != null -> {
-                        ownerEditText.setText(body.creator.nickname)
-                        recyclerView.adapter = RoommatesAdapter(body.users, flatService, session)
-                    }
-                    else -> {
-                        Log.d(TAG, "Could not fetch users in apartment", error)
-                        Toasts.sendingRequestFailure(context)
-                    }
+    private fun setUpAddNewRoommateButton() {
+        binding.buttonAddNewRoommate.isClickable = false
+        viewModel.roommates.observe(viewLifecycleOwner) {
+            if (it.creator.id == session.userData!!.id) {
+                binding.buttonAddNewRoommate.isClickable = true
+                binding.buttonAddNewRoommate.setOnClickListener {
+                    findNavController().navigate(RoommatesFragmentDirections.actionRoommatesToAddRoommate())
                 }
             }
+        }
     }
 }
