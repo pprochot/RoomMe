@@ -2,6 +2,8 @@ package uj.roomme.app.fragments.home.housework
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -11,12 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.databinding.FragmentHouseworkDetailsBinding
-import uj.roomme.app.fragments.home.housework. adapters.UsersNicknameAdapter
+import uj.roomme.app.fragments.home.housework.adapters.DaysAdapter
+import uj.roomme.app.fragments.home.housework.adapters.UsersNicknameAdapter
 import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkDetailsViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
-import uj.roomme.domain.user.UserNicknameModel
 import uj.roomme.services.service.HouseworkService
+import java.time.DayOfWeek
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,21 +34,16 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
     }
 
     private lateinit var binding: FragmentHouseworkDetailsBinding
-    private var daysAdapter = UsersNicknameAdapter()
     private val participantsAdapter = UsersNicknameAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
         binding = FragmentHouseworkDetailsBinding.bind(view)
-        setUpRecyclerViews()
+        setUpRecyclerView()
         setUpCloseHouseworkButton()
         fetchDataFromService()
     }
 
-    private fun setUpRecyclerViews() {
-        binding.rvDays.run {
-            adapter = daysAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
+    private fun setUpRecyclerView() {
         binding.rvHouseworkParticipants.run {
             adapter = participantsAdapter
             layoutManager = LinearLayoutManager(context)
@@ -65,19 +63,24 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
 
     private fun fetchDataFromService() {
         showLoading()
-        viewModel.houseworkDetails.observe(viewLifecycleOwner) {
+        viewModel.houseworkDetails.observe(viewLifecycleOwner) { model ->
             hideLoading()
-            binding.textHouseworkName.text = it.name
-            binding.textHouseworkDescription.text = it.description
-            binding.textHouseworkAuthor.text = it.author.nickname
-            binding.textHouseworkFrequency.text = it.settings.frequency.name
-            daysAdapter.dataList = it.settings.days.map {
-                UserNicknameModel(
-                    id,
-                    id.toString()
-                )
-            } // TODO Replace with new adapter
-            participantsAdapter.dataList = it.users
+            binding.textHouseworkName.text = model.name
+            binding.textHouseworkDescription.text = model.description
+            binding.textHouseworkAuthor.text = model.author.nickname
+            binding.textHouseworkFrequency.text = model.settings.frequency.name
+            if (model.settings.days.size < 2) {
+                binding.listDays.layoutParams =
+                    LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                    )
+            }
+            binding.listDays.layoutManager = LinearLayoutManager(context)
+            binding.listDays.adapter = DaysAdapter().apply {
+                dataList = model.settings.days.map { DayOfWeek.of(it) }.toList()
+            }
+            participantsAdapter.dataList = model.users
         }
         viewModel.fetchHouseworkDetailsFromService()
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TableLayout
@@ -27,7 +27,7 @@
                 android:inputType="text" />
         </TableRow>
 
-        <Space
+        <androidx.legacy.widget.Space
             android:layout_width="match_parent"
             android:layout_height="15dp" />
 
@@ -65,19 +65,36 @@
                 android:layout_height="wrap_content" />
         </TableRow>
 
-        <Space
+        <androidx.legacy.widget.Space
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
     </TableLayout>
 
-    <Spinner
-        android:id="@+id/spinnerDays"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutDays"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textInstruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="Instruction how many days to pick" />
+
+        <ListView
+            android:id="@+id/listDays"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+    </LinearLayout>
 
     <include layout="@layout/layout_space_divider" />
 
@@ -107,7 +124,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHouseworkLocators"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
             android:layout_above="@id/buttonCreateHousework"
             android:layout_below="@id/textCompletors" />
 

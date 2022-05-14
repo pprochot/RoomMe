@@ -2,6 +2,7 @@ package uj.roomme.app.fragments.home.housework
 
 import android.os.Bundle
 import android.view.View
+import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
@@ -14,8 +15,6 @@ import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.FragmentHouseworkCreateBinding
 import uj.roomme.app.fragments.home.housework.HouseworkCreateFragmentDirections.Companion.actionToHouseworkDetailsFragment
-import uj.roomme.app.fragments.home.housework.adapters.CheckBoxSpinnerAdapter
-import uj.roomme.app.fragments.home.housework.adapters.CheckBoxState
 import uj.roomme.app.fragments.home.housework.adapters.SelectUsersAdapter
 import uj.roomme.app.fragments.home.housework.models.HouseworkCreateModel
 import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkCreateViewModel
@@ -42,30 +41,15 @@ class HouseworkCreateFragment : Fragment(R.layout.fragment_housework_create) {
     }
 
     private lateinit var binding: FragmentHouseworkCreateBinding
-    private lateinit var daysSpinnerAdapter: CheckBoxSpinnerAdapter
     private val selectUsersAdapter = SelectUsersAdapter()
+    private var selectedDays = mutableSetOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentHouseworkCreateBinding.bind(view)
-        setUpDaysSpinnerAdapter()
         setUpFrequenciesAdapter()
-        setUpLocatorsRecyclerView()
+        setUpRecyclerView()
         setUpCreateButton()
         setUpNavigation()
-    }
-
-    private fun setUpDaysSpinnerAdapter() {
-        val daysStringArray = requireContext().resources.getStringArray(R.array.days_of_week_array)
-        val states = daysStringArray.mapIndexed { index, it ->
-            CheckBoxState(
-                index + 1,
-                it.toString(),
-                false
-            ) // TODO check if index should be from 0 or 1
-        }.toMutableList()
-        states.add(0, CheckBoxState(0, "Select days of week", false))
-        daysSpinnerAdapter = CheckBoxSpinnerAdapter(requireContext(), 0, states)
-        binding.spinnerDays.adapter = daysSpinnerAdapter
     }
 
     private fun setUpFrequenciesAdapter() {
@@ -74,11 +58,67 @@ class HouseworkCreateFragment : Fragment(R.layout.fragment_housework_create) {
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinnerFrequency.adapter = adapter // TODO custom adapter
+            binding.spinnerFrequency.adapter = adapter
+        }
+
+        binding.spinnerFrequency.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, index: Int, p3: Long) {
+                    when (index) {
+                        0 -> setUpSingleChoiceDaysList()
+                        1 -> setUpHiddenDaysList()
+                        2 -> setUpSingleChoiceDaysList()
+                        3 -> setUpMultipleChoiceDaysList()
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+            }
+    }
+
+    private fun setUpSingleChoiceDaysList() {
+        selectedDays = mutableSetOf()
+        binding.layoutDays.visibility = View.VISIBLE
+        binding.textInstruction.text = "Select one day"
+        binding.listDays.run {
+            choiceMode = AbsListView.CHOICE_MODE_SINGLE
+            adapter = ArrayAdapter.createFromResource(
+                requireContext(), R.array.days_of_week_array,
+                android.R.layout.simple_list_item_single_choice
+            )
+            setOnItemClickListener { _, _, position, _ ->
+                selectedDays = mutableSetOf(position + 1)
+            }
         }
     }
 
-    private fun setUpLocatorsRecyclerView() {
+    private fun setUpMultipleChoiceDaysList() {
+        selectedDays = mutableSetOf()
+        binding.layoutDays.visibility = View.VISIBLE
+        binding.textInstruction.text = "Select two days"
+        binding.listDays.run {
+            visibility = View.VISIBLE
+            choiceMode = AbsListView.CHOICE_MODE_MULTIPLE
+            adapter = ArrayAdapter.createFromResource(
+                requireContext(), R.array.days_of_week_array,
+                android.R.layout.simple_list_item_multiple_choice
+            )
+            setOnItemClickListener { _, _, position, _ ->
+                if (isItemChecked(position)) {
+                    selectedDays.add(position + 1)
+                } else {
+                    selectedDays.remove(position + 1)
+                }
+            }
+        }
+    }
+
+    private fun setUpHiddenDaysList() {
+        selectedDays = mutableSetOf(1, 2, 3, 4, 5, 6, 7)
+        binding.layoutDays.visibility = View.GONE
+    }
+
+    private fun setUpRecyclerView() {
         binding.progressBar.visibility = View.VISIBLE
         binding.rvHouseworkLocators.run {
             layoutManager = LinearLayoutManager(context)
@@ -111,17 +151,27 @@ class HouseworkCreateFragment : Fragment(R.layout.fragment_housework_create) {
     private fun isUserInputCorrect(): Boolean = binding.run {
         return editTextHouseworkName.text != null &&
                 editTextHouseworkDescription.text != null &&
-                daysSpinnerAdapter.listState.any { it.isSelected } &&
-                spinnerFrequency.selectedItem != null && // TODO set default value
+                spinnerFrequency.selectedItem != null &&
+                areDaysPickedCorrectly() &&
                 selectUsersAdapter.selectedUserIds.isNotEmpty()
+    }
+
+    private fun areDaysPickedCorrectly(): Boolean {
+        return when (binding.spinnerFrequency.selectedItemPosition) {
+            0 -> selectedDays.size == 1
+            1 -> selectedDays.size == 7
+            2 -> selectedDays.size == 1
+            3 -> selectedDays.size == 2
+            else -> false
+        }
     }
 
     private fun getModelFromViews(): HouseworkCreateModel = binding.run {
         return HouseworkCreateModel(
             name = editTextHouseworkName.text.toString(),
             description = editTextHouseworkDescription.text.toString(),
-            days = daysSpinnerAdapter.listState.filter { it.isSelected }.map { it.id },
-            frequencyId = spinnerFrequency.selectedItemPosition + 1, // TODO check position number
+            days = selectedDays.toList(),
+            frequencyId = spinnerFrequency.selectedItemPosition + 1,
             selectedUsersIds = selectUsersAdapter.selectedUserIds
         )
     }
