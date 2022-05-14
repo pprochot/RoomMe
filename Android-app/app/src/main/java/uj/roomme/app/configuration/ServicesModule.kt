@@ -16,7 +16,6 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -57,6 +56,9 @@ class ServicesModule {
 
     @Provides
     fun shoppingListService(gson: GsonConverterFactory) = createService<ShoppingListService>(gson)
+
+    @Provides
+    fun statisticsService(gson: GsonConverterFactory) = createService<StatisticsService>(gson)
 
     private inline fun <reified T> createService(gsonConverterFactory: GsonConverterFactory): T {
         return Retrofit.Builder()

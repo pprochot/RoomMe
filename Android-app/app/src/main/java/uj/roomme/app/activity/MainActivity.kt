@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSette
         val topLevelDestinations = setOf(
             R.id.destSelectShoppingListFragment, R.id.destSignInFragment, R.id.destHomeFragment,
             R.id.destProfileFragment, R.id.destFriendsFragments, R.id.destSelectApartmentFragment,
-            R.id.destHouseWorksFragment, R.id.destRoommatesFragment, R.id.destStatisticsFragment
+            R.id.destHouseWorksFragment, R.id.destRoommatesFragment, R.id.destCommonStatisticsFragment,
+            R.id.destPrivateStatisticsFragment
         )
     }
 
