@@ -44,6 +44,7 @@ namespace RoomMe.API.Controllers
                 .Include(x => x.Completor)
                 .Include(x => x.Flat)
                 .ThenInclude(y => y.Users)
+                .Include(x => x.Receipts)
                 .SingleOrDefaultAsync(x => x.Id == listId)
                 .ConfigureAwait(false);
 
@@ -240,6 +241,26 @@ namespace RoomMe.API.Controllers
                 TimeStamp = DateTime.UtcNow,
                 FileGuids = guids
             };
+        }
+
+        [HttpGet("{listId}/receipt/{guid}", Name = nameof(GetShoppingListReceipts))]
+        public async Task<ActionResult> GetShoppingListReceipts(int listId, Guid guid)
+        {
+            var list = await _sqlContext.ShoppingLists
+                .Include(x => x.Flat)
+                .ThenInclude(x => x.Users)
+                .Include(x => x.Receipts)
+                .FirstOrDefaultAsync(x => x.Id == listId)
+                .ConfigureAwait(false);
+
+            if(list == null || !_sessionHelper.IsUserOfFlat(list.Flat) || !list.Receipts.Any(x => x.Guid == guid))
+            {
+                return new BadRequestResult();
+            }
+
+            var receipt = list.Receipts.Single(x => x.Guid == guid);
+
+            return PhysicalFile(receipt.Path, receipt.ContentType, receipt.Name);
         }
     }
 }
