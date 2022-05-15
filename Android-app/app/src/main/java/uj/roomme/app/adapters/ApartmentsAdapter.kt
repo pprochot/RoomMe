@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -13,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.viewmodels.SessionViewModel
-import uj.roomme.app.fragments.home.apartment.SelectApartmentFragmentDirections as Directions
 import uj.roomme.domain.flat.FlatShortModel
 import uj.roomme.services.service.FlatService
+import uj.roomme.app.fragments.home.apartment.SelectApartmentFragmentDirections as Directions
 
 class ApartmentsAdapter(
     private val sessionViewModel: SessionViewModel,
@@ -36,8 +35,7 @@ class ApartmentsAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.rv_row_apartment, parent, false)
         val viewHolder = ViewHolder(view)
-        view.findViewById<ImageView>(R.id.imageGoToApartment)
-            .setOnClickListener { onApartmentClick(viewHolder) }
+        view.setOnClickListener { onApartmentClick(viewHolder) }
         return viewHolder
     }
 

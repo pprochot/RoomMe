@@ -49,12 +49,8 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             signInButton = findViewById(R.id.buttonSignIn)
         }
 
-        val forgotPasswordText = view?.findViewById<TextView>(R.id.textForgotPassword)
         val noAccountText = view?.findViewById<TextView>(R.id.textNoAccount)
 
-        forgotPasswordText?.setOnClickListener {
-            navController.navigate(Directions.actionSignInToForgotPassword())
-        }
         noAccountText?.setOnClickListener {
             navController.navigate(Directions.actionSignInToSignUp())
         }

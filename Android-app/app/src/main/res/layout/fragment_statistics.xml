@@ -38,12 +38,12 @@
 
             <TextView
                 android:id="@+id/textDateFrom"
+                style="@style/ClickableTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:paddingEnd="10dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:clickable="true"/>
 
 
         </TableRow>
@@ -59,12 +59,11 @@
 
             <TextView
                 android:id="@+id/textDateTo"
+                style="@style/ClickableTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:paddingEnd="10dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:paddingEnd="10dp" />
 
         </TableRow>
     </TableLayout>

@@ -18,7 +18,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onStart()
         apartmentName = requireView().findViewById(R.id.textApartmentName)
         apartmentAddress = requireView().findViewById(R.id.textApartmentAddress)
-
+        // TODO bug
         apartmentName.text = session.apartmentData!!.name
         apartmentAddress.text = session.apartmentData!!.address
     }

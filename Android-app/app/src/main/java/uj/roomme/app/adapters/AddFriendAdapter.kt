@@ -32,7 +32,7 @@ class AddFriendAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.rv_add_friend, parent, false)
+        val view = inflater.inflate(R.layout.rv_friend_add, parent, false)
         return ViewHolder(view)
     }
 

@@ -31,7 +31,7 @@
     <include app:graph="@navigation/home_nav_graph" />
     <fragment
         android:id="@+id/destAddFriendFragment"
-        android:name="uj.roomme.app.fragments.friends.AddFriendFragment"
+        android:name="uj.roomme.app.fragments.friends.FriendsAddFragment"
         android:label="Add Friend"
-        tools:layout="@layout/fragment_add_friend"/>
+        tools:layout="@layout/fragment_friends_add"/>
 </navigation>

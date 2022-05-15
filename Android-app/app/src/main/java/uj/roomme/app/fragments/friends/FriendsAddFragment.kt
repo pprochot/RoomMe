@@ -18,7 +18,7 @@ import uj.roomme.services.service.UserService
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
+class FriendsAddFragment : Fragment(R.layout.fragment_friends_add) {
 
     private companion object {
         const val TAG = "AddFriendFragment"

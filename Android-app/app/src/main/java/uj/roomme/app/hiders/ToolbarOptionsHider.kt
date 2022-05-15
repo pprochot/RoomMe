@@ -14,20 +14,21 @@ class ToolbarOptionsHider(private val drawerLayout: DrawerLayout, private val to
 
     private val buttonLogOut: ImageView = toolbar.findViewById(R.id.buttonLogOut)
 
-    companion object {
-        private val destinationsWithoutToolbarOptions = setOf(
-            R.id.destSignInFragment, R.id.destSignUpFragment, R.id.destForgotPasswordFragment
-        )
-    }
-
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
-        if (destinationsWithoutToolbarOptions.contains(destination.id)) {
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            toolbar.navigationIcon = null
-            buttonLogOut.visibility = View.GONE
-        } else {
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            buttonLogOut.visibility = View.VISIBLE
+        when (destination.id) {
+            R.id.destSignInFragment -> {
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                toolbar.navigationIcon = null
+                buttonLogOut.visibility = View.GONE
+            }
+            R.id.destSignUpFragment -> {
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                buttonLogOut.visibility = View.GONE
+            }
+            else -> {
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                buttonLogOut.visibility = View.VISIBLE
+            }
         }
     }
 }
