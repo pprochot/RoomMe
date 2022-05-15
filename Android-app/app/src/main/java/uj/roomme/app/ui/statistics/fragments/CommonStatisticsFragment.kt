@@ -1,14 +1,14 @@
-package uj.roomme.app.fragments.statistics
+package uj.roomme.app.ui.statistics.fragments
 
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -17,7 +17,10 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.fragments.statistics.viewmodel.CommonStatisticsViewModel
+import uj.roomme.app.consts.ViewUtils.makeClickable
+import uj.roomme.app.consts.ViewUtils.makeNotClickable
+import uj.roomme.app.databinding.FragmentStatisticsBinding
+import uj.roomme.app.ui.statistics.viewmodel.CommonStatisticsViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.statistics.StatisticsFrequency
 import uj.roomme.services.service.StatisticsService
@@ -33,19 +36,20 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
     private val viewModel: CommonStatisticsViewModel by viewModels {
         CommonStatisticsViewModel.Factory(session, statisticsService, session.selectedApartmentId!!)
     }
+    private lateinit var binding: FragmentStatisticsBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setDateFromPicker(view)
-        setDateToPicker(view)
-        setRefreshButton(view)
-        assignFrequenciesSpinnerAdapter(view)
-        setUpChart(view)
+        binding = FragmentStatisticsBinding.bind(view)
+        setUpDateFromPicker()
+        setUpDateToPicker()
+        setUpRefreshButton()
+        assignFrequenciesSpinnerAdapter()
+        setUpChart()
         viewModel.fetchCommonStatisticsFromService()
     }
 
-    private fun setUpChart(view: View) {
-        val barChart = view.findViewById<BarChart>(R.id.barChart)
-        barChart.xAxis.run {
+    private fun setUpChart() {
+        binding.barChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             setDrawAxisLine(true)
             setDrawGridLines(false)
@@ -57,11 +61,12 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
         }
 
         viewModel.statisticsLiveData.observe(viewLifecycleOwner) { statistics ->
+            binding.buttonRefresh.makeClickable()
             val labels = statistics.map { it.timeStamp }
             val entries = statistics.mapIndexed { index, model ->
                 BarEntry(index.toFloat(), model.value.toFloat())
             }
-            barChart.xAxis.run {
+            binding.barChart.xAxis.run {
                 labelCount = labels.size
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
@@ -76,73 +81,69 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
             barDataSet.valueTextSize = 10f
 
             val barData = BarData(barDataSet)
-            barChart.setFitBars(true)
-            barChart.data = barData
-            barChart.description.text = "Bar Chart example"
-            barChart.animateY(2000)
+            binding.barChart.setFitBars(true)
+            binding.barChart.data = barData
+            binding.barChart.description.text = "Bar chart common statistics"
+            binding.barChart.animateY(2000)
         }
     }
 
-
-    private fun setRefreshButton(view: View) {
-        val refreshButton = view.findViewById<Button>(R.id.buttonRefresh)
-        refreshButton.setOnClickListener {
+    private fun setUpRefreshButton() {
+        binding.buttonRefresh.setOnClickListener {
+            binding.buttonRefresh.makeNotClickable()
             viewModel.fetchCommonStatisticsFromService()
         }
     }
 
-    private fun setDateFromPicker(view: View) {
+    private fun setUpDateFromPicker() {
         val date = viewModel.searchModel.dateFrom
-        val dateFromView = view.findViewById<TextView>(R.id.textDateFrom)
-        dateFromView.text = date.toString()
+        binding.textDateFrom.text = date.toString()
         val dateFromPickerDialog = DatePickerDialog(
             requireActivity(),
             { _, year, monthOfYear, dayOfMonth ->
                 val selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
-                dateFromView.text = selectedDate.toString()
+                binding.textDateFrom.text = selectedDate.toString()
                 viewModel.searchModel.dateFrom = selectedDate
             },
             date.year, date.monthValue - 1, date.dayOfMonth
         )
-        dateFromView.setOnClickListener {
+        binding.textDateFrom.setOnClickListener {
             dateFromPickerDialog.show()
         }
     }
 
-    private fun setDateToPicker(view: View) {
+    private fun setUpDateToPicker() {
         val date = viewModel.searchModel.dateTo
-        val dateToView = view.findViewById<TextView>(R.id.textDateTo)
-        dateToView.text = date.toString()
+        binding.textDateTo.text = date.toString()
         val dateToPickerDialog = DatePickerDialog(
             requireActivity(),
             { _, year, monthOfYear, dayOfMonth ->
                 val selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
-                dateToView.text = selectedDate.toString()
+                binding.textDateTo.text = selectedDate.toString()
                 viewModel.searchModel.dateTo = selectedDate
             },
             date.year, date.monthValue - 1, date.dayOfMonth
         )
-        dateToView.setOnClickListener {
+        binding.textDateTo.setOnClickListener {
             dateToPickerDialog.show()
         }
     }
 
-    private fun assignFrequenciesSpinnerAdapter(view: View) {
-        val spinner = view.findViewById<Spinner>(R.id.spinner)
-        spinner.adapter = ArrayAdapter.createFromResource(
+    private fun assignFrequenciesSpinnerAdapter() {
+        binding.spinner.adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.statistics_frequencies_array,
             android.R.layout.simple_spinner_item
         ).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 viewModel.searchModel.frequency = StatisticsFrequency.values()[p2]
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                spinner.setSelection(0)
+                binding.spinner.setSelection(0)
             }
         }
     }

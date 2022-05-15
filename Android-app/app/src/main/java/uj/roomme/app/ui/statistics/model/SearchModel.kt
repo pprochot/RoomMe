@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.statistics.model
+package uj.roomme.app.ui.statistics.model
 
 import uj.roomme.domain.statistics.StatisticsFrequency
 import java.time.LocalDate

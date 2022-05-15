@@ -1,9 +1,10 @@
-package uj.roomme.app.fragments.statistics.viewmodel
+package uj.roomme.app.ui.statistics.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import uj.roomme.app.fragments.statistics.model.SearchModel
+import uj.roomme.app.ui.statistics.model.SearchModel
 import uj.roomme.app.viewmodels.ServiceViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.statistics.StatisticsReturnModel
@@ -23,18 +24,18 @@ class CommonStatisticsViewModel(
     val searchModel = SearchModel()
 
     fun fetchCommonStatisticsFromService() {
+        val logTag = "$TAG.fetchCommonStatisticsFromService()"
         statisticsService.getCommonCostsStatistics(accessToken, flatId, searchModel.toQueryMap())
             .processAsync { code, body, error ->
                 when (code) {
-                    200 -> updateLiveData(body!!)
-                    401 -> unauthorizedCall(TAG)
-                    else -> unknownError(TAG, error)
+                    200 -> {
+                        Log.d(logTag, "Fetched common statistics.")
+                        statisticsLiveData.value = body
+                    }
+                    401 -> unauthorizedCall(logTag)
+                    else -> unknownError(logTag, error)
                 }
             }
-    }
-
-    private fun updateLiveData(statistics: List<StatisticsReturnModel>) {
-        statisticsLiveData.value = statistics
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -43,7 +44,7 @@ class CommonStatisticsViewModel(
         private val statisticsService: StatisticsService,
         private val flatId: Int
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(CommonStatisticsViewModel::class.java))
                 return CommonStatisticsViewModel(session, statisticsService, flatId) as T
             throw IllegalArgumentException("Invalid class!")

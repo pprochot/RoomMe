@@ -63,8 +63,8 @@
     </fragment>
     <fragment
         android:id="@+id/destCommonStatisticsFragment"
-        android:name="uj.roomme.app.fragments.statistics.CommonStatisticsFragment"
-        android:label="Statistics"
+        android:name="uj.roomme.app.ui.statistics.fragments.CommonStatisticsFragment"
+        android:label="Common statistics"
         tools:layout="@layout/fragment_statistics"/>
 
     <include app:graph="@navigation/shopping_list_nav_graph" />
@@ -76,8 +76,8 @@
         tools:layout="@layout/fragment_roommates_add"/>
     <fragment
         android:id="@+id/destPrivateStatisticsFragment"
-        android:name="uj.roomme.app.fragments.statistics.PrivateStatisticsFragment"
-        android:label="PrivateStatisticsFragment"
+        android:name="uj.roomme.app.ui.statistics.fragments.PrivateStatisticsFragment"
+        android:label="Private statistics"
         tools:layout="@layout/fragment_statistics"/>
 
 </navigation>
