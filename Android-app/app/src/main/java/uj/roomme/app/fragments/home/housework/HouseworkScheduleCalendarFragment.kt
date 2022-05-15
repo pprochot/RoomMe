@@ -47,7 +47,7 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
         HouseworkScheduleCalendarViewModel.Factory(
             session,
             scheduleService,
-            session.apartmentData!!.id
+            session.selectedApartmentId!!
         )
     }
 

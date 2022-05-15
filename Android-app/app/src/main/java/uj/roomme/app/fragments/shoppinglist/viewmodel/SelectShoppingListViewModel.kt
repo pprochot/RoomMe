@@ -25,7 +25,7 @@ class SelectShoppingListViewModel(
         if (!session.hasSelectedApartment())
             throw IllegalStateException(NO_APARTMENT_SELECTED)
 
-        val flatId = session.apartmentData!!.id
+        val flatId = session.selectedApartmentId!!
 
         flatService.getShoppingLists(accessToken, flatId).processAsync { code, body, error ->
             when (code) {
@@ -44,7 +44,7 @@ class SelectShoppingListViewModel(
     @Suppress("UNCHECKED_CAST")
     class Factory(private val session: SessionViewModel, private val flatService: FlatService) :
         ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(SelectShoppingListViewModel::class.java))
                 return SelectShoppingListViewModel(session, flatService) as T
             throw IllegalArgumentException("Invalid class!")

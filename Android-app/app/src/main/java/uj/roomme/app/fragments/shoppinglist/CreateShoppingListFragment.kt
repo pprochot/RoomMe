@@ -63,6 +63,6 @@ class CreateShoppingListFragment : Fragment(R.layout.fragment_shoppinglist_creat
     private fun getDataFromViews() = ShoppingListPostModel(
         name = nameView.text.toString(),
         description = descriptionView.text.toString(),
-        flatId = session.apartmentData!!.id
+        flatId = session.selectedApartmentId!!
     )
 }

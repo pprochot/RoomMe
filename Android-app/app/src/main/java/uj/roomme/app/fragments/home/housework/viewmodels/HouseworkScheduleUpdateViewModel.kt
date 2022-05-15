@@ -28,7 +28,7 @@ class HouseworkScheduleUpdateViewModel(
 
     fun fetchApartmentLocatorsViaService() {
         val logTag = "$TAG.fetchApartmentLocatorsViaService()"
-        flatService.getFlatUsers(accessToken, session.apartmentData!!.id)
+        flatService.getFlatUsers(accessToken, session.selectedApartmentId!!)
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> updateLocatorsLiveData(body!!)
@@ -63,7 +63,7 @@ class HouseworkScheduleUpdateViewModel(
         private val flatService: FlatService,
         private val scheduleId: Int
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(HouseworkScheduleUpdateViewModel::class.java))
                 return HouseworkScheduleUpdateViewModel(
                     session, scheduleService, flatService, scheduleId

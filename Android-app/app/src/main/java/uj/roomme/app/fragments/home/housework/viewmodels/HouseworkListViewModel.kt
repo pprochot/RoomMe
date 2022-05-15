@@ -21,7 +21,7 @@ class HouseworkListViewModel(
 
     fun fetchHouseworkListViaService() {
         val logTag = "$TAG.fetchHouseworkListViaService()"
-        flatService.getHouseworkList(accessToken, session.apartmentData!!.id)
+        flatService.getHouseworkList(accessToken, session.selectedApartmentId!!)
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> houseworkList.value = body
@@ -36,7 +36,7 @@ class HouseworkListViewModel(
         private val session: SessionViewModel,
         private val flatService: FlatService
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(HouseworkListViewModel::class.java))
                 return HouseworkListViewModel(session, flatService) as T
             throw IllegalArgumentException("Invalid class!")

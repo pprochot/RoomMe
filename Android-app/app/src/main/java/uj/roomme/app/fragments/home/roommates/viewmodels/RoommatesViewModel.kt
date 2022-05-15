@@ -22,7 +22,7 @@ class RoommatesViewModel(session: SessionViewModel, private val flatService: Fla
 
     fun getRoommatesFromService() {
         val logTag = "$TAG.getRoommatesFromService()"
-        flatService.getFlatUsers(accessToken, session.apartmentData!!.id)
+        flatService.getFlatUsers(accessToken, session.selectedApartmentId!!)
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> roommates.value = body
@@ -34,7 +34,7 @@ class RoommatesViewModel(session: SessionViewModel, private val flatService: Fla
 
     fun removeRoommateByService(userId: Int, position: Int) {
         val logTag = "$TAG.removeRoommateByService()"
-        flatService.removeUserFromFlat(accessToken, session.apartmentData!!.id, userId)
+        flatService.removeUserFromFlat(accessToken, session.selectedApartmentId!!, userId)
             .processAsync { code, _, error ->
                 when (code) {
                     200 -> removedRoommateEvent.value = Event(position)
@@ -49,7 +49,7 @@ class RoommatesViewModel(session: SessionViewModel, private val flatService: Fla
         private val session: SessionViewModel,
         private val flatService: FlatService
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(RoommatesViewModel::class.java))
                 return RoommatesViewModel(session, flatService) as T
             throw IllegalArgumentException("Invalid class!")

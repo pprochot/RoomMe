@@ -19,7 +19,7 @@ class SessionViewModel @Inject constructor(private val authService: AuthService)
     }
 
     var userData: SignInReturnModel? = null
-    var apartmentData: FlatGetModel? = null
+    var selectedApartmentId: Int? = null
 
     val successfullyRefreshedTokenEvent = MutableLiveData<NotificationEvent>()
     val failedToRefreshTokenEvent = MutableLiveData<NotificationEvent>()
@@ -27,12 +27,12 @@ class SessionViewModel @Inject constructor(private val authService: AuthService)
     // TODO change to sign out
     fun clear() {
         userData = null
-        apartmentData = null
+        selectedApartmentId = null
     }
 
     fun isLoggedIn() = userData != null
 
-    fun hasSelectedApartment() = isLoggedIn() && apartmentData != null
+    fun hasSelectedApartment() = isLoggedIn() && selectedApartmentId != null
 
     fun refreshAccessToken() {
         val logTag = "$TAG.refreshAccessToken()"

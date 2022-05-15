@@ -31,7 +31,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
     lateinit var statisticsService: StatisticsService
     private val session: SessionViewModel by activityViewModels()
     private val viewModel: CommonStatisticsViewModel by viewModels {
-        CommonStatisticsViewModel.Factory(session, statisticsService, session.apartmentData!!.id)
+        CommonStatisticsViewModel.Factory(session, statisticsService, session.selectedApartmentId!!)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -37,7 +37,6 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
         navController = findNavController()
         setUpRecyclerView()
         setUpAddFriendsButton()
-        showProgressBar()
         viewModel.getFriendsFromService()
     }
 
@@ -49,6 +48,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
 
     private fun setUpRecyclerView() {
         val friendsAdapter = FriendsAdapter(viewModel)
+        showProgressBar()
         viewModel.friends.observe(viewLifecycleOwner) {
             hideProgressBar()
             friendsAdapter.dataList = it

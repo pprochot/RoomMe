@@ -36,7 +36,7 @@ class HouseworkCreateFragment : Fragment(R.layout.fragment_housework_create) {
     private val session: SessionViewModel by activityViewModels()
     private val viewModel: HouseworkCreateViewModel by viewModels {
         HouseworkCreateViewModel.Factory(
-            session, houseworkService, flatService, session.apartmentData!!.id
+            session, houseworkService, flatService, session.selectedApartmentId!!
         )
     }
 
