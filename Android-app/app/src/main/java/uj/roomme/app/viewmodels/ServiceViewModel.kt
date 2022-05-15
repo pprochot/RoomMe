@@ -26,13 +26,11 @@ abstract class ServiceViewModel(protected val session: SessionViewModel) : ViewM
         }
 
     protected fun unauthorizedCall(tag: String) {
-        // TODO replace
         Log.d(tag, UNAUTHORIZED)
-        _messageUIEvent.value = Event(UNAUTHORIZED)
+        session.refreshAccessToken()
     }
 
     protected fun unknownError(tag: String, error: Throwable?) {
-        // TODO replace
         Log.d(tag, FAILED_TO_PROCEED, error)
         _messageUIEvent.value = Event(FAILED_TO_PROCEED)
     }

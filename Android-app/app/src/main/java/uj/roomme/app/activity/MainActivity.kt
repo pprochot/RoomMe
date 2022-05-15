@@ -3,6 +3,7 @@ package uj.roomme.app.activity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -23,15 +24,22 @@ import uj.roomme.app.hiders.ToolbarOptionsHider
 import uj.roomme.app.navigation.DrawerLayoutMenuNavigation
 import uj.roomme.app.navigation.NavBottomViewMenuNavigation
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.viewmodels.livedata.NotificationEventObserver
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSetter {
 
     companion object {
         val topLevelDestinations = setOf(
-            R.id.destSelectShoppingListFragment, R.id.destSignInFragment, R.id.destHomeFragment,
-            R.id.destProfileFragment, R.id.destFriendsFragments, R.id.destSelectApartmentFragment,
-            R.id.houseworkMenuFragment, R.id.destRoommatesFragment, R.id.destCommonStatisticsFragment,
+            R.id.destSelectShoppingListFragment,
+            R.id.destSignInFragment,
+            R.id.destHomeFragment,
+            R.id.destProfileFragment,
+            R.id.destFriendsFragments,
+            R.id.destSelectApartmentFragment,
+            R.id.houseworkMenuFragment,
+            R.id.destRoommatesFragment,
+            R.id.destCommonStatisticsFragment,
             R.id.destPrivateStatisticsFragment
         )
     }
@@ -62,13 +70,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSette
 
         setUpToolbarAndDrawerLayout()
         setUpBottomNavView()
+        setUpSessionViewModelObservers()
     }
 
     private fun setUpToolbarAndDrawerLayout() {
         setSupportActionBar(toolbar)
         toolbar.findViewById<ImageButton>(R.id.buttonLogOut).setOnClickListener {
-            sessionViewModel.clear()
-            navController.navigate(R.id.actionGlobalLogOut)
+            signOut()
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener(ToolbarOptionsHider(drawerLayout, toolbar))
@@ -98,5 +106,20 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSette
     override fun setDataInNavigationView() {
         navView.getHeaderView(0).findViewById<TextView>(R.id.textNavViewNickname)?.text =
             sessionViewModel.userData?.email
+    }
+
+    private fun setUpSessionViewModelObservers() {
+        sessionViewModel.successfullyRefreshedTokenEvent.observe(this, NotificationEventObserver {
+            Toast.makeText(this, "Try again.", Toast.LENGTH_SHORT).show()
+        })
+        sessionViewModel.failedToRefreshTokenEvent.observe(this, NotificationEventObserver {
+            signOut()
+            Toast.makeText(this, "Sign in again.", Toast.LENGTH_SHORT).show()
+        })
+    }
+
+    private fun signOut() {
+        sessionViewModel.clear()
+        navController.navigate(R.id.actionGlobalLogOut)
     }
 }
