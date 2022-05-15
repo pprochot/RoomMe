@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
-import uj.roomme.app.adapters.MutableAndReplaceableRvAdapter
+import uj.roomme.app.adapters.common.MutableAndReplaceableRvAdapter
 import uj.roomme.app.databinding.RvRowUsernicknameRemoveBinding
 import uj.roomme.app.fragments.home.roommates.viewmodels.RoommatesViewModel
 import uj.roomme.domain.user.UserNicknameModel
@@ -27,7 +27,7 @@ class RoommatesAdapter(private val viewModel: RoommatesViewModel) :
         val user = dataList[position]
         holder.binding.layoutUserNickname.textUsername.text = user.nickname
         holder.binding.buttonRemove.setOnClickListener {
-            viewModel.removeRoommateByService(user.id, position)
+            viewModel.removeRoommateByService(user.id, holder.bindingAdapterPosition)
         }
     }
 }

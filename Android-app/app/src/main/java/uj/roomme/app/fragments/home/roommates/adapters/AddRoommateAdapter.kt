@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
-import uj.roomme.app.adapters.MutableAndReplaceableRvAdapter
+import uj.roomme.app.adapters.common.MutableAndReplaceableRvAdapter
 import uj.roomme.app.databinding.RvRowUsernicknameAddBinding
 import uj.roomme.app.fragments.home.roommates.viewmodels.RoommatesAddViewModel
 import uj.roomme.domain.user.UserNicknameModel
@@ -28,7 +28,7 @@ class AddRoommateAdapter(private val viewModel: RoommatesAddViewModel) :
         holder.binding.layoutUserNickname.textUsername.text = user.nickname
 
         holder.binding.buttonAdd.setOnClickListener {
-            viewModel.addUserToFlatViaService(user.id, position)
+            viewModel.addUserToFlatViaService(user.id, holder.bindingAdapterPosition)
         }
     }
 }

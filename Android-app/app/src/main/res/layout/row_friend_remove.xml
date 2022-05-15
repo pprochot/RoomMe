@@ -3,14 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <include layout="@layout/rv_user_info" />
+    <include
+        android:id="@+id/layoutUserInfo"
+        layout="@layout/rv_user_info" />
 
     <ImageButton
-        android:id="@+id/icAddFriend"
+        android:id="@+id/icRemoveFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_add_friend" />
+        android:src="@drawable/ic_remove_friend" />
 
 </RelativeLayout>

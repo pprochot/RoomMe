@@ -3,7 +3,7 @@ package uj.roomme.app.fragments.home.housework.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import uj.roomme.app.R
-import uj.roomme.app.adapters.ReplaceableRvAdapter
+import uj.roomme.app.adapters.common.ReplaceableRvAdapter
 import uj.roomme.app.adapters.common.viewholders.UserNicknameModelViewHolder
 import uj.roomme.domain.user.UserNicknameModel
 

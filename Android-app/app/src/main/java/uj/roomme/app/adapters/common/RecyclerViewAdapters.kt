@@ -1,4 +1,4 @@
-package uj.roomme.app.adapters
+package uj.roomme.app.adapters.common
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class UnReplaceableRvAdapter<T, V : RecyclerView.ViewHolder>(val dataList: List<T>) :
     RecyclerView.Adapter<V>() {
 
-    override fun getItemCount() = dataList.size
+    final override fun getItemCount() = dataList.size
 }
+
+// TODO change classes to mutable and immutable adapters
 
 abstract class ReplaceableRvAdapter<T, V : RecyclerView.ViewHolder> : RecyclerView.Adapter<V>() {
 
@@ -18,22 +20,28 @@ abstract class ReplaceableRvAdapter<T, V : RecyclerView.ViewHolder> : RecyclerVi
             notifyDataSetChanged()
         }
 
-    override fun getItemCount() = dataList.size
+    final override fun getItemCount() = dataList.size
 }
 
-
-/**
- * IMPORTANT: After mutation remember to notify adapter that data has changed
- */
 abstract class MutableAndReplaceableRvAdapter<T, V : RecyclerView.ViewHolder> :
     RecyclerView.Adapter<V>() {
 
-    var dataList: MutableList<T> = mutableListOf()
+    private var _dataList: MutableList<T> = mutableListOf()
+    var dataList: List<T>
+        get() = _dataList
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
-            field = value
+            _dataList = value.toMutableList()
             notifyDataSetChanged()
         }
 
-    override fun getItemCount() = dataList.size
+    final override fun getItemCount() = _dataList.size
+
+    fun removeAtPosition(position: Int) {
+        if (position >= itemCount)
+            throw IllegalArgumentException("Position cannot be bigger than item count!")
+
+        _dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 }

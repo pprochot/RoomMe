@@ -48,7 +48,7 @@ class SignUpViewModel(
         private val session: SessionViewModel,
         private val authService: AuthService
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(SignUpViewModel::class.java))
                 return SignUpViewModel(session, authService) as T
             throw IllegalArgumentException("Invalid class!")

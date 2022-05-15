@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
-import uj.roomme.app.adapters.ReplaceableRvAdapter
+import uj.roomme.app.adapters.common.ReplaceableRvAdapter
 import uj.roomme.app.databinding.RowDayBinding
 import java.time.DayOfWeek
 

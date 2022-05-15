@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
-import uj.roomme.app.adapters.ReplaceableRvAdapter
+import uj.roomme.app.adapters.common.ReplaceableRvAdapter
 import uj.roomme.app.databinding.RowHouseworkBinding
 import uj.roomme.app.fragments.home.housework.HouseworkListFragmentDirections
 import uj.roomme.domain.housework.HouseworkShortModel

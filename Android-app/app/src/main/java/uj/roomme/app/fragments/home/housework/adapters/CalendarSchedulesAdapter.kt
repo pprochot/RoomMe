@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.findNavController
 import uj.roomme.app.R
-import uj.roomme.app.adapters.ReplaceableRvAdapter
+import uj.roomme.app.adapters.common.ReplaceableRvAdapter
 import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections.Companion.actionToHouseworkDetailsFragment
 import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections.Companion.actionToHouseworkScheduleUpdateFragment
 import uj.roomme.app.fragments.home.housework.viewholders.CalendarScheduleViewHolder
 import uj.roomme.domain.schedule.ScheduleModel
-import java.time.format.DateTimeFormatter
 
 class CalendarSchedulesAdapter(private val loggedUserId: Int) :
     ReplaceableRvAdapter<ScheduleModel, CalendarScheduleViewHolder>() {

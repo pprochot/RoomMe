@@ -56,8 +56,7 @@ class RoommatesAddFragment : Fragment(R.layout.fragment_roommates_add) {
             addRoommateAdapter.dataList = it.toMutableList()
         }
         viewModel.addedRoommateEvent.observe(viewLifecycleOwner, EventObserver { position ->
-            addRoommateAdapter.dataList.removeAt(position)
-            addRoommateAdapter.notifyItemChanged(position)
+            addRoommateAdapter.removeAtPosition(position)
         })
     }
 }
