@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.roommates
+package uj.roomme.app.ui.roommates.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.databinding.FragmentRoommatesAddBinding
-import uj.roomme.app.fragments.home.roommates.adapters.AddRoommateAdapter
-import uj.roomme.app.fragments.home.roommates.viewmodels.RoommatesAddViewModel
+import uj.roomme.app.ui.roommates.adapters.AddRoommateAdapter
+import uj.roomme.app.ui.roommates.viewmodels.RoommatesAddViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.services.service.FlatService

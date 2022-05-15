@@ -1,9 +1,8 @@
-package uj.roomme.app.fragments.home.roommates.viewmodels
+package uj.roomme.app.ui.roommates.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkListViewModel
 import uj.roomme.app.viewmodels.ServiceViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.Event

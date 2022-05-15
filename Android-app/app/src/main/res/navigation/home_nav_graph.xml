@@ -54,7 +54,7 @@
 
     <fragment
         android:id="@+id/destRoommatesFragment"
-        android:name="uj.roomme.app.fragments.home.roommates.RoommatesFragment"
+        android:name="uj.roomme.app.ui.roommates.fragments.RoommatesFragment"
         android:label="Roommates"
         tools:layout="@layout/fragment_roommates">
         <action
@@ -71,9 +71,9 @@
     <include app:graph="@navigation/housework_nav_graph"/>
     <fragment
         android:id="@+id/destAddRoommateFragment"
-        android:name="uj.roomme.app.fragments.home.roommates.RoommatesAddFragment"
+        android:name="uj.roomme.app.ui.roommates.fragments.RoommatesAddFragment"
         android:label="Add roommate"
-        tools:layout="@layout/fragment_add_roommate"/>
+        tools:layout="@layout/fragment_roommates_add"/>
     <fragment
         android:id="@+id/destPrivateStatisticsFragment"
         android:name="uj.roomme.app.fragments.statistics.PrivateStatisticsFragment"

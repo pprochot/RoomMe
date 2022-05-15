@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.roommates.adapters
+package uj.roomme.app.ui.roommates.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
 import uj.roomme.app.adapters.common.MutableAndReplaceableRvAdapter
 import uj.roomme.app.databinding.RvRowUsernicknameRemoveBinding
-import uj.roomme.app.fragments.home.roommates.viewmodels.RoommatesViewModel
+import uj.roomme.app.ui.roommates.viewmodels.RoommatesViewModel
 import uj.roomme.domain.user.UserNicknameModel
 
 class RoommatesAdapter(private val viewModel: RoommatesViewModel) :

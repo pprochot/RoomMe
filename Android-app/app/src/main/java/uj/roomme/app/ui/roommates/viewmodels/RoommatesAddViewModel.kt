@@ -1,5 +1,6 @@
-package uj.roomme.app.fragments.home.roommates.viewmodels
+package uj.roomme.app.ui.roommates.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +25,10 @@ class RoommatesAddViewModel(session: SessionViewModel, private val flatService: 
         flatService.getAvailableLocators(accessToken, session.selectedApartmentId!!)
             .processAsync { code, body, error ->
                 when (code) {
-                    200 -> users.value = body
+                    200 -> {
+                        Log.d(logTag, "Available locators fetched.")
+                        users.value = body
+                    }
                     401 -> unauthorizedCall(logTag)
                     else -> unknownError(logTag, error)
                 }
@@ -36,7 +40,10 @@ class RoommatesAddViewModel(session: SessionViewModel, private val flatService: 
         flatService.addUserToFlat(accessToken, session.selectedApartmentId!!, userId)
             .processAsync { code, body, error ->
                 when (code) {
-                    200 -> addedRoommateEvent.value = Event(position)
+                    200 -> {
+                        Log.d(logTag, "User added to flat.")
+                        addedRoommateEvent.value = Event(position)
+                    }
                     401 -> unauthorizedCall(logTag)
                     else -> unknownError(logTag, error)
                 }
