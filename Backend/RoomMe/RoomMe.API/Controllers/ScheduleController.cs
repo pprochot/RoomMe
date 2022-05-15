@@ -50,6 +50,7 @@ namespace RoomMe.API.Controllers
             var houseworks = await _sqlContext.Houseworks
                 .Include(x => x.HouseworkSchedules)
                 .Include(x => x.HouseworkSettings)
+                .Include(x => x.Users)
                 .Where(x => x.FlatId == flatId)
                 .ToListAsync()
                 .ConfigureAwait(false);

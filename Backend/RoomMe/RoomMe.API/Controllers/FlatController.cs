@@ -218,7 +218,7 @@ namespace RoomMe.API.Controllers
                 .SingleOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || _sessionHelper.IsCreatorOfFlat(flat))
+            if(flat == null || !_sessionHelper.IsCreatorOfFlat(flat))
             {
                 return new BadRequestResult();
             }
