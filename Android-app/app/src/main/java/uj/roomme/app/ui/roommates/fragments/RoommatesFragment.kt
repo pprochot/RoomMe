@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.ViewUtils.makeClickable
+import uj.roomme.app.consts.ViewUtils.makeNotClickable
 import uj.roomme.app.databinding.FragmentRoommatesBinding
 import uj.roomme.app.ui.roommates.adapters.RoommatesAdapter
 import uj.roomme.app.ui.roommates.viewmodels.RoommatesViewModel
@@ -62,6 +64,7 @@ class RoommatesFragment : Fragment(R.layout.fragment_roommates) {
         }
 
         viewModel.roommates.observe(viewLifecycleOwner) {
+            roommatesAdapter.isLoggedInUserAnOwner = isCreatorOfApartment(it.creator.id)
             roommatesAdapter.dataList = it.users.toMutableList()
         }
         viewModel.removedRoommateEvent.observe(viewLifecycleOwner, EventObserver { position ->
@@ -72,12 +75,17 @@ class RoommatesFragment : Fragment(R.layout.fragment_roommates) {
     private fun setUpAddNewRoommateButton() {
         binding.buttonAddNewRoommate.isClickable = false
         viewModel.roommates.observe(viewLifecycleOwner) {
-            if (it.creator.id == session.userData!!.id) {
-                binding.buttonAddNewRoommate.isClickable = true
+            if (isCreatorOfApartment(it.creator.id)) {
                 binding.buttonAddNewRoommate.setOnClickListener {
                     findNavController().navigate(RoommatesFragmentDirections.actionRoommatesToAddRoommate())
                 }
+            } else {
+                binding.buttonAddNewRoommate.visibility = View.GONE
             }
         }
+    }
+
+    private fun isCreatorOfApartment(userId: Int): Boolean {
+        return userId == session.userData!!.id
     }
 }

@@ -13,6 +13,8 @@ import uj.roomme.domain.user.UserNicknameModel
 class RoommatesAdapter(private val viewModel: RoommatesViewModel) :
     MutableAndReplaceableRvAdapter<UserNicknameModel, RoommatesAdapter.ViewHolder>() {
 
+    var isLoggedInUserAnOwner: Boolean = false
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = RvRowUsernicknameRemoveBinding.bind(itemView)
     }
@@ -26,8 +28,16 @@ class RoommatesAdapter(private val viewModel: RoommatesViewModel) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = dataList[position]
         holder.binding.layoutUserNickname.textUsername.text = user.nickname
-        holder.binding.buttonRemove.setOnClickListener {
-            viewModel.removeRoommateByService(user.id, holder.bindingAdapterPosition)
+        setUpRemoveButton(holder, user.id)
+    }
+
+    private fun setUpRemoveButton(holder: ViewHolder, userId: Int) {
+        if (isLoggedInUserAnOwner) {
+            holder.binding.buttonRemove.setOnClickListener {
+                viewModel.removeRoommateByService(userId, holder.bindingAdapterPosition)
+            }
+        } else {
+            holder.binding.buttonRemove.visibility = View.GONE
         }
     }
 }
