@@ -193,13 +193,12 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpGet("{flatId}/shopping-lists", Name = nameof(GetFlatShoppingLists))]
-        public async Task<ActionResult<IEnumerable<ShoppingListShortModel>>> GetFlatShoppingLists(int flatId, [FromQuery] bool onGoing)
+        public async Task<ActionResult<IEnumerable<ShoppingListShortModel>>> GetFlatShoppingLists(int flatId)
         {
             var lists = await _sqlContext.ShoppingLists
                 .Include(x => x.Flat)
                 .ThenInclude(y => y.Users)
                 .Where(x => x.FlatId == flatId)
-                .Where(x => onGoing ? x.CompletorId == null : x.CompletorId != null)
                 .ToListAsync()
                 .ConfigureAwait(false);
 
