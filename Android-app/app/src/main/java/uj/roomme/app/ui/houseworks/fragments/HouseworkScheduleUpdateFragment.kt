@@ -76,10 +76,11 @@ class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_sch
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerHouseworkScheduleStatus.adapter = adapter
         }
+        binding.spinnerHouseworkScheduleStatus.setSelection(args.schedule.status.id - 1)
     }
 
     private fun setUpDatePicker() {
-        val today = LocalDate.now()
+        val date = args.schedule.date.toLocalDate()
         val dateFromPickerDialog = DatePickerDialog(
             requireActivity(),
             { _, year, monthOfYear, dayOfMonth ->
@@ -87,8 +88,9 @@ class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_sch
                 binding.textDate.text = selectedDate.toString()
                 this.selectedDate = selectedDate
             },
-            today.year, today.monthValue - 1, today.dayOfMonth
+            date.year, date.monthValue - 1, date.dayOfMonth
         )
+        binding.textDate.text = date.toString()
         binding.textDate.setOnClickListener {
             dateFromPickerDialog.show()
         }

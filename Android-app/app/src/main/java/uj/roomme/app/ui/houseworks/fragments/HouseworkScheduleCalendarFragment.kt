@@ -22,8 +22,8 @@ import uj.roomme.app.R
 import uj.roomme.app.databinding.CalendarDayBinding
 import uj.roomme.app.databinding.CalendarHeaderBinding
 import uj.roomme.app.databinding.FragmentHouseworkScheduleCalendarBinding
-import uj.roomme.app.fragments.home.housework.adapters.CalendarSchedulesAdapter
-import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkScheduleCalendarViewModel
+import uj.roomme.app.ui.houseworks.adapters.CalendarSchedulesAdapter
+import uj.roomme.app.ui.houseworks.viewmodels.HouseworkScheduleCalendarViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.domain.schedule.ScheduleModel
@@ -38,7 +38,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_calendar) {
+class HouseworkScheduleCalendarFragment : Fragment(R.layout.fragment_housework_schedule_calendar) {
 
     @Inject
     lateinit var scheduleService: ScheduleService
@@ -55,7 +55,7 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
     private var selectedDate: LocalDate? = null
     private var currYearMonth: YearMonth? = null
     private var currData: Map<LocalDate, List<ScheduleModel>>? = null
-    private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
+    private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH)
     private lateinit var binding: FragmentHouseworkScheduleCalendarBinding
     private lateinit var schedulesAdapter: CalendarSchedulesAdapter
 
@@ -143,7 +143,7 @@ class HouseworkCalendarFragment : Fragment(R.layout.fragment_housework_schedule_
                     if (selectedDate != day.date) {
                         val oldDate = selectedDate
                         selectedDate = day.date
-                        val binding = this@HouseworkCalendarFragment.binding
+                        val binding = this@HouseworkScheduleCalendarFragment.binding
                         binding.calendarHousework.notifyDateChanged(day.date)
                         oldDate?.let { binding.calendarHousework.notifyDateChanged(it) }
                         schedulesAdapter.dataList = currData?.get(selectedDate) ?: emptyList()

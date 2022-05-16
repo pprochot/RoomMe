@@ -65,6 +65,7 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
         showLoading()
         viewModel.houseworkDetails.observe(viewLifecycleOwner) { model ->
             hideLoading()
+            // TODO add schedules
             binding.textHouseworkName.text = model.name
             binding.textHouseworkDescription.text = model.description
             binding.textHouseworkAuthor.text = model.author.nickname

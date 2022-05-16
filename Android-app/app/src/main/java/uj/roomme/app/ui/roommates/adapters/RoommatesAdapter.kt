@@ -27,7 +27,6 @@ class RoommatesAdapter(private val viewModel: RoommatesViewModel) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = dataList[position]
-        holder.binding.layoutUserNickname.root.background = null
         holder.binding.layoutUserNickname.textUsername.text = user.nickname
         setUpRemoveButton(holder, user.id)
     }

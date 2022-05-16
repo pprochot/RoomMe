@@ -174,7 +174,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listDays"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp" />

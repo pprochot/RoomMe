@@ -65,5 +65,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:src="@drawable/ic_check" />
+        android:src="@drawable/ic_check"
+        android:layout_marginBottom="5dp"/>
 </RelativeLayout>

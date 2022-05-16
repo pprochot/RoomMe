@@ -51,7 +51,6 @@ class RoommatesFragment : Fragment(R.layout.fragment_roommates) {
     }
 
     private fun setUpCreatorView() = binding.run {
-        viewCreator.root.background = null
         viewModel.roommates.observe(viewLifecycleOwner) {
             viewCreator.textUsername.text = it.creator.nickname
         }

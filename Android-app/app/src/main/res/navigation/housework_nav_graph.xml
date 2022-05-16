@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/destHouseworkCalendarFragment"
-        android:name="uj.roomme.app.fragments.home.housework.HouseworkCalendarFragment"
+        android:name="uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleCalendarFragment"
         android:label="Schedules calendar"
         tools:layout="@layout/fragment_housework_schedule_calendar" >
         <action

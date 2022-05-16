@@ -8,9 +8,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.findNavController
 import uj.roomme.app.R
 import uj.roomme.app.adapters.common.ReplaceableRvAdapter
-import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections.Companion.actionToHouseworkDetailsFragment
-import uj.roomme.app.fragments.home.housework.HouseworkCalendarFragmentDirections.Companion.actionToHouseworkScheduleUpdateFragment
-import uj.roomme.app.fragments.home.housework.viewholders.CalendarScheduleViewHolder
+import uj.roomme.app.databinding.RowHouseworkScheduleWithMarginBinding
+import uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleCalendarFragmentDirections.Companion.actionToHouseworkDetailsFragment
+import uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleCalendarFragmentDirections.Companion.actionToHouseworkScheduleUpdateFragment
+import uj.roomme.app.ui.houseworks.viewholders.CalendarScheduleViewHolder
 import uj.roomme.domain.schedule.ScheduleModel
 
 class CalendarSchedulesAdapter(private val loggedUserId: Int) :
@@ -32,7 +33,7 @@ class CalendarSchedulesAdapter(private val loggedUserId: Int) :
         }
         holder.binding.scheduleLayout.run {
             textName.text = schedule.housework.name
-            textDate.text = schedule.date.toString()
+            textDate.text = schedule.date.toLocalDate().toString()
             textCompletor.text = schedule.user.nickname
             textStatus.text = schedule.status.name
         }
@@ -44,10 +45,9 @@ class CalendarSchedulesAdapter(private val loggedUserId: Int) :
 
     private fun buildDialog(view: View, houseworkId: Int, schedule: ScheduleModel): AlertDialog {
         val viewGroup = view as ViewGroup
-        val inflater = LayoutInflater.from(viewGroup.context)
         val navController = view.findNavController()
         return AlertDialog.Builder(viewGroup.context)
-            .setView(inflater.inflate(R.layout.row_housework_schedule, viewGroup, false))
+            .setView(buildScheduleDetails(viewGroup, schedule))
             .setPositiveButton("Update") { _, _ ->
                 navController.navigate(actionToHouseworkScheduleUpdateFragment(schedule))
             }.setNeutralButton("See housework") { _, _ ->
@@ -56,5 +56,18 @@ class CalendarSchedulesAdapter(private val loggedUserId: Int) :
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()
             }.create()
+    }
+
+    private fun buildScheduleDetails(viewGroup: ViewGroup, schedule: ScheduleModel): View {
+        val inflater = LayoutInflater.from(viewGroup.context)
+        val view = inflater.inflate(R.layout.row_housework_schedule_with_margin, viewGroup, false)
+        val binding = RowHouseworkScheduleWithMarginBinding.bind(view)
+        binding.run {
+            textName.text = schedule.housework.name
+            textDate.text = schedule.date.toLocalDate().toString()
+            textCompletor.text = schedule.user.nickname
+            textStatus.text = schedule.status.name
+        }
+        return view
     }
 }
