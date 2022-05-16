@@ -20,6 +20,7 @@ class DrawerLayoutMenuNavigation(private val navController: NavController, priva
         when (item.itemId) {
             R.id.destProfileFragment -> navController.navigate(R.id.actionGlobalToProfile)
             R.id.destFriendsFragments -> navController.navigate(R.id.actionGlobalToFriends)
+            R.id.destPrivateStatisticsFragment -> navController.navigate(R.id.actionGlobalToPrivateStatistics)
         }
 
         closeDrawerIfOpen()

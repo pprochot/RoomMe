@@ -13,6 +13,7 @@ namespace RoomMe.SQLContext.Dictionaries
         {
             HouseworkStatusesDictionary.AddRecords(modelBuilder);
             HouseworkFrequencyDictionary.AddRecords(modelBuilder);
+            StatisticsFrequencyDictionary.AddRecords(modelBuilder);
         }
     }
 }
