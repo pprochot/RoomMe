@@ -16,5 +16,9 @@
             android:id="@id/destFriendsFragments"
             android:icon="@drawable/ic_friends"
             android:title="Friends" />
+        <item
+            android:id="@id/destPrivateStatisticsFragment"
+            android:icon="@drawable/ic_chart"
+            android:title="Statistics" />
     </group>
 </menu>
