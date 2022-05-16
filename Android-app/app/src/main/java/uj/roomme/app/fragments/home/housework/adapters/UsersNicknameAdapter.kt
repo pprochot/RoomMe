@@ -11,7 +11,7 @@ class UsersNicknameAdapter : ReplaceableRvAdapter<UserNicknameModel, UserNicknam
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserNicknameModelViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.rv_row_usernickname, parent, false)
+        val view = inflater.inflate(R.layout.row_usernickname, parent, false)
         return UserNicknameModelViewHolder(view)
     }
 

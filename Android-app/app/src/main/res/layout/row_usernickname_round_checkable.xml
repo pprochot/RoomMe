@@ -5,7 +5,7 @@
 
     <include
         android:id="@+id/layoutUserNickname"
-        layout="@layout/rv_row_usernickname"
+        layout="@layout/row_usernickname"
         android:layout_width="match_parent"
         android:layout_height="48dp" />
 

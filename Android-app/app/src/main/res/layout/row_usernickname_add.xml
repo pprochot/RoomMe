@@ -5,15 +5,15 @@
 
     <include
         android:id="@+id/layoutUserNickname"
-        layout="@layout/rv_row_usernickname"
+        layout="@layout/row_usernickname"
         android:layout_width="match_parent"
         android:layout_height="48dp" />
 
     <ImageButton
-        android:id="@+id/buttonRemove"
+        android:id="@+id/buttonAdd"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_remove_friend" />
+        android:src="@drawable/ic_add_friend" />
 
 </RelativeLayout>

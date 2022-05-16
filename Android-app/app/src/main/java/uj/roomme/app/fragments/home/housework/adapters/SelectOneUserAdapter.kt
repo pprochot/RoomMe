@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
 import uj.roomme.app.adapters.common.ReplaceableRvAdapter
-import uj.roomme.app.databinding.RvRowUsernicknameRoundCheckableBinding
+import uj.roomme.app.databinding.RowUsernicknameRoundCheckableBinding
 import uj.roomme.domain.user.UserNicknameModel
 import kotlin.properties.Delegates
 
@@ -19,12 +19,12 @@ class SelectOneUserAdapter(private val originalUserId: Int) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var userId by Delegates.notNull<Int>()
-        val binding = RvRowUsernicknameRoundCheckableBinding.bind(itemView)
+        val binding = RowUsernicknameRoundCheckableBinding.bind(itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.rv_row_usernickname_round_checkable, parent, false)
+        val view = inflater.inflate(R.layout.row_usernickname_round_checkable, parent, false)
         return ViewHolder(view)
     }
 

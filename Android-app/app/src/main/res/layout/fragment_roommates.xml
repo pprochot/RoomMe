@@ -27,7 +27,7 @@
 
         <include
             android:id="@+id/viewCreator"
-            layout="@layout/rv_row_usernickname" />
+            layout="@layout/row_usernickname" />
 
         <include layout="@layout/layout_space_divider" />
 
