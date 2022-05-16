@@ -11,6 +11,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
+import uj.roomme.app.consts.ViewUtils.makeClickable
 import uj.roomme.app.databinding.FragmentHouseworkDetailsBinding
 import uj.roomme.app.databinding.RowHouseworkScheduleBinding
 import uj.roomme.app.ui.houseworks.adapters.DaysAdapter
@@ -38,6 +40,7 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
         binding = FragmentHouseworkDetailsBinding.bind(view)
+        setUpHandleErrors()
         setUpRecyclerView()
         setUpDeleteHouseworkButton()
         fetchDataFromService()
@@ -94,5 +97,11 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
     private fun hideLoading() {
         binding.progressBar.visibility = View.GONE
         binding.layoutWholeDetails.visibility = View.VISIBLE
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.unknownError(context)
+        })
     }
 }

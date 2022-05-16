@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.FragmentHouseworkScheduleUpdateBinding
 import uj.roomme.app.ui.houseworks.adapters.SelectOneUserAdapter
 import uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleUpdateFragmentDirections.Companion.actionToHouseworkCalendarFragment
@@ -47,10 +48,9 @@ class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_sch
     private var selectedDate: LocalDate? = null
     private lateinit var adapter: SelectOneUserAdapter
 
-    // TODO next schedule (global) ViewHolder
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
         binding = FragmentHouseworkScheduleUpdateBinding.bind(view)
+        setUpHandleErrors()
         setUpStatusSpinnerAdapter()
         setUpDatePicker()
         setUpRecyclerView()
@@ -111,4 +111,10 @@ class HouseworkScheduleUpdateFragment : Fragment(R.layout.fragment_housework_sch
         date = selectedDate,
         statusId = binding.spinnerHouseworkScheduleStatus.selectedItemPosition + 1
     )
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.unknownError(context)
+        })
+    }
 }

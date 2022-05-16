@@ -10,8 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.consts.ViewUtils.makeClickable
-import uj.roomme.app.consts.ViewUtils.makeNotClickable
+import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.FragmentRoommatesBinding
 import uj.roomme.app.ui.roommates.adapters.RoommatesAdapter
 import uj.roomme.app.ui.roommates.viewmodels.RoommatesViewModel
@@ -34,6 +33,7 @@ class RoommatesFragment : Fragment(R.layout.fragment_roommates) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentRoommatesBinding.bind(view)
+        setUpHandleErrors()
         setUpProgressBar()
         setUpCreatorView()
         setUpRecyclerView()
@@ -87,5 +87,12 @@ class RoommatesFragment : Fragment(R.layout.fragment_roommates) {
 
     private fun isCreatorOfApartment(userId: Int): Boolean {
         return userId == session.userData!!.id
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            binding.progressBar.visibility = View.GONE
+            Toasts.unknownError(context)
+        })
     }
 }

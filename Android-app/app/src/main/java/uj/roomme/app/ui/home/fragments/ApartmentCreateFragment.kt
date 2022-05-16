@@ -15,6 +15,7 @@ import uj.roomme.app.databinding.FragmentApartmentCreateBinding
 import uj.roomme.app.ui.home.fragments.ApartmentCreateFragmentDirections.Companion.actionCreateApartmentToHome
 import uj.roomme.app.ui.home.viewmodels.CreateApartmentViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.app.viewmodels.livedata.NotificationEventObserver
 import uj.roomme.domain.flat.FlatPostModel
 import uj.roomme.services.service.FlatService
@@ -34,6 +35,7 @@ class ApartmentCreateFragment : Fragment(R.layout.fragment_apartment_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentApartmentCreateBinding.bind(view)
+        setUpHandleErrors()
         setUpCreateNewApartmentButton()
     }
 
@@ -65,4 +67,11 @@ class ApartmentCreateFragment : Fragment(R.layout.fragment_apartment_create) {
         binding.textInputEditApartmentAddress.text.toString(),
         listOf(session.userData!!.id)
     )
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            binding.buttonCreateApartment.makeClickable()
+            Toasts.unknownError(context)
+        })
+    }
 }

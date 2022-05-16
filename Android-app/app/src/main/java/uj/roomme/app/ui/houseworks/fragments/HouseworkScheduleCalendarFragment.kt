@@ -19,6 +19,7 @@ import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.previous
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.CalendarDayBinding
 import uj.roomme.app.databinding.CalendarHeaderBinding
 import uj.roomme.app.databinding.FragmentHouseworkScheduleCalendarBinding
@@ -75,6 +76,7 @@ class HouseworkScheduleCalendarFragment : Fragment(R.layout.fragment_housework_s
                 bindCalendarDays()
             }
         })
+        setUpHandleErrors()
         bindCalendarMonths()
         bindCalendarDays()
         binding.calendarHousework.run {
@@ -192,6 +194,12 @@ class HouseworkScheduleCalendarFragment : Fragment(R.layout.fragment_housework_s
             daysOfWeek = rhs + lhs
         }
         return daysOfWeek
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.unknownError(context)
+        })
     }
 }
 

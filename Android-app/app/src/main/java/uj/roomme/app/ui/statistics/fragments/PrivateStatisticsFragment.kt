@@ -17,11 +17,13 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
 import uj.roomme.app.consts.ViewUtils.makeClickable
 import uj.roomme.app.consts.ViewUtils.makeNotClickable
 import uj.roomme.app.databinding.FragmentStatisticsBinding
 import uj.roomme.app.ui.statistics.viewmodel.PrivateStatisticsViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.domain.statistics.StatisticsFrequency
 import uj.roomme.services.service.StatisticsService
 import java.time.LocalDate
@@ -40,6 +42,7 @@ class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentStatisticsBinding.bind(view)
+        setUpHandleErrors()
         setUpDateFromPicker()
         setUpDateToPicker()
         setUpRefreshButton()
@@ -146,5 +149,12 @@ class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
                 binding.spinner.setSelection(0)
             }
         }
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            binding.buttonRefresh.makeClickable()
+            Toasts.unknownError(context)
+        })
     }
 }

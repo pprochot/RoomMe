@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.FragmentFriendsBinding
 import uj.roomme.app.ui.friends.adapters.FriendsAdapter
 import uj.roomme.app.ui.friends.fragments.FriendsFragmentDirections.Companion.actionFriendsToAddFriend
@@ -30,11 +31,10 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
         FriendsViewModel.Factory(session, userService)
     }
     private lateinit var binding: FragmentFriendsBinding
-    private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentFriendsBinding.bind(view)
-        navController = findNavController()
+        setUpHandleErrors()
         setUpRecyclerView()
         setUpAddFriendsButton()
         viewModel.getFriendsFromService()
@@ -42,7 +42,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
 
     private fun setUpAddFriendsButton() {
         binding.fabAddFriends.setOnClickListener {
-            navController.navigate(actionFriendsToAddFriend())
+            findNavController().navigate(actionFriendsToAddFriend())
         }
     }
 
@@ -71,5 +71,11 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
     private fun hideProgressBar() {
         binding.progressBar.visibility = View.GONE
         binding.rvFriends.visibility = View.VISIBLE
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.unknownError(context)
+        })
     }
 }

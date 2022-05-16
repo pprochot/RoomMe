@@ -43,6 +43,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = findNavController()
         binding = FragmentSignUpBinding.bind(view)
+        setUpHandleErrors()
         setUpSignUpButton()
     }
 
@@ -88,4 +89,15 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         this.lastname,
         this.phoneNumber
     )
+
+    private fun setUpHandleErrors() {
+        viewModel.unsuccessfulSignUpEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.toastOnUnsuccessfulResponse(context, it)
+            binding.signUpButton.makeClickable()
+        })
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.unknownError(context)
+            binding.signUpButton.makeClickable()
+        })
+    }
 }

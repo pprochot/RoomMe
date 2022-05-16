@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.FragmentRoommatesAddBinding
 import uj.roomme.app.ui.roommates.adapters.AddRoommateAdapter
 import uj.roomme.app.ui.roommates.viewmodels.RoommatesAddViewModel
@@ -31,6 +32,7 @@ class RoommatesAddFragment : Fragment(R.layout.fragment_roommates_add) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentRoommatesAddBinding.bind(view)
+        setUpHandleErrors()
         setUpProgressBar()
         setUpRecyclerView()
         viewModel.getAvailableLocatorsFromService()
@@ -57,6 +59,12 @@ class RoommatesAddFragment : Fragment(R.layout.fragment_roommates_add) {
         }
         viewModel.addedRoommateEvent.observe(viewLifecycleOwner, EventObserver { position ->
             addRoommateAdapter.removeAtPosition(position)
+        })
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.unknownError(context)
         })
     }
 }

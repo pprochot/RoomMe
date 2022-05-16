@@ -9,12 +9,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
+import uj.roomme.app.consts.Toasts
+import uj.roomme.app.consts.ViewUtils.makeClickable
 import uj.roomme.app.databinding.FragmentApartmentSelectBinding
 import uj.roomme.app.ui.home.adapters.ApartmentsAdapter
 import uj.roomme.app.ui.home.fragments.SelectApartmentFragmentDirections.Companion.actionSelectApartmentToCreateApartment
 import uj.roomme.app.ui.home.fragments.SelectApartmentFragmentDirections.Companion.actionSelectApartmentToHome
 import uj.roomme.app.ui.home.viewmodels.SelectApartmentViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
+import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.app.viewmodels.livedata.NotificationEventObserver
 import uj.roomme.services.service.FlatService
 import uj.roomme.services.service.UserService
@@ -37,6 +40,7 @@ class SelectApartmentFragment : Fragment(R.layout.fragment_apartment_select) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentApartmentSelectBinding.bind(view)
+        setUpHandleErrors()
         setUpRecyclerView()
         setUpCreateNewApartmentButton()
         viewModel.getApartmentsFromService()
@@ -72,5 +76,12 @@ class SelectApartmentFragment : Fragment(R.layout.fragment_apartment_select) {
     private fun hideProgressBar() {
         binding.progressBar.visibility = View.GONE
         binding.rvApartments.visibility = View.VISIBLE
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            hideProgressBar()
+            Toasts.unknownError(context)
+        })
     }
 }

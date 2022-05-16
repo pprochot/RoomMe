@@ -46,6 +46,7 @@ class HouseworkCreateFragment : Fragment(R.layout.fragment_housework_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentHouseworkCreateBinding.bind(view)
+        setUpHandleErrors()
         setUpFrequenciesAdapter()
         setUpRecyclerView()
         setUpCreateButton()
@@ -174,5 +175,12 @@ class HouseworkCreateFragment : Fragment(R.layout.fragment_housework_create) {
             frequencyId = spinnerFrequency.selectedItemPosition + 1,
             selectedUsersIds = selectUsersAdapter.selectedUserIds
         )
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            binding.progressBar.visibility = View.GONE
+            Toasts.unknownError(context)
+        })
     }
 }

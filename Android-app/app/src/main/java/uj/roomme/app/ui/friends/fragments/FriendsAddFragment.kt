@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
+import uj.roomme.app.consts.ViewUtils.makeClickable
 import uj.roomme.app.databinding.FragmentFriendsAddBinding
 import uj.roomme.app.ui.friends.adapters.FriendsAddAdapter
 import uj.roomme.app.ui.friends.viewmodels.FriendsAddViewModel
@@ -32,6 +33,7 @@ class FriendsAddFragment : Fragment(R.layout.fragment_friends_add) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentFriendsAddBinding.bind(view)
+        setUpHandleErrors()
         setUpRecyclerView()
         setUpFriendNameTextView()
         showUsersNotFoundText()
@@ -71,5 +73,12 @@ class FriendsAddFragment : Fragment(R.layout.fragment_friends_add) {
     private fun showRecyclerView() = binding.run {
         textUsersNotFound.visibility = View.GONE
         rvAddFriend.visibility = View.VISIBLE
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            showUsersNotFoundText()
+            Toasts.unknownError(context)
+        })
     }
 }

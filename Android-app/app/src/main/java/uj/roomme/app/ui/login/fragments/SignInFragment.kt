@@ -2,6 +2,7 @@ package uj.roomme.app.ui.login.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -42,6 +43,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSignInBinding.bind(view)
         navController = findNavController()
+        setUpHandleErrors()
         setUpSignInButton()
         setUpSignUpView()
     }
@@ -78,4 +80,15 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.inputEditTextSignInEmail.text.toString(),
         binding.inputEditTextSignInPassword.text.toString()
     )
+
+    private fun setUpHandleErrors() {
+        viewModel.unsuccessfulSignInEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.toastOnUnsuccessfulResponse(context, it)
+            binding.buttonSignIn.makeClickable()
+        })
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            Toasts.unknownError(context)
+            binding.buttonSignIn.makeClickable()
+        })
+    }
 }
