@@ -39,7 +39,7 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = view.run {
         binding = FragmentHouseworkDetailsBinding.bind(view)
         setUpRecyclerView()
-        setUpCloseHouseworkButton()
+        setUpDeleteHouseworkButton()
         fetchDataFromService()
     }
 
@@ -50,7 +50,7 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
         }
     }
 
-    private fun setUpCloseHouseworkButton() {
+    private fun setUpDeleteHouseworkButton() {
         val navController = findNavController()
         viewModel.deletedHouseworkEvent.observe(viewLifecycleOwner, EventObserver {
             navController.navigateUp()

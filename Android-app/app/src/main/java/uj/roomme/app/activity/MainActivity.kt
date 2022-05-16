@@ -2,7 +2,6 @@ package uj.roomme.app.activity
 
 import android.os.Bundle
 import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +26,7 @@ import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.NotificationEventObserver
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSetter {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     companion object {
         val topLevelDestinations = setOf(
@@ -101,11 +100,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), NavViewDataSette
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun setDataInNavigationView() {
-        navView.getHeaderView(0).findViewById<TextView>(R.id.textNavViewNickname)?.text =
-            sessionViewModel.userData?.email
     }
 
     private fun setUpSessionViewModelObservers() {
