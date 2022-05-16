@@ -1,4 +1,4 @@
-package uj.roomme.app.ui.houseworks.models
+package uj.roomme.app.ui.housework.models
 
 data class HouseworkCreateModel(
     val name: String,

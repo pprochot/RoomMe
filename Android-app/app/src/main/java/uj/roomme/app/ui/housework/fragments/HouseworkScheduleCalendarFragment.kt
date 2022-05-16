@@ -1,4 +1,4 @@
-package uj.roomme.app.ui.houseworks.fragments
+package uj.roomme.app.ui.housework.fragments
 
 import android.os.Bundle
 import android.util.TypedValue
@@ -23,8 +23,8 @@ import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.CalendarDayBinding
 import uj.roomme.app.databinding.CalendarHeaderBinding
 import uj.roomme.app.databinding.FragmentHouseworkScheduleCalendarBinding
-import uj.roomme.app.ui.houseworks.adapters.CalendarSchedulesAdapter
-import uj.roomme.app.ui.houseworks.viewmodels.HouseworkScheduleCalendarViewModel
+import uj.roomme.app.ui.housework.adapters.CalendarSchedulesAdapter
+import uj.roomme.app.ui.housework.viewmodels.HouseworkScheduleCalendarViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.domain.schedule.ScheduleModel

@@ -1,4 +1,4 @@
-package uj.roomme.app.ui.houseworks.fragments
+package uj.roomme.app.ui.housework.fragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -14,9 +14,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.consts.Toasts
 import uj.roomme.app.databinding.FragmentHouseworkScheduleUpdateBinding
-import uj.roomme.app.ui.houseworks.adapters.SelectOneUserAdapter
-import uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleUpdateFragmentDirections.Companion.actionToHouseworkCalendarFragment
-import uj.roomme.app.ui.houseworks.viewmodels.HouseworkScheduleUpdateViewModel
+import uj.roomme.app.ui.housework.adapters.SelectOneUserAdapter
+import uj.roomme.app.ui.housework.fragments.HouseworkScheduleUpdateFragmentDirections.Companion.actionToHouseworkCalendarFragment
+import uj.roomme.app.ui.housework.viewmodels.HouseworkScheduleUpdateViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.domain.schedule.SchedulePatchModel

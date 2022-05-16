@@ -1,4 +1,4 @@
-package uj.roomme.app.ui.houseworks.adapters
+package uj.roomme.app.ui.housework.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -9,9 +9,9 @@ import androidx.navigation.findNavController
 import uj.roomme.app.R
 import uj.roomme.app.adapters.common.ReplaceableRvAdapter
 import uj.roomme.app.databinding.RowHouseworkScheduleWithMarginBinding
-import uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleCalendarFragmentDirections.Companion.actionToHouseworkDetailsFragment
-import uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleCalendarFragmentDirections.Companion.actionToHouseworkScheduleUpdateFragment
-import uj.roomme.app.ui.houseworks.viewholders.CalendarScheduleViewHolder
+import uj.roomme.app.ui.housework.fragments.HouseworkScheduleCalendarFragmentDirections.Companion.actionToHouseworkDetailsFragment
+import uj.roomme.app.ui.housework.fragments.HouseworkScheduleCalendarFragmentDirections.Companion.actionToHouseworkScheduleUpdateFragment
+import uj.roomme.app.ui.housework.viewholders.CalendarScheduleViewHolder
 import uj.roomme.domain.schedule.ScheduleModel
 
 class CalendarSchedulesAdapter(private val loggedUserId: Int) :

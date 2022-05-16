@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/destHouseworkCalendarFragment"
-        android:name="uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleCalendarFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkScheduleCalendarFragment"
         android:label="Schedules calendar"
         tools:layout="@layout/fragment_housework_schedule_calendar" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/destHouseworkListFragment"
-        android:name="uj.roomme.app.ui.houseworks.fragments.HouseworkListFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkListFragment"
         android:label="Housework list"
         tools:layout="@layout/fragment_housework_list" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/destHouseworkDetailsFragment"
-        android:name="uj.roomme.app.ui.houseworks.fragments.HouseworkDetailsFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkDetailsFragment"
         android:label="Housework details"
         tools:layout="@layout/fragment_housework_details" >
         <argument
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/destHouseworkScheduleUpdateFragment"
-        android:name="uj.roomme.app.ui.houseworks.fragments.HouseworkScheduleUpdateFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkScheduleUpdateFragment"
         android:label="Update schedule"
         tools:layout="@layout/fragment_housework_schedule_update" >
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/destHouseworkCreateFragment"
-        android:name="uj.roomme.app.ui.houseworks.fragments.HouseworkCreateFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkCreateFragment"
         android:label="Create housework"
         tools:layout="@layout/fragment_housework_create" >
         <action
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/houseworkMenuFragment"
-        android:name="uj.roomme.app.ui.houseworks.fragments.HouseworkMenuFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkMenuFragment"
         android:label="Housework menu"
         tools:layout="@layout/fragment_housework_menu">
         <action
