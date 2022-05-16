@@ -1,6 +1,4 @@
-package uj.roomme.app.fragments.home.housework.models
-
-import uj.roomme.domain.housework.HouseworkFrequencyModel
+package uj.roomme.app.ui.houseworks.models
 
 data class HouseworkCreateModel(
     val name: String,

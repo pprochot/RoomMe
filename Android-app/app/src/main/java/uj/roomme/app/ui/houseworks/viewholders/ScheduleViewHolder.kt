@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework.viewholders
+package uj.roomme.app.ui.houseworks.viewholders
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

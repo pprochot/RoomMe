@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework
+package uj.roomme.app.ui.houseworks.fragments
 
 import android.os.Bundle
 import android.util.TypedValue
@@ -186,8 +186,6 @@ class HouseworkScheduleCalendarFragment : Fragment(R.layout.fragment_housework_s
     private fun daysOfWeekFromLocale(): Array<DayOfWeek> {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         var daysOfWeek = DayOfWeek.values()
-        // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
-        // Only necessary if firstDayOfWeek != DayOfWeek.MONDAY which has ordinal 0.
         if (firstDayOfWeek != DayOfWeek.MONDAY) {
             val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
             val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)

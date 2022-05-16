@@ -1,8 +1,7 @@
-package uj.roomme.app.fragments.home.housework
+package uj.roomme.app.ui.houseworks.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,9 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.databinding.FragmentHouseworkDetailsBinding
-import uj.roomme.app.fragments.home.housework.adapters.DaysAdapter
-import uj.roomme.app.fragments.home.housework.adapters.UsersNicknameAdapter
-import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkDetailsViewModel
+import uj.roomme.app.databinding.RowHouseworkScheduleBinding
+import uj.roomme.app.ui.houseworks.adapters.DaysAdapter
+import uj.roomme.app.ui.houseworks.adapters.UsersNicknameAdapter
+import uj.roomme.app.ui.houseworks.viewmodels.HouseworkDetailsViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.services.service.HouseworkService

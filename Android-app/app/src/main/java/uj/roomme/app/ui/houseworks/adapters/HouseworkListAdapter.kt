@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework.adapters
+package uj.roomme.app.ui.houseworks.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
 import uj.roomme.app.adapters.common.ReplaceableRvAdapter
 import uj.roomme.app.databinding.RowHouseworkBinding
-import uj.roomme.app.fragments.home.housework.HouseworkListFragmentDirections
+import uj.roomme.app.ui.houseworks.fragments.HouseworkListFragmentDirections
 import uj.roomme.domain.housework.HouseworkShortModel
 
 class HouseworkListAdapter :

@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework
+package uj.roomme.app.ui.houseworks.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
 import uj.roomme.app.databinding.FragmentHouseworkListBinding
-import uj.roomme.app.fragments.home.housework.HouseworkListFragmentDirections.Companion.actionToHouseworkUpdatePart1Fragment
-import uj.roomme.app.fragments.home.housework.adapters.HouseworkListAdapter
-import uj.roomme.app.fragments.home.housework.viewmodels.HouseworkListViewModel
+import uj.roomme.app.ui.houseworks.adapters.HouseworkListAdapter
+import uj.roomme.app.ui.houseworks.fragments.HouseworkListFragmentDirections.Companion.actionToHouseworkUpdatePart1Fragment
+import uj.roomme.app.ui.houseworks.viewmodels.HouseworkListViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.services.service.FlatService
 import javax.inject.Inject

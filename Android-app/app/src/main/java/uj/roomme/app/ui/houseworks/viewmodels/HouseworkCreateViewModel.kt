@@ -1,9 +1,9 @@
-package uj.roomme.app.fragments.home.housework.viewmodels
+package uj.roomme.app.ui.houseworks.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import uj.roomme.app.fragments.home.housework.models.HouseworkCreateModel
+import uj.roomme.app.ui.houseworks.models.HouseworkCreateModel
 import uj.roomme.app.viewmodels.ServiceViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.Event

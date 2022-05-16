@@ -72,6 +72,7 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Name:"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
@@ -83,10 +84,6 @@
                         android:textSize="16sp" />
                 </TableRow>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="15dp" />
-
                 <TableRow>
 
                     <TextView
@@ -95,6 +92,7 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Description:"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
@@ -106,10 +104,6 @@
                         android:textSize="16sp" />
                 </TableRow>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="15dp" />
-
                 <TableRow>
 
                     <TextView
@@ -118,6 +112,7 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Author:"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
@@ -129,10 +124,6 @@
                         android:textSize="16sp" />
                 </TableRow>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="15dp" />
-
                 <TableRow>
 
                     <TextView
@@ -141,6 +132,7 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Frequency:"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
@@ -186,7 +178,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layoutDays"
-                android:layout_marginHorizontal="5dp"
                 android:orientation="vertical">
 
                 <include layout="@layout/layout_space_divider" />
@@ -224,6 +215,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
             android:text="Delete" />
 
     </LinearLayout>

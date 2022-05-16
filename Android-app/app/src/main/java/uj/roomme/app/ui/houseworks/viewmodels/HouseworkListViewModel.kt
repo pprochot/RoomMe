@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework.viewmodels
+package uj.roomme.app.ui.houseworks.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

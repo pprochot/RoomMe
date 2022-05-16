@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework
+package uj.roomme.app.ui.houseworks.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uj.roomme.app.R
 import uj.roomme.app.databinding.FragmentHouseworkMenuBinding
-import uj.roomme.app.fragments.home.housework.HouseworkMenuFragmentDirections.Companion.actionToHouseworkCalendarFragment
-import uj.roomme.app.fragments.home.housework.HouseworkMenuFragmentDirections.Companion.actionToHouseworkListFragment
+import uj.roomme.app.ui.houseworks.fragments.HouseworkMenuFragmentDirections.Companion.actionToHouseworkCalendarFragment
+import uj.roomme.app.ui.houseworks.fragments.HouseworkMenuFragmentDirections.Companion.actionToHouseworkListFragment
 
 class HouseworkMenuFragment : Fragment(R.layout.fragment_housework_menu) {
 

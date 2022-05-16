@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework.adapters
+package uj.roomme.app.ui.houseworks.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -27,8 +27,8 @@ class CalendarSchedulesAdapter(private val loggedUserId: Int) :
         val schedule = dataList[position]
         holder.binding.itemHouseworkColorCategory.run {
             when (schedule.user.id == loggedUserId) {
-                true -> setBackgroundColor(Color.parseColor("#737373"))
-                else -> setBackgroundColor(Color.parseColor("#FF1100"))
+                true -> setBackgroundColor(Color.parseColor("#FF1100"))
+                else -> setBackgroundColor(Color.parseColor("#737373"))
             }
         }
         holder.binding.scheduleLayout.run {

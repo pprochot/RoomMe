@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.home.housework.adapters
+package uj.roomme.app.ui.houseworks.adapters
 
 import android.view.LayoutInflater
 import android.view.View
