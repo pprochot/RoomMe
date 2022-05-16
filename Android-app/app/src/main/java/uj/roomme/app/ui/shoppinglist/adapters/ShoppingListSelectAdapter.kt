@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.shoppinglist.adapter
+package uj.roomme.app.ui.shoppinglist.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +7,14 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
-import uj.roomme.domain.shoppinglist.ShoppingListGetModel
+import uj.roomme.app.adapters.common.ReplaceableRvAdapter
+import uj.roomme.app.ui.shoppinglist.fragments.ShoppingListSelectFragmentDirections.Companion.actionDestShoppingListsFragmentToCompletedShoppingListFragment
+import uj.roomme.app.ui.shoppinglist.fragments.ShoppingListSelectFragmentDirections.Companion.actionShoppingListsToProducts
 import uj.roomme.domain.shoppinglist.ShoppingListShortModel
 import kotlin.properties.Delegates
-import uj.roomme.app.fragments.shoppinglist.SelectShoppingListFragmentDirections as Directions
 
-abstract class SelectShoppingListAdapter(private val shoppingLists: List<ShoppingListShortModel>) :
-    RecyclerView.Adapter<SelectShoppingListAdapter.ViewHolder>() {
+abstract class SelectShoppingListAdapter :
+    ReplaceableRvAdapter<ShoppingListShortModel, SelectShoppingListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var shoppingListId by Delegates.notNull<Int>()
@@ -23,12 +24,12 @@ abstract class SelectShoppingListAdapter(private val shoppingLists: List<Shoppin
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.rv_row_shoppinglist, parent, false)
+        val view = inflater.inflate(R.layout.row_shoppinglist, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val shoppingList = shoppingLists[position]
+        val shoppingList = dataList[position]
         holder.apply {
             shoppingListId = shoppingList.id
             nameView.text = shoppingList.name
@@ -37,27 +38,23 @@ abstract class SelectShoppingListAdapter(private val shoppingLists: List<Shoppin
         }
     }
 
-    override fun getItemCount() = shoppingLists.size
-
     abstract fun onViewClick(viewHolder: ViewHolder)
 }
 
-class OngoingShoppingListsAdapter(shoppingLists: List<ShoppingListShortModel>) :
-    SelectShoppingListAdapter(shoppingLists) {
+class OngoingShoppingListsAdapter : SelectShoppingListAdapter() {
 
     override fun onViewClick(viewHolder: ViewHolder) {
         viewHolder.itemView.findNavController().navigate(
-            Directions.actionShoppingListsToProducts(viewHolder.shoppingListId)
+            actionShoppingListsToProducts(viewHolder.shoppingListId)
         )
     }
 }
 
-class CompletedShoppingListsAdapter(shoppingLists: List<ShoppingListShortModel>) :
-    SelectShoppingListAdapter(shoppingLists) {
+class CompletedShoppingListsAdapter : SelectShoppingListAdapter() {
 
     override fun onViewClick(viewHolder: ViewHolder) {
         viewHolder.itemView.findNavController().navigate(
-            Directions.actionDestShoppingListsFragmentToCompletedShoppingListFragment(viewHolder.shoppingListId)
+            actionDestShoppingListsFragmentToCompletedShoppingListFragment(viewHolder.shoppingListId)
         )
     }
 }

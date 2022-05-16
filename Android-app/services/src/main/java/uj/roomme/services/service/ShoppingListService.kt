@@ -3,6 +3,7 @@ package uj.roomme.services.service
 import okhttp3.MultipartBody
 import retrofit2.http.*
 import uj.roomme.domain.product.ProductListPostReturnModel
+import uj.roomme.domain.product.ProductModel
 import uj.roomme.domain.product.ProductPostModel
 import uj.roomme.domain.shoppinglist.*
 import uj.roomme.services.call.RoomMeCall
@@ -40,7 +41,7 @@ interface ShoppingListService {
         @Header("Authorization") accessToken: String,
         @Path("listId") listId: Int,
         @Body products: List<ProductPatchModel>
-    ): RoomMeCall<ProductPatchReturnModel>
+    ): RoomMeCall<List<ProductModel>>
 
     @Multipart
     @PATCH("/shoppinglist/{listId}/completion")

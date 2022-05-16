@@ -13,8 +13,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.GridView
-import android.widget.ImageButton
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -24,7 +22,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -32,7 +29,9 @@ import okhttp3.RequestBody
 import uj.roomme.app.R
 import uj.roomme.app.adapters.GridAdapter
 import uj.roomme.app.consts.PermissionCheckers
-import uj.roomme.app.fragments.shoppinglist.viewmodel.CompleteShoppingListViewModel
+import uj.roomme.app.databinding.FragmentShoppinglistCompleteBinding
+import uj.roomme.app.fragments.shoppinglist.ShoppingListCompleteFragmentDirections.Companion.actionDestCompleteShoppingListFragmentToCompletedShoppingListFragment
+import uj.roomme.app.fragments.shoppinglist.viewmodel.ShoppingListCompleteViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.services.service.ShoppingListService
@@ -43,20 +42,17 @@ import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppinglist) {
+class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_complete) {
 
     @Inject
     lateinit var slService: ShoppingListService
     private val session: SessionViewModel by activityViewModels()
-    private val args: CompleteShoppingListFragmentArgs by navArgs()
-    private val viewModel: CompleteShoppingListViewModel by viewModels {
-        CompleteShoppingListViewModel.Factory(session, slService, args.listId)
+    private val args: ShoppingListCompleteFragmentArgs by navArgs()
+    private val viewModel: ShoppingListCompleteViewModel by viewModels {
+        ShoppingListCompleteViewModel.Factory(session, slService, args.listId)
     }
 
-    private lateinit var takePhotoButton: ImageButton
-    private lateinit var uploadPhotosButton: ImageButton
-    private lateinit var completeButton: FloatingActionButton
-    private lateinit var gridView: GridView
+    private lateinit var binding: FragmentShoppinglistCompleteBinding
     private lateinit var contentResolver: ContentResolver
     private val uploadPhotosProvider = UploadPhotosProvider()
     private val takePhotoProvider = TakePhotoProvider()
@@ -71,36 +67,34 @@ class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppin
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        findViews(view)
+        binding = FragmentShoppinglistCompleteBinding.bind(view)
         contentResolver = requireActivity().contentResolver
-        gridAdapter = GridAdapter(requireContext(), emptyList())
-        gridView.adapter = gridAdapter
-        uploadPhotosButton.setOnClickListener(uploadPhotosProvider::uploadPhotos)
-        takePhotoButton.setOnClickListener(takePhotoProvider::takePhoto)
-        completeButton.setOnClickListener {
+        setUpNavigation()
+        setUpGridView()
+        setUpButtons()
+    }
+
+    private fun setUpButtons() {
+        binding.buttonUploadFile.setOnClickListener { uploadPhotosProvider.uploadPhotos() }
+        binding.buttonTakePhoto.setOnClickListener { takePhotoProvider.takePhoto() }
+        binding.buttonCompleteShoppingList.setOnClickListener {
             val receipts = gridAdapter.getAllItems()
                 .map { createMultipartBody(it.first, it.second) }
                 .toList()
             viewModel.completeShoppingListViaService(receipts)
         }
-        setUpNavigation(view)
     }
 
-    private fun findViews(view: View) = view.apply {
-        gridView = findViewById(R.id.gridViewReceipts)
-        uploadPhotosButton = findViewById(R.id.buttonUploadFile)
-        takePhotoButton = findViewById(R.id.buttonTakePhoto)
-        completeButton = findViewById(R.id.buttonCompleteShoppingList)
+    private fun setUpGridView() {
+        gridAdapter = GridAdapter(requireContext(), emptyList())
+        binding.gridViewReceipts.adapter = gridAdapter
     }
 
-    private fun setUpNavigation(view: View) {
+    private fun setUpNavigation() {
         val navController = findNavController()
         viewModel.completedShoppingListEvent.observe(viewLifecycleOwner, EventObserver {
             navController.navigate(
-                CompleteShoppingListFragmentDirections.actionDestCompleteShoppingListFragmentToCompletedShoppingListFragment(
-                    args.listId
-                )
+                actionDestCompleteShoppingListFragmentToCompletedShoppingListFragment(args.listId)
             )
         })
     }
@@ -125,7 +119,7 @@ class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppin
 
     private inner class UploadPhotosProvider {
 
-        fun uploadPhotos(view: View?) {
+        fun uploadPhotos() {
             if (PermissionCheckers.isReadExternalStorageGranted(requireContext())) {
                 // TODO check if that works
                 ActivityCompat.requestPermissions(
@@ -185,7 +179,7 @@ class CompleteShoppingListFragment : Fragment(R.layout.fragment_complete_shoppin
             }
         }
 
-        fun takePhoto(view: View?) {
+        fun takePhoto() {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePhotoActivityResult.launch(takePictureIntent)
         }

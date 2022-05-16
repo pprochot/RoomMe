@@ -3,6 +3,7 @@ package uj.roomme.app.fragments.shoppinglist.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import uj.roomme.app.ui.shoppinglist.viewmodels.ShoppingListOngoingViewModel
 import uj.roomme.app.viewmodels.ServiceViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.domain.shoppinglist.ShoppingListGetModel
@@ -21,8 +22,8 @@ class FinishedShoppingListViewModel(
             .processAsync { code, body, error ->
                 when (code) {
                     200 -> updateLiveData(body!!)
-                    401 -> unauthorizedCall(OngoingShoppingListViewModel.TAG)
-                    else -> unknownError(OngoingShoppingListViewModel.TAG, error)
+                    401 -> unauthorizedCall(ShoppingListOngoingViewModel.TAG)
+                    else -> unknownError(ShoppingListOngoingViewModel.TAG, error)
                 }
             }
     }

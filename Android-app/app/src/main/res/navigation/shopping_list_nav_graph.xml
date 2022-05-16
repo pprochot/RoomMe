@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/destSelectShoppingListFragment"
-        android:name="uj.roomme.app.fragments.shoppinglist.SelectShoppingListFragment"
+        android:name="uj.roomme.app.ui.shoppinglist.fragments.ShoppingListSelectFragment"
         android:label="Shopping lists"
         tools:layout="@layout/fragment_shoppinglist_select">
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/destNewProductFragment"
-        android:name="uj.roomme.app.fragments.shoppinglist.CreateProductFragment"
+        android:name="uj.roomme.app.ui.shoppinglist.fragments.ShoppingListProductCreateFragment"
         android:label="New product"
         tools:layout="@layout/fragment_shoppinglist_product_create">
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/destCreateShoppingListFragment"
-        android:name="uj.roomme.app.fragments.shoppinglist.CreateShoppingListFragment"
+        android:name="uj.roomme.app.ui.shoppinglist.fragments.ShoppingListCreateFragment"
         android:label="Create shopping list"
         tools:layout="@layout/fragment_shoppinglist_create">
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/destOngoingShoppingList"
-        android:name="uj.roomme.app.fragments.shoppinglist.OngoingShoppingListFragment"
+        android:name="uj.roomme.app.ui.shoppinglist.fragments.ShoppingListOngoingFragment"
         android:label="Products"
         tools:layout="@layout/fragment_shoppinglist_ongoing">
         <action
@@ -61,9 +61,9 @@
     </fragment>
     <fragment
         android:id="@+id/destCompleteShoppingListFragment"
-        android:name="uj.roomme.app.fragments.shoppinglist.CompleteShoppingListFragment"
+        android:name="uj.roomme.app.fragments.shoppinglist.ShoppingListCompleteFragment"
         android:label="CompleteShoppingListFragment"
-        tools:layout="@layout/fragment_complete_shoppinglist">
+        tools:layout="@layout/fragment_shoppinglist_complete">
         <action
             android:id="@+id/action_destCompleteShoppingListFragment_to_completedShoppingListFragment"
             app:destination="@id/destCompletedShoppingList"

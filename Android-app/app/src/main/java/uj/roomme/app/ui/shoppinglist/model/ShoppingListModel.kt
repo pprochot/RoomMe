@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.shoppinglist.model
+package uj.roomme.app.ui.shoppinglist.model
 
 import uj.roomme.domain.product.ProductModel
 import uj.roomme.domain.shoppinglist.ShoppingListGetModel
@@ -9,7 +9,7 @@ data class ShoppingListModel(
     var completorId: Int?, var completorName: String?,
     val name: String, val description: String?,
     val creationDate: OffsetDateTime, var completionDate: OffsetDateTime,
-    val products: MutableList<ProductModel>
+    var products: MutableList<ProductModel>
 ) {
 
     companion object {

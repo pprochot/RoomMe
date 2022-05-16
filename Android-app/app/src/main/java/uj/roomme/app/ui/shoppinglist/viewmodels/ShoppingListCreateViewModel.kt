@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.shoppinglist.viewmodel
+package uj.roomme.app.ui.shoppinglist.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,15 +10,14 @@ import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.Event
 import uj.roomme.domain.shoppinglist.ShoppingListPostModel
 import uj.roomme.services.service.ShoppingListService
-import java.lang.IllegalArgumentException
 
-class CreateShoppingListViewModel(
+class ShoppingListCreateViewModel(
     session: SessionViewModel,
     private val slService: ShoppingListService
 ) : ServiceViewModel(session) {
 
     private companion object {
-        const val TAG = "CreateShoppingListViewModel"
+        const val TAG = "ShoppingListCreateViewModel"
     }
 
     private val _createdShoppingListIdEvent = MutableLiveData<Event<Int>>()
@@ -26,19 +25,18 @@ class CreateShoppingListViewModel(
         get() = _createdShoppingListIdEvent
 
     fun createNewShoppingListByService(request: ShoppingListPostModel) {
+        val logTag = "$TAG.createNewShoppingListByService()"
         slService.createNewShoppingList(accessToken, request)
             .processAsync { code, body, error ->
                 when (code) {
-                    200 -> publishSuccessfulEvent(body!!.id)
-                    401 -> unauthorizedCall(TAG)
-                    else -> unknownError(TAG, error)
+                    200 -> {
+                        Log.d(logTag, "Successfully created new list.")
+                        _createdShoppingListIdEvent.value = Event(body!!.id)
+                    }
+                    401 -> unauthorizedCall(logTag)
+                    else -> unknownError(logTag, error)
                 }
             }
-    }
-
-    private fun publishSuccessfulEvent(id: Int) {
-        Log.d(TAG, "Successfully created new list.")
-        _createdShoppingListIdEvent.value = Event(id)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -47,8 +45,8 @@ class CreateShoppingListViewModel(
         private val slService: ShoppingListService
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(CreateShoppingListViewModel::class.java))
-                return CreateShoppingListViewModel(session, slService) as T
+            if (modelClass.isAssignableFrom(ShoppingListCreateViewModel::class.java))
+                return ShoppingListCreateViewModel(session, slService) as T
             throw IllegalArgumentException("Invalid class!")
         }
     }

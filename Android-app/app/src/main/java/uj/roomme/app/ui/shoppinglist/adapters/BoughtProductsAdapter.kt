@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.shoppinglist.adapter
+package uj.roomme.app.ui.shoppinglist.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.R
-import uj.roomme.app.fragments.shoppinglist.viewmodel.OngoingShoppingListViewModel
+import uj.roomme.app.adapters.common.ReplaceableRvAdapter
 import uj.roomme.domain.product.ProductModel
 
-class BoughtProductsAdapter : RecyclerView.Adapter<BoughtProductsAdapter.ViewHolder>() {
-
-    private var visibleProducts = listOf<ProductModel>()
+class BoughtProductsAdapter :
+    ReplaceableRvAdapter<ProductModel, BoughtProductsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var productId: Int? = null
@@ -20,22 +19,13 @@ class BoughtProductsAdapter : RecyclerView.Adapter<BoughtProductsAdapter.ViewHol
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.rv_row_bought_product, parent, false)
+        val view = inflater.inflate(R.layout.row_product_bought, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = visibleProducts[position]
+        val data = dataList[position]
         holder.productId = data.id
         holder.nameView.text = data.name
-    }
-
-    override fun getItemCount(): Int {
-        return visibleProducts.size
-    }
-
-    fun updateProducts(products: List<ProductModel>) {
-        visibleProducts = products
-        notifyDataSetChanged()
     }
 }

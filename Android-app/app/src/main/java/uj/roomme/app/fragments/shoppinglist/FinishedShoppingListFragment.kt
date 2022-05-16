@@ -4,18 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import uj.roomme.app.R
-import uj.roomme.app.adapters.GridAdapter
-import uj.roomme.app.fragments.shoppinglist.adapter.BoughtProductsAdapter
+import uj.roomme.app.ui.shoppinglist.adapters.BoughtProductsAdapter
 import uj.roomme.app.fragments.shoppinglist.viewmodel.FinishedShoppingListViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
@@ -56,7 +51,7 @@ class FinishedShoppingListFragment : Fragment(R.layout.fragment_shoppinglist_fin
         productsRecyclerView.adapter = adapter
 
         viewModel.shoppingList.observe(viewLifecycleOwner) {
-            adapter.updateProducts(it!!.products)
+            adapter.dataList = it!!.products
             progressBar.visibility = View.GONE
             mainLayout.visibility = View.VISIBLE
         }
