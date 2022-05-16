@@ -49,7 +49,7 @@ namespace RoomMe.API.Converters
                 Id = schedule.Id,
                 User = schedule.User.ToUserNicknameModel(),
                 Date = schedule.Date,
-                StatusId = schedule.StatusId
+                Status = schedule.Status.ToHouseworkStatusModel()
             };
         }
     }
