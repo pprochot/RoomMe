@@ -1,4 +1,4 @@
-package uj.roomme.app.fragments.shoppinglist.viewmodel
+package uj.roomme.app.ui.shoppinglist.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,6 +10,7 @@ import uj.roomme.app.viewmodels.ServiceViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.Event
 import uj.roomme.domain.shoppinglist.ShoppingListCompletionPatchReturnModel
+import uj.roomme.services.call.RoomMeCall
 import uj.roomme.services.service.ShoppingListService
 
 class ShoppingListCompleteViewModel(
@@ -29,17 +30,21 @@ class ShoppingListCompleteViewModel(
 
     fun completeShoppingListViaService(receipts: List<MultipartBody.Part>) {
         val logTag = "$TAG.completeShoppingListViaService()"
-        slService.setShoppingListAsCompleted(accessToken, listId, receipts)
-            .processAsync { code, body, error ->
-                when (code) {
-                    200 -> {
-                        Log.d(TAG, "Successfully created product.")
-                        _completedShoppingListEvent.value = Event(body!!)
-                    }
-                    401 -> unauthorizedCall(logTag)
-                    else -> unknownError(logTag, error)
+        val roomMeCall: RoomMeCall<ShoppingListCompletionPatchReturnModel> = if (receipts.isEmpty()) {
+            slService.setShoppingListAsCompleted(accessToken, listId)
+        } else {
+            slService.setShoppingListAsCompleted(accessToken, listId, receipts)
+        }
+        roomMeCall.processAsync { code, body, error ->
+            when (code) {
+                200 -> {
+                    Log.d(TAG, "Successfully created product.")
+                    _completedShoppingListEvent.value = Event(body!!)
                 }
+                401 -> unauthorizedCall(logTag)
+                else -> unknownError(logTag, error)
             }
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

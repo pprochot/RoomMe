@@ -5,7 +5,7 @@
 
     <include
         android:id="@+id/layoutUserInfo"
-        layout="@layout/rv_user_info" />
+        layout="@layout/row_user_info" />
 
     <ImageButton
         android:id="@+id/icRemoveFriend"

@@ -13,7 +13,7 @@ import uj.roomme.app.consts.Toasts
 import uj.roomme.app.consts.ViewUtils.makeClickable
 import uj.roomme.app.consts.ViewUtils.makeNotClickable
 import uj.roomme.app.databinding.FragmentSignUpBinding
-import uj.roomme.app.models.UserSignUpData
+import uj.roomme.app.ui.login.model.UserSignUpModel
 import uj.roomme.app.ui.login.fragments.SignUpFragmentDirections.Companion.actionSignUpToSignIn
 import uj.roomme.app.ui.login.viewmodels.SignUpViewModel
 import uj.roomme.app.validators.SignUpValidator
@@ -69,8 +69,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         }
     }
 
-    private fun modelFromViews(): UserSignUpData = binding.run {
-        return UserSignUpData(
+    private fun modelFromViews(): UserSignUpModel = binding.run {
+        return UserSignUpModel(
             inputEditTextSignUpNickname.text.toString(),
             emailInputEditTextRegistration.text.toString(),
             inputEditTextSignUpFirstPassword.text.toString(),
@@ -81,7 +81,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         )
     }
 
-    private fun UserSignUpData.toRequestBody() = SignUpUserModel(
+    private fun UserSignUpModel.toRequestBody() = SignUpUserModel(
         this.login,
         this.email,
         this.firstPassword,

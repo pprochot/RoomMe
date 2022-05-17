@@ -7,7 +7,6 @@ import dagger.hilt.components.SingletonComponent
 import uj.roomme.app.validators.NewProductValidator
 import uj.roomme.app.validators.SignInValidator
 import uj.roomme.app.validators.SignUpValidator
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

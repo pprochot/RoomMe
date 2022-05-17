@@ -1,6 +1,6 @@
-package uj.roomme.app.models
+package uj.roomme.app.ui.login.model
 
-data class UserSignUpData(
+data class UserSignUpModel(
     val login: String,
     val email: String,
     val firstPassword: String,

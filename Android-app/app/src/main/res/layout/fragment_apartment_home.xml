@@ -1,44 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center|top"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textApartmentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apartment name"
+        android:textSize="24dp" />
+
+    <TextView
+        android:id="@+id/textApartmentAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apartment address"
+        android:textSize="18dp" />
 
     <LinearLayout
+        android:id="@+id/layoutRentNotPaid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center|top"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textApartmentName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="Apartment name" />
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="20dp"
+            android:background="#E4463B"
+            android:gravity="center_horizontal"
+            android:text="Rent not paid for this month" />
 
-        <TextView
-            android:id="@+id/textApartmentAddress"
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
-            android:text="Apartment address" />
-
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome user" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next rent: 12.12.2022!" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Today's tasks" />
+            android:layout_marginHorizontal="60dp"
+            android:text="Pay rent" />
 
     </LinearLayout>
-</ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"
+        android:background="#96F646"
+        android:gravity="center_horizontal"
+        android:text="Rent was paid" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="60dp"
+        android:text="Set rent cost" />
+
+    <LinearLayout
+        android:id="@+id/layoutTodayHouseworkList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="Today's housework"
+            android:textSize="18dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

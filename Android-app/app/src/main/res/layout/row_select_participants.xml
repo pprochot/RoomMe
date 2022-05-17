@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/rv_user_info" />
+        layout="@layout/row_user_info" />
 
     <CheckBox
         android:id="@+id/checkBox"

@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/destProfileFragment"
-        android:name="uj.roomme.app.fragments.ProfileFragment"
+        android:name="uj.roomme.app.ui.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 

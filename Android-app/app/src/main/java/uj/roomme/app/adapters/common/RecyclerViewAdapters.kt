@@ -44,4 +44,9 @@ abstract class MutableAndReplaceableRvAdapter<T, V : RecyclerView.ViewHolder> :
         _dataList.removeAt(position)
         notifyItemRemoved(position)
     }
+
+    fun addAtLastPosition(item: T) {
+        _dataList.add(item)
+        notifyItemInserted(dataList.size - 1)
+    }
 }

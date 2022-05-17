@@ -50,4 +50,11 @@ interface ShoppingListService {
         @Path("listId") listId: Int,
         @Part receiptFiles: List<MultipartBody.Part>
     ): RoomMeCall<ShoppingListCompletionPatchReturnModel>
+
+    @PATCH("/shoppinglist/{listId}/completion")
+    fun setShoppingListAsCompleted(
+        @Header("Authorization") accessToken: String,
+        @Path("listId") listId: Int
+    ): RoomMeCall<ShoppingListCompletionPatchReturnModel>
+
 }

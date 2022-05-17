@@ -1,9 +1,8 @@
-package uj.roomme.app.fragments.shoppinglist
+package uj.roomme.app.ui.shoppinglist.fragments
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,27 +10,31 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import uj.roomme.app.R
-import uj.roomme.app.adapters.GridAdapter
+import uj.roomme.app.adapters.RemovableReceiptsAdapter
 import uj.roomme.app.consts.PermissionCheckers
+import uj.roomme.app.consts.ViewUtils.makeClickable
+import uj.roomme.app.consts.ViewUtils.makeNotClickable
 import uj.roomme.app.databinding.FragmentShoppinglistCompleteBinding
-import uj.roomme.app.fragments.shoppinglist.ShoppingListCompleteFragmentDirections.Companion.actionDestCompleteShoppingListFragmentToCompletedShoppingListFragment
-import uj.roomme.app.fragments.shoppinglist.viewmodel.ShoppingListCompleteViewModel
+import uj.roomme.app.ui.shoppinglist.fragments.ShoppingListCompleteFragmentDirections.Companion.actionDestCompleteShoppingListFragmentToCompletedShoppingListFragment
+import uj.roomme.app.ui.shoppinglist.viewmodels.ShoppingListCompleteViewModel
 import uj.roomme.app.viewmodels.SessionViewModel
 import uj.roomme.app.viewmodels.livedata.EventObserver
 import uj.roomme.services.service.ShoppingListService
@@ -39,6 +42,8 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -56,7 +61,7 @@ class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_com
     private lateinit var contentResolver: ContentResolver
     private val uploadPhotosProvider = UploadPhotosProvider()
     private val takePhotoProvider = TakePhotoProvider()
-    private lateinit var gridAdapter: GridAdapter
+    private lateinit var receiptsAdapter: RemovableReceiptsAdapter
     private lateinit var uploadPhotosActivityResult: ActivityResultLauncher<Intent>
     private lateinit var takePhotoActivityResult: ActivityResultLauncher<Intent>
 
@@ -70,6 +75,7 @@ class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_com
         binding = FragmentShoppinglistCompleteBinding.bind(view)
         contentResolver = requireActivity().contentResolver
         setUpNavigation()
+        setUpHandleErrors()
         setUpGridView()
         setUpButtons()
     }
@@ -77,8 +83,9 @@ class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_com
     private fun setUpButtons() {
         binding.buttonUploadFile.setOnClickListener { uploadPhotosProvider.uploadPhotos() }
         binding.buttonTakePhoto.setOnClickListener { takePhotoProvider.takePhoto() }
-        binding.buttonCompleteShoppingList.setOnClickListener {
-            val receipts = gridAdapter.getAllItems()
+        binding.buttonCompleteShoppingList.setOnClickListener { button ->
+            button.makeNotClickable()
+            val receipts = receiptsAdapter.dataList
                 .map { createMultipartBody(it.first, it.second) }
                 .toList()
             viewModel.completeShoppingListViaService(receipts)
@@ -86,16 +93,25 @@ class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_com
     }
 
     private fun setUpGridView() {
-        gridAdapter = GridAdapter(requireContext(), emptyList())
-        binding.gridViewReceipts.adapter = gridAdapter
+        receiptsAdapter = RemovableReceiptsAdapter()
+        binding.rvReceipts.layoutManager = LinearLayoutManager(context)
+        binding.rvReceipts.adapter = receiptsAdapter
     }
 
     private fun setUpNavigation() {
         val navController = findNavController()
         viewModel.completedShoppingListEvent.observe(viewLifecycleOwner, EventObserver {
+
             navController.navigate(
                 actionDestCompleteShoppingListFragmentToCompletedShoppingListFragment(args.listId)
             )
+        })
+    }
+
+    private fun setUpHandleErrors() {
+        viewModel.messageUIEvent.observe(viewLifecycleOwner, EventObserver {
+            binding.buttonCompleteShoppingList.makeClickable()
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         })
     }
 
@@ -121,7 +137,6 @@ class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_com
 
         fun uploadPhotos() {
             if (PermissionCheckers.isReadExternalStorageGranted(requireContext())) {
-                // TODO check if that works
                 ActivityCompat.requestPermissions(
                     requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100
                 )
@@ -142,7 +157,7 @@ class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_com
                     return@registerForActivityResult
 
                 val bitmaps = retrieveBitmaps(result)
-                gridAdapter.addItems(bitmaps)
+                receiptsAdapter.addItems(bitmaps)
             }
         }
 
@@ -168,44 +183,58 @@ class ShoppingListCompleteFragment : Fragment(R.layout.fragment_shoppinglist_com
 
     private inner class TakePhotoProvider {
 
+        private lateinit var currentPhotoPath: String
+        private lateinit var photoUri: Uri
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss")
+
+        fun takePhoto() {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    null
+                }
+                photoFile?.also {
+                    photoUri = FileProvider.getUriForFile(
+                        requireContext(),
+                        "uj.roomme.app.fileprovider",
+                        it
+                    )
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                }
+            }
+
+            takePhotoActivityResult.launch(takePictureIntent)
+        }
+
+        @Throws(IOException::class)
+        private fun createImageFile(): File {
+            // Create an image file name
+            val timeStamp: String = dateFormat.format(Date())
+            val storageDir: File? = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+            return File.createTempFile(
+                "JPEG_${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+            ).apply {
+                currentPhotoPath = absolutePath
+            }
+        }
+
+
         fun takePhotoResult(): ActivityResultLauncher<Intent> {
             return registerForActivityResult(StartActivityForResult()) { result ->
                 if (result.resultCode != RESULT_OK)
                     return@registerForActivityResult
 
-                val imageBitmap = retrieveBitmap(result)
-                saveImageToGallery(imageBitmap)
-//                gridAdapter.addItem(imageBitmap) TODO
+                val bitmap = retrieveBitmap()
+                receiptsAdapter.addAtLastPosition(Pair(bitmap, photoUri))
             }
         }
 
-        fun takePhoto() {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePhotoActivityResult.launch(takePictureIntent)
-        }
-
-        private fun retrieveBitmap(result: ActivityResult): Bitmap {
-            return result.data?.extras?.get("data") as Bitmap
-        }
-
-        private fun saveImageToGallery(bitmap: Bitmap) {
-            try {
-                val resolver = requireActivity().contentResolver
-                val contentValues = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, "Image_" + ".jpg")
-                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-                    put(
-                        MediaStore.MediaColumns.RELATIVE_PATH,
-                        Environment.DIRECTORY_PICTURES + File.separator + "PicturesFolder"
-                    )
-                }
-                val imageUri =
-                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-                val fos = resolver.openOutputStream(imageUri!!)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-            } catch (e: Exception) {
-                Log.d("TAG", e.toString())
-            }
+        private fun retrieveBitmap(): Bitmap {
+            return MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri);
         }
     }
 }

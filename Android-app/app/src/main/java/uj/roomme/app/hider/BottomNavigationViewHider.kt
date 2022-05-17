@@ -1,4 +1,4 @@
-package uj.roomme.app.hiders
+package uj.roomme.app.hider
 
 import android.os.Bundle
 import android.view.View
