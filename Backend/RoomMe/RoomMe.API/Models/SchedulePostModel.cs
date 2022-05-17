@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class SchedulePutModel
+    public class SchedulePostModel
     {
         public int HouseworkId { get; set; }
+        public int UserId { get; set; }
         public DateTime Date { get; set; }
     }
 }

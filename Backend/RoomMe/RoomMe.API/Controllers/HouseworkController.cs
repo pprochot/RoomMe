@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RoomMe.API.Helpers;
+using RoomMe.API.Extensions;
 
 namespace RoomMe.API.Controllers
 {
@@ -31,14 +32,17 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpGet("{houseworkId}", Name = nameof(GetHouseworkFull))]
-        public async Task<ActionResult<HouseworkFullGetModel>> GetHouseworkFull(int houseworkId)
+        public async Task<ActionResult<HouseworkModel>> GetHouseworkFull(int houseworkId)
         {
             var housework = await _sqlContext.Houseworks
                             .Include(x => x.Author)
                             .Include(y => y.Flat)
                             .ThenInclude(z => z.Users)
                             .Include(z => z.Users)
+                            .Include(x => x.HouseworkSettings)
+                            .ThenInclude(x => x.Frequency)
                             .Include(p => p.HouseworkSchedules)
+                            .ThenInclude(x => x.Status)
                             .FirstOrDefaultAsync(x => x.Id == houseworkId)
                             .ConfigureAwait(false);
 
@@ -55,11 +59,15 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            return housework.ToHouseworkFullModel();
+            housework.GenerateSchedules(DateTime.UtcNow.AddDays(31), _sqlContext);
+
+            _sqlContext.SaveChanges();
+
+            return housework.ToHouseworkModel();
         }
 
-        [HttpPut("", Name = nameof(PutHousework))]
-        public async Task<ActionResult<HouseworkPutReturnModel>> PutHousework(HouseworkPutModel housework)
+        [HttpPost("", Name = nameof(PostHousework))]
+        public async Task<ActionResult<HouseworkPostReturnModel>> PostHousework(HouseworkPostModel housework)
         {
             var users = await _sqlContext.Users
                 .Where(x => housework.Users.Contains(x.Id))
@@ -77,7 +85,7 @@ namespace RoomMe.API.Controllers
                 }
             }
 
-            var flat = await _sqlContext.Flats.FirstOrDefaultAsync(x => x.Id == housework.FlatId).ConfigureAwait(false);
+            var flat = await _sqlContext.Flats.Include(x => x.Users).FirstOrDefaultAsync(x => x.Id == housework.FlatId).ConfigureAwait(false);
 
             if (flat == null)
             {
@@ -87,7 +95,6 @@ namespace RoomMe.API.Controllers
 
             if (!_sessionHelper.IsUserOfFlat(flat))
             {
-                _logger.LogError($"User is not in flat for housework id {housework.Id}");
                 return new BadRequestResult();
             }
 
@@ -99,80 +106,84 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var houseworkEntity = await _sqlContext.Houseworks
-                .Include(x => x.HouseworkSettings)
-                .FirstOrDefaultAsync(x => x.Id == housework.Id)
-                .ConfigureAwait(false);
-
-            int settingsId = -1;
-
-            if (houseworkEntity == null)
+            if (housework.Days.Any(x => x <= 0 || x >= 8))
             {
-                houseworkEntity = housework.ToHouseworkModel(_sessionHelper.UserId);
-                await _sqlContext.Houseworks.AddAsync(houseworkEntity).ConfigureAwait(false);
-                await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-                HouseworkSettings settings = new()
-                {
-                    HouseworkId = houseworkEntity.Id,
-                    FrequencyId = housework.FrequencyId,
-                    Day = housework.Day
-                };
-
-                await _sqlContext.HouseworkSettings.AddAsync(settings).ConfigureAwait(false);
-                await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-                settingsId = settings.Id;
-            }
-            else
-            {
-                houseworkEntity.UpdateHousework(housework, users, _sessionHelper.UserId);
-                _sqlContext.Houseworks.Update(houseworkEntity);
-                await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-                settingsId = houseworkEntity.HouseworkSettings.Id;
+                return new BadRequestResult();
             }
 
-            return houseworkEntity.ToHouseworkPutReturnModel(settingsId);
+            switch (housework.FrequencyId)
+            {
+                case (int)Consts.HouseworkFrequencies.Once:
+                    if (housework.Days.Length != 1)
+                    {
+                        return new BadRequestResult();
+                    }
+                    break;
+                case (int)Consts.HouseworkFrequencies.Daily:
+                    if (housework.Days.Length != 7)
+                    {
+                        return new BadRequestResult();
+                    }
+                    break;
+                case (int)Consts.HouseworkFrequencies.TwiceAWeek:
+                    if (housework.Days.Length != 2)
+                    {
+                        return new BadRequestResult();
+                    }
+                    break;
+                case (int)Consts.HouseworkFrequencies.Weekly:
+                    if (housework.Days.Length != 1)
+                    {
+                        return new BadRequestResult();
+                    }
+                    break;
+            }
+
+            var houseworkEntity = housework.ToHouseworkModel(_sessionHelper.UserId, users);
+            _sqlContext.Houseworks.Add(houseworkEntity);
+            _sqlContext.SaveChanges();
+
+            HouseworkSettings settings = new()
+            {
+                HouseworkId = houseworkEntity.Id,
+                FrequencyId = housework.FrequencyId,
+                Days = string.Join(",", housework.Days)
+            };
+
+            _sqlContext.HouseworkSettings.Add(settings);
+            _sqlContext.SaveChanges();
+
+            houseworkEntity.HouseworkSettings = settings;
+            houseworkEntity.GenerateSchedules(DateTime.UtcNow.AddDays(31), _sqlContext);
+
+            _sqlContext.SaveChanges();
+
+            return houseworkEntity.ToHouseworkPutReturnModel(settings.Id);
         }
 
-        [HttpGet("{houseworkId}/settings", Name = nameof(GetHouseworkSettings))]
-        public async Task<ActionResult<HouseworkSettingsModel>> GetHouseworkSettings(int houseworkId)
+        [HttpDelete("{houseworkId}", Name = nameof(RemoveHousework))]
+        public async Task<ActionResult> RemoveHousework(int houseworkId)
         {
             var housework = await _sqlContext.Houseworks
-               .Include(x => x.HouseworkSettings)
-               .ThenInclude(y => y.Frequency)
-               .Include(x => x.Flat)
-               .ThenInclude(y => y.Users)
-               .FirstOrDefaultAsync(x => x.Id == houseworkId)
-               .ConfigureAwait(false);
+                .Include(x => x.Flat)
+                .ThenInclude(x => x.Users)
+                .Include(x => x.HouseworkSchedules)
+                .Include(x => x.HouseworkSettings)
+                .FirstOrDefaultAsync(x => x.Id == houseworkId)
+                .ConfigureAwait(false);
 
-            if (housework == null)
+            if(housework == null || !_sessionHelper.IsCreatorOfFlat(housework.Flat))
             {
-                _logger.LogError($"Housework not found for id {houseworkId}");
                 return new BadRequestResult();
             }
 
-            if (!_sessionHelper.IsUserOfFlat(housework.Flat))
-            {
-                _logger.LogError($"User is not in flat for housework id {houseworkId}");
-                return new BadRequestResult();
-            }
+            _sqlContext.HouseworkSettings.Remove(housework.HouseworkSettings);
+            _sqlContext.HouseworkSchedules.RemoveRange(housework.HouseworkSchedules);
+            _sqlContext.Houseworks.Remove(housework);
 
-            if (housework.HouseworkSettings == null)
-            {
-                _logger.LogError($"Settings not found for housework id {houseworkId}");
-                return new BadRequestResult();
-            }
+            _sqlContext.SaveChanges();
 
-            if (housework.HouseworkSettings.Frequency == null)
-            {
-                _logger.LogError($"Frequency not found for settings in housework with Id {houseworkId}");
-                return new BadRequestResult();
-            }
-
-            return housework.HouseworkSettings.ToHouseworkSettingsModel();
+            return Ok();
         }
-
     }
 }

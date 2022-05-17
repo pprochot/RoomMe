@@ -9,6 +9,6 @@ namespace RoomMe.API.Models
     {
         public int Id { get; set; }
         public HouseworkFrequencyModel Frequency { get; set; }
-        public int Day { get; set; }
+        public int[] Days { get; set; }
     }
 }

@@ -209,5 +209,58 @@ namespace RoomMe.API.Controllers
 
             return lists.Select(x => x.ToShoppingListShortModel()).ToList();
         }
+
+        [HttpGet("{flatId}/available-locators", Name = nameof(GetAvailableLocators))]
+        public async Task<ActionResult<IEnumerable<UserNicknameModel>>> GetAvailableLocators(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .SingleOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsCreatorOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var friends = await _sqlContext.UserFriends
+                .Include(x => x.Friend)
+                .Where(x => x.UserId == _sessionHelper.UserId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            var res = new List<UserNicknameModel>();
+
+            foreach(var friend in friends)
+            {
+                if(!flat.Users.Contains(friend.Friend))
+                {
+                    res.Add(friend.Friend.ToUserNicknameModel());
+                }
+            }
+
+            return res;
+        }
+
+        [HttpGet("{flatId}/houseworks", Name = nameof(GetFlatHouseworks))]
+        public async Task<ActionResult<IEnumerable<HouseworkShortModel>>> GetFlatHouseworks(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var houseworks = await _sqlContext.Houseworks
+                .Where(x => x.FlatId == flatId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return houseworks.Select(x => x.ToHouseworkShortModel()).ToList();
+        }
     }
 }

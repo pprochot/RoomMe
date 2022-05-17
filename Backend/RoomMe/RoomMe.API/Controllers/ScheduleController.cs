@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RoomMe.API.Helpers;
+using RoomMe.API.Extensions;
 
 namespace RoomMe.API.Controllers
 {
@@ -30,106 +31,111 @@ namespace RoomMe.API.Controllers
             _sessionHelper = sessionHelper;
         }
 
-        [HttpGet("{scheduleId}", Name = nameof(GetScheduleFull))]
-        public async Task<ActionResult<ScheduleFullGetModel>> GetScheduleFull(int scheduleId)
+        [HttpGet("{flatId}", Name = nameof(GetSchedulesByMonth))]
+        public async Task<ActionResult<Dictionary<DateTime, List<ScheduleModel>>>> GetSchedulesByMonth(int flatId, [FromQuery] SchedulesByMonthModel model)
         {
-            var schedule = await _sqlContext.HouseworkSchedules
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var startDate = new DateTime(model.Year, model.Month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            var houseworks = await _sqlContext.Houseworks
+                .Include(x => x.HouseworkSchedules)
+                .Include(x => x.HouseworkSettings)
+                .Include(x => x.Users)
+                .Where(x => x.FlatId == flatId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            foreach(var housework in houseworks)
+            {
+                housework.GenerateSchedules(endDate, _sqlContext);
+            }
+
+            _sqlContext.SaveChanges();
+            
+            var schedules = await _sqlContext.HouseworkSchedules
+                .Include(x => x.Housework)
                 .Include(x => x.User)
                 .Include(x => x.Status)
+                .Where(x => x.Date >= startDate && x.Date <= endDate)
+                .Where(x => x.Housework.FlatId == flatId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            Dictionary<DateTime, List<ScheduleModel>> result = new();
+
+            while(startDate <= endDate)
+            {
+                result.Add(startDate, schedules.Where(x => x.Date.Date == startDate.Date).Select(x => x.ToScheduleModel()).ToList());
+                startDate = startDate.AddDays(1);
+            }
+
+            return result;
+        }
+
+        [HttpPatch("{scheduleId}", Name = nameof(PatchSchedule))]
+        public async Task<ActionResult> PatchSchedule(int scheduleId, SchedulePatchModel model)
+        {
+            var schedule = await _sqlContext.HouseworkSchedules
                 .Include(x => x.Housework)
-                .ThenInclude(y => y.Flat)
-                .ThenInclude(z => z.Users)
-                .Include(x => x.Housework)
-                .ThenInclude(y => y.HouseworkSettings)
-                .ThenInclude(z => z.Frequency)
+                .ThenInclude(x => x.Flat)
+                .ThenInclude(x => x.Users)
                 .FirstOrDefaultAsync(x => x.Id == scheduleId)
                 .ConfigureAwait(false);
-                
 
             if(schedule == null)
             {
-                _logger.LogError($"Schedule not found for id {scheduleId}");
                 return new BadRequestResult();
             }
 
-            if (!_sessionHelper.IsUserOfFlat(schedule.Housework.Flat))
+
+            if(model.UserId != null)
             {
-                _logger.LogError($"User is not in flat for schedule {scheduleId}");
-                return new BadRequestResult();
+                if(!_sessionHelper.IsCreatorOfFlat(schedule.Housework.Flat) && model.UserId != _sessionHelper.UserId)
+                {
+                    return new BadRequestResult();
+                }
+
+                schedule.UserId = (int)model.UserId;
             }
 
-            if(schedule.Status == null)
+            if(model.StatusId != null)
             {
-                _logger.LogError($"Status not found for scheduleID {scheduleId}");
-                return new BadRequestResult();
+                if(!_sessionHelper.IsCreatorOfFlat(schedule.Housework.Flat) && schedule.UserId != _sessionHelper.UserId)
+                {
+                    return new BadRequestResult();
+                }
+
+                if(!Enum.IsDefined(typeof(Consts.HouseworkStatuses), model.StatusId))
+                {
+                    return new BadRequestResult();
+                }
+
+                schedule.StatusId = (int)model.StatusId;
             }
 
-            return schedule.ToScheduleFullGetModel();
+            if(model.Date != null)
+            {
+                if (!_sessionHelper.IsCreatorOfFlat(schedule.Housework.Flat))
+                {
+                    return new BadRequestResult();
+                }
+
+                schedule.Date = (DateTime)model.Date;
+            }
+
+            _sqlContext.SaveChanges();
+
+            return Ok();
         }
-
-        [HttpPost("", Name = nameof(CreateNewSchedule))]
-        public async Task<ActionResult<SchedulePutReturnModel>> CreateNewSchedule(SchedulePutModel schedule)
-        {
-            var housework = await _sqlContext.Houseworks.FindAsync(schedule.HouseworkId).ConfigureAwait(false);
-
-            if(housework == null)
-            {
-                _logger.LogError($"Housework not found for id {schedule.HouseworkId}");
-                return new BadRequestResult();
-            }
-
-            var scheduleEntity = schedule.ToScheduleModel(housework, _sessionHelper.UserId);
-
-            await _sqlContext.HouseworkSchedules.AddAsync(scheduleEntity).ConfigureAwait(false);
-            await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
-
-            return scheduleEntity.ToSchedulePutReturnModel();
-        }
-
-        [HttpGet("date", Name = nameof(GetScheduleDate))]
-        public async Task<ActionResult<List<ScheduleDateModel>>> GetScheduleDate([FromQuery] FromToDateModel dates)
-        {
-            var schedules = await _sqlContext.HouseworkSchedules
-                .Where(x => x.Date >= dates.From && x.Date <= dates.To)
-                .Include(y => y.Housework)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            return schedules.Select(x => x.ToScheduleDateModel()).ToList();
-        }
-
-        [HttpGet("{houseworkId}/list", Name = nameof(GetFullSchedulesByDate))]
-        public async Task<ActionResult<List<ScheduleListModel>>> GetFullSchedulesByDate([FromQuery] FromToDateModel dates, int houseworkId)
-        {
-
-            var schedules = await _sqlContext.HouseworkSchedules
-                .Where(x => x.Date >= dates.From && x.Date <= dates.To && x.HouseworkId == houseworkId)
-                .Include(x => x.User)
-                .Include(x => x.Status)
-                .Include(x => x.Housework)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            var housework = await _sqlContext.Houseworks
-                .Include(x => x.Flat)
-                .ThenInclude(y => y.Users)
-                .FirstOrDefaultAsync(x => x.Id == houseworkId)
-                .ConfigureAwait(false);
-
-            if (housework == null)
-            {
-                _logger.LogError($"Housework not found for id {houseworkId}");
-                return new BadRequestResult();
-            }
-
-            if (!_sessionHelper.IsUserOfFlat(housework.Flat))
-            {
-                _logger.LogError($"User is not in flat for housework {houseworkId}");
-                return new BadRequestResult();
-            }
-
-            return schedules.Select(x => x.ToScheduleListModel()).ToList();
-        }
-
     }
 }
