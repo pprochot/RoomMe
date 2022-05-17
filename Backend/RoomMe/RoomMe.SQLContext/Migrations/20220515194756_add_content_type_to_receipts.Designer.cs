@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220515194756_add_content_type_to_receipts")]
+    partial class add_content_type_to_receipts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,7 +159,8 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
 
                     b.HasIndex("FlatId");
 
@@ -205,6 +208,12 @@ namespace RoomMe.SQLContext.Migrations
                             Id = 4,
                             Name = "Twice a week",
                             Value = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Monthly",
+                            Value = 30
                         });
                 });
 
@@ -245,8 +254,8 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Days")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
 
                     b.Property<int>("FrequencyId")
                         .HasColumnType("int");
@@ -282,7 +291,7 @@ namespace RoomMe.SQLContext.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Todo"
+                            Name = "In Progress"
                         },
                         new
                         {
@@ -351,6 +360,9 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -693,8 +705,8 @@ namespace RoomMe.SQLContext.Migrations
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>
                 {
                     b.HasOne("RoomMe.SQLContext.Models.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
+                        .WithOne()
+                        .HasForeignKey("RoomMe.SQLContext.Models.Housework", "AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220426201547_remove_monthly_frequency")]
+    partial class remove_monthly_frequency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +66,9 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.Property<int>("FlatId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDivided")
+                        .HasColumnType("bit");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -157,7 +162,8 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
 
                     b.HasIndex("FlatId");
 
@@ -352,6 +358,9 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -444,9 +453,6 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContentType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
@@ -519,43 +525,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasIndex("FlatId");
 
                     b.ToTable("ShoppingLists");
-                });
-
-            modelBuilder.Entity("RoomMe.SQLContext.Models.StatisticsFrequency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StatisticsFrequencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "All costs"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Daily"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Weekly"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Monthly"
-                        });
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.User", b =>
@@ -693,8 +662,8 @@ namespace RoomMe.SQLContext.Migrations
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>
                 {
                     b.HasOne("RoomMe.SQLContext.Models.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
+                        .WithOne()
+                        .HasForeignKey("RoomMe.SQLContext.Models.Housework", "AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
