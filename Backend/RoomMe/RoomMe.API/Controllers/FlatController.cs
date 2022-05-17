@@ -167,7 +167,11 @@ namespace RoomMe.API.Controllers
 
             if(rent == null)
             {
-                return new BadRequestResult();
+                return new RentCostGetReturnModel()
+                {
+                    IsPaid = false,
+                    Value = null
+                };
             }
 
             var currDate = DateTime.UtcNow;
