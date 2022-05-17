@@ -13,6 +13,6 @@ namespace RoomMe.SQLContext.Models
         public Housework Housework { get; set; }
         public int FrequencyId { get; set; }
         public HouseworkFrequency Frequency { get; set; }
-        public int Day { get; set; }
+        public string Days { get; set; }
     }
 }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace RoomMe.API.Models
 {
-    public class FromToDateModel
+    public class SchedulesByMonthModel
     {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
     }
 }
