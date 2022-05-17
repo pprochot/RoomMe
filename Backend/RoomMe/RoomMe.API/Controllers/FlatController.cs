@@ -149,7 +149,7 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpGet("{flatId}/rent", Name = nameof(CheckIfRentIsPaid))]
-        public async Task<ActionResult<bool>> CheckIfRentIsPaid(int flatId)
+        public async Task<ActionResult<RentCostGetReturnModel>> CheckIfRentIsPaid(int flatId)
         {
             var flat = await _sqlContext.Flats
                 .Include(x => x.Users)
@@ -161,13 +161,26 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var currDate = DateTime.UtcNow;
+            var rent = await _sqlContext.RentCosts
+                .FirstOrDefaultAsync(x => x.FlatId == flatId && x.UserId == _sessionHelper.UserId)
+                .ConfigureAwait(false);
 
+            if(rent == null)
+            {
+                return new BadRequestResult();
+            }
+
+            var currDate = DateTime.UtcNow;
             var startDate = new DateTime(currDate.Year, currDate.Month, 1);
 
-            var result = await _sqlContext.PrivateCosts.AnyAsync(x => x.Date >= startDate).ConfigureAwait(false);
+            var isPaid = await _sqlContext.PrivateCosts.AnyAsync(x => x.Date >= startDate 
+                && x.UserId == _sessionHelper.UserId && x.FlatId == flatId).ConfigureAwait(false);
 
-            return result;
+            return new RentCostGetReturnModel()
+            {
+                IsPaid = isPaid,
+                Value = rent.Value
+            };
         }
 
         [HttpPost("{flatId}/rent", Name = nameof(PostRentCost))]
@@ -183,7 +196,9 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var rentCost = await _sqlContext.RentCosts.SingleOrDefaultAsync(x => x.FlatId == flatId).ConfigureAwait(false);
+            var rentCost = await _sqlContext.RentCosts
+                .SingleOrDefaultAsync(x => x.FlatId == flatId && x.UserId == _sessionHelper.UserId)
+                .ConfigureAwait(false);
 
             if(rentCost == null)
             {
@@ -193,6 +208,7 @@ namespace RoomMe.API.Controllers
             var cost = new PrivateCost()
             {
                 UserId = _sessionHelper.UserId,
+                FlatId = flatId,
                 Value = rentCost.Value,
                 Date = DateTime.UtcNow
             };
