@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="5dp"
     android:paddingHorizontal="5dp"
-    android:stretchColumns="2">
+    android:stretchColumns="1,2">
 
     <TableRow>
 
@@ -15,7 +15,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Name:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -37,7 +36,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Date:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -59,7 +57,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Completor:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -81,7 +78,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Status:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView

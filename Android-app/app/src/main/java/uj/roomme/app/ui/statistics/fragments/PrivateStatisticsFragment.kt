@@ -62,6 +62,13 @@ class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
             spaceMax = 0.5f
             spaceMin = 0.5f
         }
+        binding.barChart.run {
+            axisLeft.textColor = Color.GRAY
+            xAxis.textColor = Color.GRAY
+            legend.textColor = Color.GRAY
+            description.textColor = Color.GRAY
+        }
+
 
         viewModel.statisticsLiveData.observe(viewLifecycleOwner) { statistics ->
             binding.buttonRefresh.makeClickable()
@@ -80,13 +87,13 @@ class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
             val barDataSet = BarDataSet(entries, "Statistics")
             barDataSet.colors = ColorTemplate.MATERIAL_COLORS.toMutableList()
-            barDataSet.valueTextColor = Color.BLACK
+            barDataSet.valueTextColor = Color.GRAY
             barDataSet.valueTextSize = 10f
 
             val barData = BarData(barDataSet)
             binding.barChart.setFitBars(true)
             binding.barChart.data = barData
-            binding.barChart.description.text = "Bar chart private statistics"
+            binding.barChart.description.text = "Private statistics"
             binding.barChart.animateY(2000)
         }
     }

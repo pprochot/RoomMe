@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp"
-    android:background="#DFDFDF">
+    android:layout_marginBottom="2dp">
 
     <View
         android:id="@+id/itemHouseworkColorCategory"
-        android:layout_width="10dp"
+        android:layout_width="7dp"
         android:layout_height="match_parent"
         android:background="@color/red"
         android:gravity="center"

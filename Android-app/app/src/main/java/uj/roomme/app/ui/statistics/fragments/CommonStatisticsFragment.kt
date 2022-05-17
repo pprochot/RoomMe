@@ -53,6 +53,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
     private fun setUpChart() {
         binding.barChart.xAxis.run {
+            textColor = Color.GRAY
             position = XAxis.XAxisPosition.BOTTOM
             setDrawAxisLine(true)
             setDrawGridLines(false)
@@ -61,6 +62,12 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
             granularity = 1f
             spaceMax = 0.5f
             spaceMin = 0.5f
+        }
+        binding.barChart.run {
+            axisLeft.textColor = Color.GRAY
+            xAxis.textColor = Color.GRAY
+            legend.textColor = Color.GRAY
+            description.textColor = Color.GRAY
         }
 
         viewModel.statisticsLiveData.observe(viewLifecycleOwner) { statistics ->
@@ -80,13 +87,13 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
             val barDataSet = BarDataSet(entries, "Statistics")
             barDataSet.colors = ColorTemplate.MATERIAL_COLORS.toMutableList()
-            barDataSet.valueTextColor = Color.BLACK
+            barDataSet.valueTextColor = Color.GRAY
             barDataSet.valueTextSize = 10f
 
             val barData = BarData(barDataSet)
             binding.barChart.setFitBars(true)
             binding.barChart.data = barData
-            binding.barChart.description.text = "Bar chart common statistics"
+            binding.barChart.description.text = "Common statistics"
             binding.barChart.animateY(2000)
         }
     }

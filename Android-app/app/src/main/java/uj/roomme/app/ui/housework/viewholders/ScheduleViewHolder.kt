@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uj.roomme.app.databinding.RowCalendarScheduleBinding
 import uj.roomme.app.databinding.RowHouseworkScheduleBinding
 
-class ScheduleViewHolder(itemView: View) {
+class ScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     val binding = RowHouseworkScheduleBinding.bind(itemView)
 }

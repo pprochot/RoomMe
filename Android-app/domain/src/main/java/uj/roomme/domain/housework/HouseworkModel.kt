@@ -11,6 +11,6 @@ data class HouseworkModel(
     val author: UserNicknameModel,
     val description: String,
     val users: List<UserNicknameModel>,
-    val schedule: ScheduleShortModel,
+    val nextSchedule: ScheduleShortModel,
     val settings: HouseworkSettingsModel
 )

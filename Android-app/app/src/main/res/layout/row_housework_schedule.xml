@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:stretchColumns="2">
+    android:layout_marginBottom="3dp"
+    android:stretchColumns="1,2">
 
     <TableRow>
 
@@ -13,7 +14,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Name:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -35,7 +35,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Date:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -57,7 +56,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Completor:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -79,7 +77,6 @@
             android:layout_column="1"
             android:paddingEnd="20dp"
             android:text="Status:"
-            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView

@@ -19,6 +19,17 @@
         android:text="Apartment address"
         android:textSize="18dp" />
 
+    <TextView
+        android:id="@+id/viewRentNotSet"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/roundable_grey_view"
+        android:gravity="center"
+        android:text="Rent not set."
+        android:textSize="17sp" />
+
     <LinearLayout
         android:id="@+id/layoutRentNotPaid"
         android:layout_width="match_parent"
@@ -26,15 +37,18 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textRentNotPaid"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="20dp"
-            android:background="#E4463B"
-            android:gravity="center_horizontal"
-            android:text="Rent not paid for this month" />
+            android:background="@drawable/roundable_red_view"
+            android:gravity="center"
+            android:text="Rent to pay: "
+            android:textSize="17sp" />
 
         <Button
+            android:id="@+id/buttonPayRent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="60dp"
@@ -43,15 +57,18 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/viewRentPaid"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="20dp"
-        android:background="#96F646"
-        android:gravity="center_horizontal"
-        android:text="Rent was paid" />
+        android:background="@drawable/roundable_green_view"
+        android:gravity="center"
+        android:text="Rent was paid"
+        android:textSize="17sp" />
 
     <Button
+        android:id="@+id/buttonSetRentCost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="60dp"
@@ -69,10 +86,11 @@
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:text="Today's housework"
+            android:text="Today's housework schedules"
             android:textSize="18dp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSchedules"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="5dp" />

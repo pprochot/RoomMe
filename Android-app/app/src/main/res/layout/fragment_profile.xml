@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:text="Nickname:"
-        android:textColor="@color/black"
         android:textSize="18sp" />
 
     <TextView
@@ -29,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:text="Email:"
-        android:textColor="@color/black"
         android:textSize="18sp" />
 
     <TextView
@@ -46,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:text="Firstname:"
-        android:textColor="@color/black"
         android:textSize="18sp" />
 
     <TextView
@@ -63,7 +60,6 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:text="Lastname:"
-        android:textColor="@color/black"
         android:textSize="18sp" />
 
     <TextView
@@ -80,7 +76,6 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:text="Phone number:"
-        android:textColor="@color/black"
         android:textSize="18sp" />
 
     <TextView
