@@ -48,35 +48,47 @@ namespace RoomMe.API.Extensions
                     return;
                 }
 
+                int diffIndex = 0;
+                int userIndex = 0;
+                DateTime currDate;
 
-                var differences = new int[availableDays.Length];
-
-                for (int i = 0; i < availableDays.Length; i++)
+                if(lastSchedule == null)
                 {
-                    if (i + 1 == availableDays.Length)
+                    while (true)
                     {
-                        differences[i] = 7 + availableDays[0] - availableDays[i];
+                        int tempDate = availableDays[diffIndex] - (int)DateTime.UtcNow.DayOfWeek;
+                        if (tempDate > 0) break;
+
+                        diffIndex++;
+                        if (diffIndex == availableDays.Length)
+                        {
+                            break;
+                        }
                     }
-                    else
-                    {
-                        differences[i] = availableDays[i + 1] - availableDays[i];
-                    }
+
+                    int diffDate = availableDays[diffIndex] - (int)DateTime.UtcNow.DayOfWeek;
+                    currDate = DateTime.UtcNow.AddDays(diffDate);
                 }
-
-                int diffDate = availableDays[0] - (int)DateTime.UtcNow.DayOfWeek;
-                if (diffDate <= 0) diffDate += 7;
-                DateTime currDate = DateTime.UtcNow.AddDays(diffDate);
-
-                if (lastSchedule != null)
+                else
                 {
-                    diffDate = availableDays[0] - (int)lastSchedule.Date.DayOfWeek;
-                    if (diffDate <= 0) diffDate += 7;
+                    diffIndex = 0;
+                    while (true)
+                    {
+                        int tempDate = availableDays[diffIndex] - (int)lastSchedule.Date.DayOfWeek;
+                        if (tempDate > 0) break;
+
+                        diffIndex++;
+                        if (diffIndex == availableDays.Length)
+                        {
+                            break;
+                        }
+                    }
+
+                    int diffDate = availableDays[diffIndex] - (int)lastSchedule.Date.DayOfWeek;
                     currDate = lastSchedule.Date.AddDays(diffDate);
                 }
 
                 var users = housework.Users.ToArray();
-                int userIndex = 0;
-                int diffIndex = 0;
 
                 while (currDate < untilDate)
                 {
@@ -90,7 +102,7 @@ namespace RoomMe.API.Extensions
 
                     diffIndex = (diffIndex + 1) % availableDays.Length;
                     userIndex = (userIndex + 1) % users.Length;
-                    diffDate = availableDays[diffIndex] - (int)currDate.DayOfWeek;
+                    int diffDate = availableDays[diffIndex] - (int)currDate.DayOfWeek;
                     if (diffDate <= 0) diffDate += 7;
 
                     currDate = currDate.AddDays(diffDate);

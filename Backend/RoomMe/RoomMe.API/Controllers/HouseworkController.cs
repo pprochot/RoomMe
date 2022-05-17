@@ -42,6 +42,7 @@ namespace RoomMe.API.Controllers
                             .Include(x => x.HouseworkSettings)
                             .ThenInclude(x => x.Frequency)
                             .Include(p => p.HouseworkSchedules)
+                            .ThenInclude(x => x.Status)
                             .FirstOrDefaultAsync(x => x.Id == houseworkId)
                             .ConfigureAwait(false);
 

@@ -65,9 +65,6 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<int>("FlatId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDivided")
-                        .HasColumnType("bit");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -522,6 +519,43 @@ namespace RoomMe.SQLContext.Migrations
                     b.HasIndex("FlatId");
 
                     b.ToTable("ShoppingLists");
+                });
+
+            modelBuilder.Entity("RoomMe.SQLContext.Models.StatisticsFrequency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StatisticsFrequencies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "All costs"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Daily"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Weekly"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Monthly"
+                        });
                 });
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.User", b =>

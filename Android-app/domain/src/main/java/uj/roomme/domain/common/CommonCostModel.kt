@@ -1,6 +1,7 @@
 package uj.roomme.domain.common
 
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 data class CommonCostModel(
