@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomMe.SQLContext;
 
 namespace RoomMe.SQLContext.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20220517210345_add_flat_to_private_costs")]
+    partial class add_flat_to_private_costs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

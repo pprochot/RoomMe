@@ -62,6 +62,7 @@ namespace RoomMe.API.Extensions
                         diffIndex++;
                         if (diffIndex == availableDays.Length)
                         {
+                            diffIndex = 0;
                             break;
                         }
                     }
@@ -80,6 +81,7 @@ namespace RoomMe.API.Extensions
                         diffIndex++;
                         if (diffIndex == availableDays.Length)
                         {
+                            diffIndex = 0;
                             break;
                         }
                     }

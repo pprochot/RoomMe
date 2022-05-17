@@ -7,8 +7,8 @@ namespace RoomMe.API.Models
 {
     public class RentCostPostReturnModel
     {
-        public int userId { get; set; }
-        public int flatId { get; set; }
+        public int UserId { get; set; }
+        public int FlatId { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

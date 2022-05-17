@@ -38,6 +38,7 @@ namespace RoomMe.API.Converters
             {
                 Id = user.Id,
                 Email = user.Email,
+                Nickname = user.Nickname,
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 PhoneNumber = user.PhoneNumber
