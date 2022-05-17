@@ -19,13 +19,13 @@ class RoomMeCall<R>(private val call: Call<R>, private val executor: Executor) {
     }
 
     fun processAsync(responseHandler: (Int?, R?, Throwable?) -> Unit) {
-
         val callback = object : Callback<R> {
             override fun onResponse(call: Call<R>?, r: Response<R>?) =
                 handleResponse(r, responseHandler)
 
-            override fun onFailure(call: Call<R>?, t: Throwable?) =
-                responseHandler(null, null, t)
+            override fun onFailure(call: Call<R>?, t: Throwable?) {
+                executor.execute { responseHandler(null, null, t) }
+            }
         }
         call.enqueue(callback)
     }

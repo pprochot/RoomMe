@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="30dp"
-    android:layout_marginStart="30dp"
-    android:layout_marginEnd="30dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
+        style="@style/NoBottomNavBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".app.fragments.login.SignUpFragment">
 
@@ -19,8 +17,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="Nickname"
+            android:hint="@string/nickname"
             app:counterEnabled="true"
             app:counterMaxLength="20"
             app:endIconMode="clear_text"
@@ -44,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Email"
+            android:hint="@string/email"
             app:endIconMode="clear_text"
             app:helperText="Required*"
             app:helperTextTextColor="@color/red"
@@ -65,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Password"
+            android:hint="@string/password"
             app:endIconMode="password_toggle"
             app:helperText="Required*"
             app:helperTextTextColor="@color/red"
@@ -86,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Enter password again"
+            android:hint="@string/enter_password_again"
             app:endIconMode="password_toggle"
             app:helperText="Required*"
             app:helperTextTextColor="@color/red"
@@ -107,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="First name"
+            android:hint="@string/first_name"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Last name"
+            android:hint="@string/last_name"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Phone number"
+            android:hint="@string/phone_number"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -163,8 +160,8 @@
             android:id="@+id/signUpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_gravity="center"
-            android:text="Sign up" />
+            android:layout_marginTop="25dp"
+            android:text="@string/sign_up" />
     </LinearLayout>
 </ScrollView>
