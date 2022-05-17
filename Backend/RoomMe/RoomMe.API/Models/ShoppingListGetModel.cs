@@ -16,5 +16,6 @@ namespace RoomMe.API.Models
         public DateTime CreationDate { get; set; }
         public DateTime CompletionDate { get; set; }
         public List<ProductModel> Products { get; set; }
+        public List<Guid> Receipts { get; set; }
     }
 }

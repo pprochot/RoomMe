@@ -13,5 +13,6 @@ namespace RoomMe.SQLContext.Models
         public int ShoppingListId { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
+        public string ContentType { get; set; }
     }
 }
