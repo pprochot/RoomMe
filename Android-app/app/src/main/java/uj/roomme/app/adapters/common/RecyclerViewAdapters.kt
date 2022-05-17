@@ -9,8 +9,6 @@ abstract class UnReplaceableRvAdapter<T, V : RecyclerView.ViewHolder>(val dataLi
     final override fun getItemCount() = dataList.size
 }
 
-// TODO change classes to mutable and immutable adapters
-
 abstract class ReplaceableRvAdapter<T, V : RecyclerView.ViewHolder> : RecyclerView.Adapter<V>() {
 
     var dataList: List<T> = emptyList()

@@ -24,7 +24,6 @@ class SessionViewModel @Inject constructor(private val authService: AuthService)
     val successfullyRefreshedTokenEvent = MutableLiveData<NotificationEvent>()
     val failedToRefreshTokenEvent = MutableLiveData<NotificationEvent>()
 
-    // TODO change to sign out
     fun clear() {
         userData = null
         selectedApartmentId = null

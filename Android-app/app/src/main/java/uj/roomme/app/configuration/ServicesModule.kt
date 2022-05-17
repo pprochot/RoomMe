@@ -29,7 +29,7 @@ class ServicesModule {
                     .atOffset(ZoneOffset.UTC)
             } catch (ex: DateTimeParseException) {
                 LocalDateTime.parse(json.asString, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-                    .atOffset(ZoneOffset.UTC) //TODO incorrect
+                    .atOffset(ZoneOffset.UTC)
             }
         }
         val gson = GsonBuilder()
