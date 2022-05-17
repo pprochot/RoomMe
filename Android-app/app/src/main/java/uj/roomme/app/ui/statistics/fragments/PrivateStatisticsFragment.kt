@@ -52,6 +52,7 @@ class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
     }
 
     private fun setUpChart() {
+        binding.barChart.visibility = View.GONE
         binding.barChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             setDrawAxisLine(true)
@@ -71,6 +72,7 @@ class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
 
         viewModel.statisticsLiveData.observe(viewLifecycleOwner) { statistics ->
+            binding.barChart.visibility = View.VISIBLE
             binding.buttonRefresh.makeClickable()
             val labels = statistics.map { it.timeStamp }
             val entries = statistics.mapIndexed { index, model ->
@@ -100,6 +102,7 @@ class PrivateStatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
     private fun setUpRefreshButton() {
         binding.buttonRefresh.setOnClickListener {
+            binding.barChart.visibility = View.GONE
             binding.buttonRefresh.makeNotClickable()
             viewModel.fetchPrivateStatisticsFromService()
         }

@@ -52,6 +52,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
     }
 
     private fun setUpChart() {
+        binding.barChart.visibility = View.GONE
         binding.barChart.xAxis.run {
             textColor = Color.GRAY
             position = XAxis.XAxisPosition.BOTTOM
@@ -71,6 +72,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
         }
 
         viewModel.statisticsLiveData.observe(viewLifecycleOwner) { statistics ->
+            binding.barChart.visibility = View.VISIBLE
             binding.buttonRefresh.makeClickable()
             val labels = statistics.map { it.timeStamp }
             val entries = statistics.mapIndexed { index, model ->
@@ -101,6 +103,7 @@ class CommonStatisticsFragment : Fragment(R.layout.fragment_statistics) {
     private fun setUpRefreshButton() {
         binding.buttonRefresh.setOnClickListener {
             binding.buttonRefresh.makeNotClickable()
+            binding.barChart.visibility = View.GONE
             viewModel.fetchCommonStatisticsFromService()
         }
     }
