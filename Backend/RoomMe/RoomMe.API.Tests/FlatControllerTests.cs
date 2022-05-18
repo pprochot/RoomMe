@@ -32,6 +32,7 @@ namespace RoomMe.API.Tests
         SqlContext context;
         SessionHelper sessionHelper;
         FlatController flatController;
+        StatisticsController statisticsController;
 
         User sessionUser;
 
@@ -69,6 +70,7 @@ namespace RoomMe.API.Tests
             sessionHelper = new SessionHelper(mockHttpContextAccesor.Object, mockHeaderConfiguration.Object);
             
             flatController = new FlatController(new NullLogger<FlatController>(), context, sessionHelper);
+            statisticsController = new StatisticsController(new NullLogger<StatisticsController>(), context, sessionHelper);
         }
         
         //CreateNewFlat Test
@@ -302,6 +304,85 @@ namespace RoomMe.API.Tests
 
             Assert.IsInstanceOf<PrivateCostModel>(actionResult.Value);
             Assert.AreEqual(150.0, actionResult.Value.Value);
+        }
+
+        [Test, Order(12)]
+        public async Task GetPrivateCostsStatistics_AllStatsId_ShouldReturnPrivateStats()
+        {
+            var actionResult = await statisticsController.GetPrivateCostsStatistics(new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow,
+                frequencyId = Consts.AllStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            double sum = 0;
+
+            foreach (var x in actionResult.Value)
+            {
+                sum += x.Value;
+            }
+
+            Assert.AreEqual(150, sum);
+        }
+
+        [Test, Order(13)]
+        public async Task GetPrivateCostsStatistics_AllStatsIdWithTwoRents_ShouldReturnPrivateStats()
+        {
+            await flatController.SetFlatRentCost(2, new RentCostPutModel()
+            {
+                Value = 150
+            });
+
+            await flatController.PostRentCost(2);
+
+            var actionResult = await statisticsController.GetPrivateCostsStatistics(new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow,
+                frequencyId = Consts.AllStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            int count = 0;
+            double sum = 0;
+
+            foreach(var x in actionResult.Value)
+            {
+                sum += x.Value;
+                count++;
+            }
+
+            Assert.AreEqual(2, count);
+            Assert.AreEqual(300, sum);
+        }
+
+        [Test, Order(14)]
+        public async Task GetPrivateCostsStatistics_DailydWithTwoRents_ShouldReturnPrivateStats()
+        {
+            var actionResult = await statisticsController.GetPrivateCostsStatistics(new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow,
+                frequencyId = Consts.DailyStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            int count = 0;
+            double sum = 0;
+
+            foreach (var x in actionResult.Value)
+            {
+                sum += x.Value;
+                count++;
+            }
+
+            Assert.AreEqual((DateTime.UtcNow.Date - DateTime.UtcNow.AddMonths(-1).Date).TotalDays, count);
+            Assert.AreEqual(300, sum);
         }
 
         [Test, Order(12)]
