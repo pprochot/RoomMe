@@ -265,7 +265,7 @@ namespace RoomMe.API.Tests
         [Test, Order(10)]
         public async Task GetFlatShoppingLists_WithNoListsForFlat_ShouldReturnEmptyList()
         {
-            var actionResult = await flatController.GetFlatShoppingLists(3, true);
+            var actionResult = await flatController.GetFlatShoppingLists(3);
 
             Assert.IsInstanceOf<List<ShoppingListShortModel>>(actionResult.Value);
             Assert.AreEqual("", actionResult.Value);
@@ -273,14 +273,14 @@ namespace RoomMe.API.Tests
         [Test, Order(10)]
         public async Task GetFlatShoppingLists_WithSessionUserNotOfFlat_ShouldReturnBadRequestResult()
         {
-            var actionResult = await flatController.GetFlatShoppingLists(1, true);
+            var actionResult = await flatController.GetFlatShoppingLists(1);
 
             Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
         }
         [Test, Order(10)]
         public async Task GetFlatShoppingLists_WithValidUserAndList_ShouldReturnListWithContent()
         {
-            var actionResult = await flatController.GetFlatShoppingLists(2, true);
+            var actionResult = await flatController.GetFlatShoppingLists(2);
 
             Assert.IsInstanceOf<List<ShoppingListShortModel>>(actionResult.Value);
             Assert.AreNotEqual("", actionResult.Value);
