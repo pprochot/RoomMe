@@ -60,16 +60,6 @@ namespace RoomMe.API.Converters
                 CreationDate = DateTime.UtcNow
             };
         }
-
-        public static ProductPatchReturnModel ToProductPatchReturnModel(this IEnumerable<Product> products)
-        {
-            return new ProductPatchReturnModel()
-            {
-                TimeStamp = DateTime.UtcNow,
-                CommonCostIds = products.Select(x => x.Id).ToList()
-            };
-        }
-
         public static CommonCost CreateCommonCost(this ProductPatchModel product, int flatId, int userId)
         {
             return new CommonCost()
@@ -120,7 +110,8 @@ namespace RoomMe.API.Converters
                 Description = list.Description,
                 CreationDate = list.CreationDate,
                 CompletionDate = list.CompletionDate,
-                Products = list.Products.Select(x => x.ToProductModel()).ToList()
+                Products = list.Products.Select(x => x.ToProductModel()).ToList(),
+                Receipts = list.Receipts.Select(x => x.Guid).ToList(),
             };
         }
 
@@ -142,7 +133,8 @@ namespace RoomMe.API.Converters
                 Guid = guid,
                 ShoppingListId = listId,
                 Name = file.FileName,
-                Path = path
+                Path = path,
+                ContentType = file.ContentType,
             };
         }
     }

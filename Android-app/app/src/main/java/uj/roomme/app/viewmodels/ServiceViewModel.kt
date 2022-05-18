@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import uj.roomme.app.fragments.shoppinglist.viewmodel.OngoingShoppingListViewModel
 import uj.roomme.app.viewmodels.livedata.Event
 
 abstract class ServiceViewModel(protected val session: SessionViewModel) : ViewModel() {
@@ -12,27 +11,26 @@ abstract class ServiceViewModel(protected val session: SessionViewModel) : ViewM
     companion object {
         const val UNAUTHORIZED = "Unauthorized"
         const val FAILED_TO_PROCEED = "Failed to proceed!"
+        const val NOT_LOGGED_IN = "Not logged in!"
     }
 
-    private val _messageUIEvent = MutableLiveData<Event<String>>()
+    protected val _messageUIEvent = MutableLiveData<Event<String>>()
     val messageUIEvent: LiveData<Event<String>>
         get() = _messageUIEvent
     protected val accessToken: String
         get() {
             if (!session.isLoggedIn())
-                throw IllegalStateException(OngoingShoppingListViewModel.NOT_LOGGED_IN)
+                throw IllegalStateException(NOT_LOGGED_IN)
 
             return session.userData!!.accessToken
         }
 
     protected fun unauthorizedCall(tag: String) {
-        // TODO replace
         Log.d(tag, UNAUTHORIZED)
-        _messageUIEvent.value = Event(UNAUTHORIZED)
+        session.refreshAccessToken()
     }
 
     protected fun unknownError(tag: String, error: Throwable?) {
-        // TODO replace
         Log.d(tag, FAILED_TO_PROCEED, error)
         _messageUIEvent.value = Event(FAILED_TO_PROCEED)
     }

@@ -352,8 +352,8 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FlatId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -362,6 +362,8 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FlatId");
 
                     b.HasIndex("UserId");
 
@@ -446,6 +448,9 @@ namespace RoomMe.SQLContext.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
@@ -768,11 +773,19 @@ namespace RoomMe.SQLContext.Migrations
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.PrivateCost", b =>
                 {
+                    b.HasOne("RoomMe.SQLContext.Models.Flat", "Flat")
+                        .WithMany()
+                        .HasForeignKey("FlatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RoomMe.SQLContext.Models.User", "User")
                         .WithMany("PrivateCosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Flat");
 
                     b.Navigation("User");
                 });

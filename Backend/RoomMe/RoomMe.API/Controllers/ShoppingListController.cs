@@ -44,6 +44,7 @@ namespace RoomMe.API.Controllers
                 .Include(x => x.Completor)
                 .Include(x => x.Flat)
                 .ThenInclude(y => y.Users)
+                .Include(x => x.Receipts)
                 .SingleOrDefaultAsync(x => x.Id == listId)
                 .ConfigureAwait(false);
 
@@ -116,7 +117,7 @@ namespace RoomMe.API.Controllers
             var shoppingList = await _sqlContext.ShoppingLists
                 .Include(x => x.Flat)
                 .ThenInclude(y => y.Users)
-                .Include(x => x.Products.Where(y => productsIds.Contains(y.Id)))
+                .Include(x => x.Products)
                 .SingleOrDefaultAsync(x => x.Id == listId)
                 .ConfigureAwait(false);
 
@@ -131,7 +132,14 @@ namespace RoomMe.API.Controllers
                 return new BadRequestResult();
             }
 
-            var deletedProducts = shoppingList.Products;
+            var deletedProducts = new List<Product>();
+
+            foreach(var product in shoppingList.Products)
+            {
+                if (productsIds.Contains(product.Id)) {
+                    deletedProducts.Add(product);
+                }
+            }
 
             _sqlContext.Products.RemoveRange(deletedProducts);
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
@@ -140,7 +148,7 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpPatch("{listId}/products/", Name = nameof(SetProductsAsBought))]
-        public async Task<ActionResult<ProductPatchReturnModel>> SetProductsAsBought(int listId, List<ProductPatchModel> products)
+        public async Task<ActionResult<List<ProductModel>>> SetProductsAsBought(int listId, List<ProductPatchModel> products)
         {
             var productsIds = products.Select(x => x.Id).ToList();
 
@@ -181,7 +189,7 @@ namespace RoomMe.API.Controllers
 
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
-            return boughtProducts.ToProductPatchReturnModel();
+            return boughtProducts.Select(x => x.ToProductModel()).ToList();
         }
 
         [HttpPatch("{listId}/completion", Name = nameof(SetShoppingListAsCompleted))]
@@ -240,6 +248,26 @@ namespace RoomMe.API.Controllers
                 TimeStamp = DateTime.UtcNow,
                 FileGuids = guids
             };
+        }
+
+        [HttpGet("{listId}/receipt/{guid}", Name = nameof(GetShoppingListReceipts))]
+        public async Task<ActionResult> GetShoppingListReceipts(int listId, Guid guid)
+        {
+            var list = await _sqlContext.ShoppingLists
+                .Include(x => x.Flat)
+                .ThenInclude(x => x.Users)
+                .Include(x => x.Receipts)
+                .FirstOrDefaultAsync(x => x.Id == listId)
+                .ConfigureAwait(false);
+
+            if(list == null || !_sessionHelper.IsUserOfFlat(list.Flat) || !list.Receipts.Any(x => x.Guid == guid))
+            {
+                return new BadRequestResult();
+            }
+
+            var receipt = list.Receipts.Single(x => x.Guid == guid);
+
+            return PhysicalFile(receipt.Path, receipt.ContentType, receipt.Name);
         }
     }
 }

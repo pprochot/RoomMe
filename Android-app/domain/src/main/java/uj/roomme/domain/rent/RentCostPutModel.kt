@@ -1,9 +1,7 @@
 package uj.roomme.domain.rent
 
-import java.time.OffsetDateTime
+import java.math.BigDecimal
 
 data class RentCostPutModel(
-    val userId: Int,
-    val flatId: Int,
-    val creationDate: OffsetDateTime
+    val value: BigDecimal
 )
