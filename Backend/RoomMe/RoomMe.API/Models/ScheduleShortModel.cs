@@ -11,6 +11,5 @@ namespace RoomMe.API.Models
         public DateTime Date { get; set; }
         public HouseworkStatusModel Status { get; set; }
         public UserNicknameModel User { get; set; }
-
     }
 }
