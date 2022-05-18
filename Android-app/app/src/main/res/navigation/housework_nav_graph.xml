@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/houseworkNavGraph"
+    app:startDestination="@id/houseworkMenuFragment">
+
+    <fragment
+        android:id="@+id/destHouseworkCalendarFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkScheduleCalendarFragment"
+        android:label="Schedules calendar"
+        tools:layout="@layout/fragment_housework_schedule_calendar" >
+        <action
+            android:id="@+id/actionToHouseworkDetailsFragment"
+            app:destination="@id/destHouseworkDetailsFragment" />
+        <action
+            android:id="@+id/actionToHouseworkScheduleUpdateFragment"
+            app:destination="@id/destHouseworkScheduleUpdateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/destHouseworkListFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkListFragment"
+        android:label="Housework list"
+        tools:layout="@layout/fragment_housework_list" >
+        <action
+            android:id="@+id/actionToHouseworkUpdatePart1Fragment"
+            app:destination="@id/destHouseworkCreateFragment" />
+        <action
+            android:id="@+id/action_destHouseworkFragment_to_destHouseworkDetailsFragment"
+            app:destination="@id/destHouseworkDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/destHouseworkDetailsFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkDetailsFragment"
+        android:label="Housework details"
+        tools:layout="@layout/fragment_housework_details" >
+        <argument
+            android:name="houseworkId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/destHouseworkScheduleUpdateFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkScheduleUpdateFragment"
+        android:label="Update schedule"
+        tools:layout="@layout/fragment_housework_schedule_update" >
+        <action
+            android:id="@+id/actionToHouseworkCalendarFragment"
+            app:destination="@id/destHouseworkCalendarFragment"
+            app:popUpTo="@id/destHouseworkCalendarFragment"
+            app:popUpToInclusive="true" />
+        <argument android:name="schedule"
+            app:argType="uj.roomme.domain.schedule.ScheduleModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/destHouseworkCreateFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkCreateFragment"
+        android:label="Create housework"
+        tools:layout="@layout/fragment_housework_create" >
+        <action
+            android:id="@+id/actionToHouseworkDetailsFragment"
+            app:destination="@id/destHouseworkDetailsFragment"
+            app:popUpTo="@id/destHouseworkListFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/houseworkMenuFragment"
+        android:name="uj.roomme.app.ui.housework.fragments.HouseworkMenuFragment"
+        android:label="Housework menu"
+        tools:layout="@layout/fragment_housework_menu">
+        <action
+            android:id="@+id/actionToHouseworkCalendarFragment"
+            app:destination="@id/destHouseworkCalendarFragment" />
+        <action
+            android:id="@+id/actionToHouseworkListFragment"
+            app:destination="@id/destHouseworkListFragment" />
+    </fragment>
+</navigation>

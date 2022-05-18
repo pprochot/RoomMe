@@ -34,7 +34,7 @@ namespace RoomMe.SQLContext
         {
             DictionaryBuilder.AddDictionaries(modelBuilder);
 
-            modelBuilder.Entity<Housework>().HasOne(x => x.Author).WithOne().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Housework>().HasOne(x => x.Author).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Housework>().HasMany(x => x.Users).WithMany(x => x.Houseworks);
 
             modelBuilder.Entity<Product>().HasOne(x => x.CommonCost).WithOne().OnDelete(DeleteBehavior.Restrict);

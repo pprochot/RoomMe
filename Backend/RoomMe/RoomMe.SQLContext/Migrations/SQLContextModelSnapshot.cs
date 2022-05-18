@@ -157,8 +157,7 @@ namespace RoomMe.SQLContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId")
-                        .IsUnique();
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("FlatId");
 
@@ -206,12 +205,6 @@ namespace RoomMe.SQLContext.Migrations
                             Id = 4,
                             Name = "Twice a week",
                             Value = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Monthly",
-                            Value = 30
                         });
                 });
 
@@ -252,8 +245,8 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Day")
-                        .HasColumnType("int");
+                    b.Property<string>("Days")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FrequencyId")
                         .HasColumnType("int");
@@ -289,7 +282,7 @@ namespace RoomMe.SQLContext.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "In Progress"
+                            Name = "Todo"
                         },
                         new
                         {
@@ -359,8 +352,8 @@ namespace RoomMe.SQLContext.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FlatId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -369,6 +362,8 @@ namespace RoomMe.SQLContext.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FlatId");
 
                     b.HasIndex("UserId");
 
@@ -453,6 +448,9 @@ namespace RoomMe.SQLContext.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
@@ -700,8 +698,8 @@ namespace RoomMe.SQLContext.Migrations
             modelBuilder.Entity("RoomMe.SQLContext.Models.Housework", b =>
                 {
                     b.HasOne("RoomMe.SQLContext.Models.User", "Author")
-                        .WithOne()
-                        .HasForeignKey("RoomMe.SQLContext.Models.Housework", "AuthorId")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -775,11 +773,19 @@ namespace RoomMe.SQLContext.Migrations
 
             modelBuilder.Entity("RoomMe.SQLContext.Models.PrivateCost", b =>
                 {
+                    b.HasOne("RoomMe.SQLContext.Models.Flat", "Flat")
+                        .WithMany()
+                        .HasForeignKey("FlatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RoomMe.SQLContext.Models.User", "User")
                         .WithMany("PrivateCosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Flat");
 
                     b.Navigation("User");
                 });

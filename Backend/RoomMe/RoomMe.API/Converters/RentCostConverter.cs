@@ -24,8 +24,8 @@ namespace RoomMe.API.Converters
         {
             return new RentCostPostReturnModel()
             {
-                userId = cost.UserId,
-                flatId = cost.FlatId,
+                UserId = cost.UserId,
+                FlatId = cost.FlatId,
                 CreationDate = DateTime.UtcNow
             };
         }
@@ -34,6 +34,16 @@ namespace RoomMe.API.Converters
         {
             entityCost.Value = cost.Value;
             entityCost.CreationDate = DateTime.UtcNow;
+        }
+
+        public static PrivateCostModel ToPrivateCostModel(this PrivateCost cost)
+        {
+            return new PrivateCostModel()
+            {
+                Id = cost.Id,
+                Value = cost.Value,
+                Date = cost.Date
+            };
         }
     }
 }

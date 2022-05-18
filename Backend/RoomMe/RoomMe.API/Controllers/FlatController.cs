@@ -58,7 +58,7 @@ namespace RoomMe.API.Controllers
                 .FirstOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            if (flat == null || !_sessionHelper.IsUserOfFlat(flat))
             {
                 _logger.LogError($"Flat not found for id {flatId}");
                 return new BadRequestResult();
@@ -68,14 +68,14 @@ namespace RoomMe.API.Controllers
         }
 
         [HttpPost("", Name = nameof(CreateNewFlat))]
-        public async Task<ActionResult<FlatPostReturnModel>> CreateNewFlat(FlatPostModel flat) 
+        public async Task<ActionResult<FlatPostReturnModel>> CreateNewFlat(FlatPostModel flat)
         {
             List<User> users = new();
 
-            foreach(var userId in flat.Users)
+            foreach (var userId in flat.Users)
             {
                 var entity = await _sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
-                
+
                 if (entity == null)
                 {
                     _logger.LogError($"User not found for id {userId}");
@@ -102,14 +102,14 @@ namespace RoomMe.API.Controllers
                 .SingleOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !_sessionHelper.IsCreatorOfFlat(flat) || flat.Users.Any(x => x.Id == userId))
+            if (flat == null || !_sessionHelper.IsCreatorOfFlat(flat) || flat.Users.Any(x => x.Id == userId))
             {
                 return new BadRequestResult();
             }
 
             var user = await _sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
 
-            if(user == null)
+            if (user == null)
             {
                 return new BadRequestResult();
             }
@@ -129,14 +129,14 @@ namespace RoomMe.API.Controllers
                 .SingleOrDefaultAsync(x => x.Id == flatId)
                 .ConfigureAwait(false);
 
-            if(flat == null || !_sessionHelper.IsCreatorOfFlat(flat))
+            if (flat == null || !_sessionHelper.IsCreatorOfFlat(flat))
             {
                 return new BadRequestResult();
             }
 
             var user = await _sqlContext.Users.FindAsync(userId).ConfigureAwait(false);
 
-            if(user == null)
+            if (user == null)
             {
                 return new BadRequestResult();
             }
@@ -151,6 +151,81 @@ namespace RoomMe.API.Controllers
             await _sqlContext.SaveChangesAsync().ConfigureAwait(false);
 
             return Ok();
+        }
+
+        [HttpGet("{flatId}/rent", Name = nameof(CheckIfRentIsPaid))]
+        public async Task<ActionResult<RentCostGetReturnModel>> CheckIfRentIsPaid(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var rent = await _sqlContext.RentCosts
+                .FirstOrDefaultAsync(x => x.FlatId == flatId && x.UserId == _sessionHelper.UserId)
+                .ConfigureAwait(false);
+
+            if(rent == null)
+            {
+                return new RentCostGetReturnModel()
+                {
+                    IsPaid = false,
+                    Value = null
+                };
+            }
+
+            var currDate = DateTime.UtcNow;
+            var startDate = new DateTime(currDate.Year, currDate.Month, 1);
+
+            var isPaid = await _sqlContext.PrivateCosts.AnyAsync(x => x.Date >= startDate 
+                && x.UserId == _sessionHelper.UserId && x.FlatId == flatId).ConfigureAwait(false);
+
+            return new RentCostGetReturnModel()
+            {
+                IsPaid = isPaid,
+                Value = rent.Value
+            };
+        }
+
+        [HttpPost("{flatId}/rent", Name = nameof(PostRentCost))]
+        public async Task<ActionResult<PrivateCostModel>> PostRentCost(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var rentCost = await _sqlContext.RentCosts
+                .SingleOrDefaultAsync(x => x.FlatId == flatId && x.UserId == _sessionHelper.UserId)
+                .ConfigureAwait(false);
+
+            if(rentCost == null)
+            {
+                return new BadRequestResult();
+            }
+
+            var cost = new PrivateCost()
+            {
+                UserId = _sessionHelper.UserId,
+                FlatId = flatId,
+                Value = rentCost.Value,
+                Date = DateTime.UtcNow
+            };
+
+            _sqlContext.Add(cost);
+            await _sqlContext.SaveChangesAsync();
+
+            return cost.ToPrivateCostModel();
         }
 
         [HttpPut("{flatId}/rent", Name = nameof(SetFlatRentCost))]
@@ -213,6 +288,59 @@ namespace RoomMe.API.Controllers
             }
 
             return lists.Select(x => x.ToShoppingListShortModel()).ToList();
+        }
+
+        [HttpGet("{flatId}/available-locators", Name = nameof(GetAvailableLocators))]
+        public async Task<ActionResult<IEnumerable<UserNicknameModel>>> GetAvailableLocators(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .SingleOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsCreatorOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var friends = await _sqlContext.UserFriends
+                .Include(x => x.Friend)
+                .Where(x => x.UserId == _sessionHelper.UserId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            var res = new List<UserNicknameModel>();
+
+            foreach(var friend in friends)
+            {
+                if(!flat.Users.Contains(friend.Friend))
+                {
+                    res.Add(friend.Friend.ToUserNicknameModel());
+                }
+            }
+
+            return res;
+        }
+
+        [HttpGet("{flatId}/houseworks", Name = nameof(GetFlatHouseworks))]
+        public async Task<ActionResult<IEnumerable<HouseworkShortModel>>> GetFlatHouseworks(int flatId)
+        {
+            var flat = await _sqlContext.Flats
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == flatId)
+                .ConfigureAwait(false);
+
+            if(flat == null || !_sessionHelper.IsUserOfFlat(flat))
+            {
+                return new BadRequestResult();
+            }
+
+            var houseworks = await _sqlContext.Houseworks
+                .Where(x => x.FlatId == flatId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return houseworks.Select(x => x.ToHouseworkShortModel()).ToList();
         }
     }
 }

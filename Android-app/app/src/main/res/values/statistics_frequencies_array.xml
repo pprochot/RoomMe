@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="statistics_frequencies_array">
+        <item>All costs</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+</resources>

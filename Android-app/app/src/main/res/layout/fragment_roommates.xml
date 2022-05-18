@@ -4,31 +4,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputLayoutApartmentOwner"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:hint="Owner">
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/inputEditTextApartmentOwner"
+    <LinearLayout
+        android:id="@id/layoutTexts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:text="Owner"
+            android:textSize="20sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <include
+            android:id="@+id/viewCreator"
+            layout="@layout/row_usernickname" />
+
+        <include layout="@layout/layout_space_divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Roomates"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRoommates"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonAddNewRoommate"
-        android:layout_below="@+id/inputLayoutApartmentOwner"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/layoutTexts"
         android:scrollbars="vertical"
         android:verticalScrollbarPosition="right" />
 
@@ -38,6 +53,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Add new roommate"/>
+        android:text="Add new roommate" />
 
 </RelativeLayout>

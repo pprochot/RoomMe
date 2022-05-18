@@ -16,8 +16,7 @@ namespace RoomMe.SQLContext.Dictionaries
                 new { Id = 1, Name = "Once", Value = 0 },
                 new { Id = 2, Name = "Daily", Value = 1 },
                 new { Id = 3, Name = "Weekly", Value = 7 },
-                new { Id = 4, Name = "Twice a week", Value = 3},
-                new { Id = 5, Name = "Monthly", Value = 30 }
+                new { Id = 4, Name = "Twice a week", Value = 3}
                 );
         }
 	}

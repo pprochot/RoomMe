@@ -13,15 +13,12 @@
 
     <fragment
         android:id="@+id/destSignInFragment"
-        android:name="uj.roomme.app.fragments.login.SignInFragment"
+        android:name="uj.roomme.app.ui.login.fragments.SignInFragment"
         android:label="Sign in"
         tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/actionSignInToSignUp"
             app:destination="@id/destSignUpFragment" />
-        <action
-            android:id="@+id/actionSignInToForgotPassword"
-            app:destination="@id/destForgotPasswordFragment" />
         <action
             android:id="@+id/actionSignInToHome"
             app:destination="@id/mainNavGraph"
@@ -30,22 +27,11 @@
     </fragment>
     <fragment
         android:id="@+id/destSignUpFragment"
-        android:name="uj.roomme.app.fragments.login.SignUpFragment"
+        android:name="uj.roomme.app.ui.login.fragments.SignUpFragment"
         android:label="Sign up"
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/actionSignUpToSignIn"
-            app:destination="@id/destSignInFragment"
-            app:popUpTo="@id/destSignInFragment"
-            app:popUpToInclusive="true"/>
-    </fragment>
-    <fragment
-        android:id="@+id/destForgotPasswordFragment"
-        android:name="uj.roomme.app.fragments.login.ForgotPasswordFragment"
-        android:label="Restore password"
-        tools:layout="@layout/fragment_forgot_password">
-        <action
-            android:id="@+id/actionForgotPasswordToSignInFragment"
             app:destination="@id/destSignInFragment"
             app:popUpTo="@id/destSignInFragment"
             app:popUpToInclusive="true"/>

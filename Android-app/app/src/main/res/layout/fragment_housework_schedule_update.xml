@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/floatingActionButtonUpdateHousework"
+        android:layout_alignParentTop="true"
+        android:elevation="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Status"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinnerHouseworkScheduleStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <include layout="@layout/layout_space_divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Date"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="01-01-2020"
+            android:textColor="@color/black" />
+
+        <include layout="@layout/layout_space_divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Completor"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHouseworkScheduleExecutor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonUpdateHousework"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_check"
+        android:layout_marginBottom="5dp"/>
+</RelativeLayout>

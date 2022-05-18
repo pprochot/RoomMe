@@ -14,9 +14,9 @@ class NavBottomViewMenuNavigation(private val navController: NavController) : Na
         navController.popBackStack(R.id.destHomeFragment, false)
         when (item.itemId) {
             R.id.destSelectShoppingListFragment -> navController.navigate(R.id.actionGlobalToShoppingLists)
-            R.id.destHouseWorksFragment -> navController.navigate(R.id.actionGlobalToHouseWorks)
+            R.id.destHouseworkCalendarFragment -> navController.navigate(R.id.actionGlobalToHouseWorks)
             R.id.destRoommatesFragment -> navController.navigate(R.id.actionGlobalToRoommates)
-            R.id.destStatisticsFragment -> navController.navigate(R.id.actionGlobalToStatistics)
+            R.id.destCommonStatisticsFragment -> navController.navigate(R.id.actionGlobalToStatistics)
         }
         return true
     }

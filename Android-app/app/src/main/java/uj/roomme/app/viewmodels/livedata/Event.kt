@@ -1,22 +1,42 @@
 package uj.roomme.app.viewmodels.livedata
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
-open class Event<out T>(private val content: T) {
+open class NotificationEvent {
 
     var hasBeenHandled = false
-        private set
+        protected set
 
-    fun getContentIfNotHandled(): T? {
+    fun useIfNotHandled(): Boolean {
         return if (hasBeenHandled) {
-            null
+            false
         } else {
             hasBeenHandled = true
-            content
+            true
+        }
+    }
+}
+
+open class Event<out T>(private val content: T) : NotificationEvent() {
+
+    fun getContentIfNotHandled(): T? {
+        return when (useIfNotHandled()) {
+            true -> content
+            else -> null
         }
     }
 
     fun peekContent(): T = content
+}
+
+class NotificationEventObserver(private val onEventUnhandledContent: () -> Unit) :
+    Observer<NotificationEvent> {
+    override fun onChanged(event: NotificationEvent?) {
+        if (event?.useIfNotHandled() == true) {
+            onEventUnhandledContent()
+        }
+    }
 }
 
 class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
@@ -25,4 +45,8 @@ class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Obser
             onEventUnhandledContent(it)
         }
     }
+}
+
+fun MutableLiveData<NotificationEvent>.notifyOfEvent() {
+    this.value = NotificationEvent()
 }

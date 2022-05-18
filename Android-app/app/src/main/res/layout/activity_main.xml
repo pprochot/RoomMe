@@ -10,9 +10,7 @@
 
     <include
         android:id="@+id/appbar"
-        layout="@layout/activity_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        layout="@layout/activity_content" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
