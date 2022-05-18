@@ -1,5 +1,6 @@
 package uj.roomme.app.ui.housework.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -71,6 +72,7 @@ class HouseworkDetailsFragment : Fragment(R.layout.fragment_housework_details) {
                 textName.text = model.name
                 textCompletor.text = model.nextSchedule.user.nickname
                 textDate.text = model.nextSchedule.date.toLocalDate().toString()
+                textStatus.setTextColor(Color.parseColor(model.nextSchedule.status.color))
             }
             binding.textHouseworkName.text = model.name
             binding.textHouseworkDescription.text = model.description

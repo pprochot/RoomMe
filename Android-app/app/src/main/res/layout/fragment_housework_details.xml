@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layoutNextSchedule"
                 android:layout_marginHorizontal="5dp"
-                android:stretchColumns="2">
+                android:stretchColumns="1,2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -72,14 +72,13 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Name:"
-                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/textHouseworkName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="1"
+                        android:layout_column="2"
                         android:text="Name"
                         android:textSize="16sp" />
                 </TableRow>
@@ -92,14 +91,13 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Description:"
-                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/textHouseworkDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="1"
+                        android:layout_column="2"
                         android:text="Description"
                         android:textSize="16sp" />
                 </TableRow>
@@ -112,14 +110,13 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Author:"
-                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/textHouseworkAuthor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="1"
+                        android:layout_column="2"
                         android:text="Author-nickname"
                         android:textSize="16sp" />
                 </TableRow>
@@ -132,14 +129,13 @@
                         android:layout_column="1"
                         android:paddingEnd="20dp"
                         android:text="Frequency:"
-                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/textHouseworkFrequency"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="1"
+                        android:layout_column="2"
                         android:text="Once"
                         android:textSize="16sp" />
                 </TableRow>

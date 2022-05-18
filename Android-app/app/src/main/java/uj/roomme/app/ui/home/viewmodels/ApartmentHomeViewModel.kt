@@ -14,6 +14,7 @@ import uj.roomme.domain.rent.RentCostPutModel
 import uj.roomme.domain.schedule.ScheduleModel
 import uj.roomme.services.service.FlatService
 import uj.roomme.services.service.ScheduleService
+import java.math.BigDecimal
 import java.time.LocalDate
 
 class ApartmentHomeViewModel(
@@ -101,11 +102,13 @@ class ApartmentHomeViewModel(
     fun setRentCostViaService(model: RentCostPutModel) {
         val logTag = "$TAG.setRentCostViaService()"
         val flatId = session.selectedApartmentId!!
-        flatService.setFlatRentCost(accessToken, flatId, model).processAsync { code, _, error ->
+        flatService.setFlatRentCost(accessToken, flatId, model).processAsync { code, body, error ->
             when (code) {
                 200 -> {
                     Log.d(logTag, "Updated rent cost.")
-                    rentPaidEvent.notifyOfEvent()
+                    rentStatus.value =
+                        RentCostGetReturnModel(rentStatus.value?.isPaid ?: false, model.value)
+                    updatedCostEvent.notifyOfEvent()
                 }
                 401 -> unauthorizedCall(logTag)
                 else -> unknownError(logTag, error)
@@ -120,7 +123,11 @@ class ApartmentHomeViewModel(
             when (code) {
                 200 -> {
                     Log.d(logTag, "Rent paid.")
-                    updatedCostEvent.notifyOfEvent()
+                    rentStatus.value = RentCostGetReturnModel(
+                        true,
+                        rentStatus.value?.value ?: BigDecimal.ZERO
+                    )
+                    rentPaidEvent.notifyOfEvent()
                 }
                 401 -> unauthorizedCall(logTag)
                 else -> unknownError(logTag, error)

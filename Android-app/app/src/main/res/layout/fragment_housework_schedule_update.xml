@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/floatingActionButtonUpdateHousework"
+        android:layout_above="@+id/buttonUpdateHousework"
         android:layout_alignParentTop="true"
         android:elevation="20dp"
         android:orientation="vertical">
@@ -38,8 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="01-01-2020"
-            android:textColor="@color/black" />
+            android:text="01-01-2020" />
 
         <include layout="@layout/layout_space_divider" />
 
@@ -65,6 +64,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:src="@drawable/ic_check"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/ic_check" />
 </RelativeLayout>
