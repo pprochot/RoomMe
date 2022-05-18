@@ -258,21 +258,7 @@ namespace RoomMe.API.Tests
             Assert.AreEqual(1, actionResult.Value.Flat.Id);
         }
 
-        [Test, Order(1)]
-        public async Task RemoveHousework_InvalidHouseworkId_ShouldReturnBadRequestResult()
-        {
-            var actionResult = await houseworkController.RemoveHousework(99);
 
-            Assert.IsInstanceOf<BadRequestResult>(actionResult);
-        }
-
-        [Test, Order(1)]
-        public async Task RemoveHousework_SessionUserNotOfFlat_ShouldReturnBadRequestResult()
-        {
-            var actionRestult = await houseworkController.RemoveHousework(1);
-
-            Assert.IsInstanceOf<BadRequestResult>(actionRestult);
-        }
 
         [Test, Order(4)]
         public async Task GetScheduleByMonth_InvalidFlatId_ShouldReturnBadRequestResult()
@@ -326,7 +312,7 @@ namespace RoomMe.API.Tests
         }
 
         [Test, Order(5)]
-        public async Task GetScheduleByMonth_Daily_ShouldReturn32Schedules()
+        public async Task GetScheduleByMonth_Daily_ShouldReturnRemainingDaysInMonthAmountOfSchedules()
         {
             await houseworkController.PostHousework(new HouseworkPostModel()
             {
@@ -354,12 +340,69 @@ namespace RoomMe.API.Tests
                 count += x.Value.Count;
 
                 if (x.Value.Count > 0)
+                {
                     Assert.AreEqual((int)Consts.HouseworkStatuses.ToDo, x.Value[0].Status.Id);
+                Console.WriteLine(x.Value[0].Id);
+
+                }
             }
 
             int expectedAmount = (int)(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.AddMonths(1).Month, 1) - DateTime.UtcNow).TotalDays;
 
             Assert.AreEqual(expectedAmount, count);
+        }
+
+        [Test, Order(6)]
+        public async Task PatchSchedule_InvalidScheduleId_ShouldReturnBadRequestResult()
+        {
+            var actionResult = await scheduleController.PatchSchedule(99, new SchedulePatchModel());
+
+            Assert.IsInstanceOf<BadRequestResult>(actionResult);
+        }
+
+        [Test, Order(6)]
+        public async Task PatchSchedule_ChangeStatus_ShouldChangeScheduleStatus()
+        {
+            var actionResult = await scheduleController.PatchSchedule(2, new SchedulePatchModel()
+            {
+                Date = null,
+                UserId = null,
+                StatusId = (int)Consts.HouseworkStatuses.Done
+            });
+
+            Assert.IsInstanceOf<OkResult>(actionResult);
+
+            var actionResult2 = await scheduleController.GetSchedulesByMonth(1, new SchedulesByMonthModel()
+            {
+                Month = DateTime.UtcNow.Month,
+                Year = DateTime.UtcNow.Year
+            });
+
+            int count = 0;
+            foreach(var x in actionResult2.Value)
+            {
+                if(x.Value.Count > 0)
+                if (x.Value[0].Status.Id == (int)Consts.HouseworkStatuses.Done)
+                    count++;
+            }
+
+            Assert.AreEqual(1, count);
+        }
+
+        [Test, Order(1)]
+        public async Task RemoveHousework_InvalidHouseworkId_ShouldReturnBadRequestResult()
+        {
+            var actionResult = await houseworkController.RemoveHousework(99);
+
+            Assert.IsInstanceOf<BadRequestResult>(actionResult);
+        }
+
+        [Test, Order(1)]
+        public async Task RemoveHousework_SessionUserNotOfFlat_ShouldReturnBadRequestResult()
+        {
+            var actionRestult = await houseworkController.RemoveHousework(1);
+
+            Assert.IsInstanceOf<BadRequestResult>(actionRestult);
         }
 
         [Test, Order(10)]
