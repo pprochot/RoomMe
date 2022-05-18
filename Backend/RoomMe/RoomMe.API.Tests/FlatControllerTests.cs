@@ -248,7 +248,7 @@ namespace RoomMe.API.Tests
             });
 
             Assert.IsInstanceOf<RentCostPostReturnModel>(actionResult.Value);
-            Assert.AreEqual(1, actionResult.Value.userId);
+            Assert.AreEqual(1, actionResult.Value.UserId);
         }
         [Test, Order(9)]
         public async Task SetFlatRentCost_WithCostAlreadyAdded_ShouldReturnRentCostPostReturnModel()
