@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import uj.roomme.app.R
 import uj.roomme.app.adapters.common.ReplaceableRvAdapter
-import uj.roomme.app.adapters.common.viewholders.UserNicknameModelViewHolder
+import uj.roomme.app.adapters.viewholder.UserNicknameModelViewHolder
 import uj.roomme.domain.user.UserNicknameModel
 
 class UsersNicknameAdapter : ReplaceableRvAdapter<UserNicknameModel, UserNicknameModelViewHolder>() {

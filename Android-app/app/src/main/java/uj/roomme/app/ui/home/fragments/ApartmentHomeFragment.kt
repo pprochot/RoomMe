@@ -92,8 +92,6 @@ class ApartmentHomeFragment : Fragment(R.layout.fragment_apartment_home) {
     private fun setUpPayRentButton() {
         viewModel.rentPaidEvent.observe(viewLifecycleOwner, NotificationEventObserver {
             Toast.makeText(context, "Rent has been paid.", Toast.LENGTH_SHORT).show()
-            binding.viewRentPaid.visibility = View.VISIBLE
-            binding.layoutRentNotPaid.visibility = View.GONE
         })
 
         binding.buttonPayRent.setOnClickListener {
@@ -102,13 +100,8 @@ class ApartmentHomeFragment : Fragment(R.layout.fragment_apartment_home) {
     }
 
     private fun setUpChangeRentCostButton() {
-        viewModel.ownerId.observe(viewLifecycleOwner) {
-            if (session.userData!!.id == it) {
-                binding.buttonSetRentCost.visibility = View.VISIBLE
-            }
-        }
+        binding.buttonSetRentCost.visibility = View.VISIBLE
         viewModel.updatedCostEvent.observe(viewLifecycleOwner, NotificationEventObserver {
-            binding.viewRentNotSet.visibility = View.GONE
             Toast.makeText(context, "Rent cost has been updated.", Toast.LENGTH_SHORT).show()
         })
 
@@ -119,15 +112,20 @@ class ApartmentHomeFragment : Fragment(R.layout.fragment_apartment_home) {
 
     private fun buildSetRentCostDialog(): AlertDialog {
         val input = EditText(context)
-        input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        input.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL or
+                InputType.TYPE_NUMBER_FLAG_SIGNED
         return AlertDialog.Builder(context)
             .setTitle("Set rent cost")
             .setView(input)
             .setPositiveButton("Ok") { dialog, _ ->
-                val value = input.text.toString().toBigDecimal()
-                val model = RentCostPutModel(value)
-                viewModel.setRentCostViaService(model)
-                dialog.dismiss()
+                try {
+                    val value = input.text.toString().toBigDecimal()
+                    val model = RentCostPutModel(value)
+                    viewModel.setRentCostViaService(model)
+                    dialog.dismiss()
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(context, "Invalid format.", Toast.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()

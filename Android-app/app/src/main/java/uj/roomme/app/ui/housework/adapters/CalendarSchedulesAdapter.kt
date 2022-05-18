@@ -36,6 +36,7 @@ class CalendarSchedulesAdapter(private val loggedUserId: Int) :
             textDate.text = schedule.date.toLocalDate().toString()
             textCompletor.text = schedule.user.nickname
             textStatus.text = schedule.status.name
+            textStatus.setTextColor(Color.parseColor(schedule.status.color))
         }
 
         holder.itemView.setOnClickListener {
@@ -67,6 +68,7 @@ class CalendarSchedulesAdapter(private val loggedUserId: Int) :
             textDate.text = schedule.date.toLocalDate().toString()
             textCompletor.text = schedule.user.nickname
             textStatus.text = schedule.status.name
+            textStatus.setTextColor(Color.parseColor(schedule.status.color))
         }
         return view
     }

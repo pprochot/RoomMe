@@ -1,4 +1,4 @@
-package uj.roomme.app.adapters
+package uj.roomme.app.ui.shoppinglist.adapters
 
 import android.graphics.Bitmap
 import android.net.Uri

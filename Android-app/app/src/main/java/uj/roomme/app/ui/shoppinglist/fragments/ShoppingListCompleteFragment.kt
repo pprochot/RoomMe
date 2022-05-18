@@ -28,7 +28,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import uj.roomme.app.R
-import uj.roomme.app.adapters.RemovableReceiptsAdapter
+import uj.roomme.app.ui.shoppinglist.adapters.RemovableReceiptsAdapter
 import uj.roomme.app.consts.PermissionCheckers
 import uj.roomme.app.consts.ViewUtils.makeClickable
 import uj.roomme.app.consts.ViewUtils.makeNotClickable

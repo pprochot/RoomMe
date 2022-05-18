@@ -1,5 +1,6 @@
 package uj.roomme.app.ui.home.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,6 +67,7 @@ class TodayHouseworkSchedulesAdapter : ReplaceableRvAdapter<ScheduleModel, Sched
             textDate.text = schedule.date.toLocalDate().toString()
             textCompletor.text = schedule.user.nickname
             textStatus.text = schedule.status.name
+            textStatus.setTextColor(Color.parseColor(schedule.status.color))
         }
         return view
     }
