@@ -405,7 +405,7 @@ namespace RoomMe.API.Tests
             Assert.IsInstanceOf<BadRequestResult>(actionRestult);
         }
 
-        [Test, Order(10)]
+        [Test, Order(7)]
         public async Task RemoveHousework_ValidHouseworkId_ShouldReturnOKResult()
         {
             var actionResult = await houseworkController.RemoveHousework(2);

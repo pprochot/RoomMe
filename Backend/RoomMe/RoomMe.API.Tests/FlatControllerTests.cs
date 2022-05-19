@@ -32,6 +32,7 @@ namespace RoomMe.API.Tests
         SqlContext context;
         SessionHelper sessionHelper;
         FlatController flatController;
+        StatisticsController statisticsController;
 
         User sessionUser;
 
@@ -48,7 +49,12 @@ namespace RoomMe.API.Tests
                 Password = BCryptNet.BCrypt.EnhancedHashPassword("pass123"),
                 Firstname = "somename",
                 Lastname = "lastname",
-                PhoneNumber = "123456789"
+                PhoneNumber = "123456789",
+                Friends = new List<UserFriend>() { new UserFriend()
+                {
+                    FriendId = 2,
+                    UserId = 1
+                } }
             };
 
             SeedDatabase();
@@ -64,6 +70,7 @@ namespace RoomMe.API.Tests
             sessionHelper = new SessionHelper(mockHttpContextAccesor.Object, mockHeaderConfiguration.Object);
             
             flatController = new FlatController(new NullLogger<FlatController>(), context, sessionHelper);
+            statisticsController = new StatisticsController(new NullLogger<StatisticsController>(), context, sessionHelper);
         }
         
         //CreateNewFlat Test
@@ -223,8 +230,25 @@ namespace RoomMe.API.Tests
 
             Assert.IsInstanceOf<OkResult>(actionResult);
         }
+        
+        //tRentCost Tests
+        [Test, Order(8)]
+        public async Task PostRentCost_RentCostNotYetAdded_ShouldReturnBadRequestResult()
+        {
+            var actionResult = await flatController.PostRentCost(3);
 
-        //SetFlatRentCost Tests
+            Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
+        }
+
+        [Test, Order(8)]
+        public async Task CheckIfRentIsPaid_RentNotYetAdded_ShouldReturnIsPaidFalse()
+        {
+            var actionResult = await flatController.CheckIfRentIsPaid(3);
+
+            Assert.IsInstanceOf<RentCostGetReturnModel>(actionResult.Value);
+            Assert.AreEqual(false, actionResult.Value.IsPaid);
+        }
+
         [Test, Order(9)]
         public async Task SetFlatRentCost_WithWrongFlatId_ShouldReturnBadRequestResult()
         {
@@ -250,7 +274,7 @@ namespace RoomMe.API.Tests
             Assert.IsInstanceOf<RentCostPostReturnModel>(actionResult.Value);
             Assert.AreEqual(1, actionResult.Value.UserId);
         }
-        [Test, Order(9)]
+        [Test, Order(10)]
         public async Task SetFlatRentCost_WithCostAlreadyAdded_ShouldReturnRentCostPostReturnModel()
         {
             var actionResult = await flatController.SetFlatRentCost(3, new RentCostPutModel()
@@ -261,8 +285,131 @@ namespace RoomMe.API.Tests
             Assert.IsInstanceOf<RentCostPostReturnModel>(actionResult.Value);
         }
 
+        [Test, Order(11)]
+        public async Task PostRentCost_InvalidFlatIdOrSessionUserNotOfFlat_ShouldReturnBadRequestResult()
+        {
+            var actionResult = await flatController.PostRentCost(99);
+
+            Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
+
+            actionResult = await flatController.PostRentCost(1);
+
+            Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
+        }
+
+        [Test, Order(11)]
+        public async Task PostRentCost_Valid_ShouldReturnPrivateCostModel()
+        {
+            var actionResult = await flatController.PostRentCost(3);
+
+            Assert.IsInstanceOf<PrivateCostModel>(actionResult.Value);
+            Assert.AreEqual(150.0, actionResult.Value.Value);
+        }
+
+        [Test, Order(12)]
+        public async Task GetPrivateCostsStatistics_AllStatsId_ShouldReturnPrivateStats()
+        {
+            var actionResult = await statisticsController.GetPrivateCostsStatistics(new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow,
+                frequencyId = Consts.AllStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            double sum = 0;
+
+            foreach (var x in actionResult.Value)
+            {
+                sum += x.Value;
+            }
+
+            Assert.AreEqual(150, sum);
+        }
+
+        [Test, Order(13)]
+        public async Task GetPrivateCostsStatistics_AllStatsIdWithTwoRents_ShouldReturnPrivateStats()
+        {
+            await flatController.SetFlatRentCost(2, new RentCostPutModel()
+            {
+                Value = 150
+            });
+
+            await flatController.PostRentCost(2);
+
+            var actionResult = await statisticsController.GetPrivateCostsStatistics(new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow,
+                frequencyId = Consts.AllStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            int count = 0;
+            double sum = 0;
+
+            foreach(var x in actionResult.Value)
+            {
+                sum += x.Value;
+                count++;
+            }
+
+            Assert.AreEqual(2, count);
+            Assert.AreEqual(300, sum);
+        }
+
+        [Test, Order(14)]
+        public async Task GetPrivateCostsStatistics_DailydWithTwoRents_ShouldReturnPrivateStats()
+        {
+            var actionResult = await statisticsController.GetPrivateCostsStatistics(new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow,
+                frequencyId = Consts.DailyStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            int count = 0;
+            double sum = 0;
+
+            foreach (var x in actionResult.Value)
+            {
+                sum += x.Value;
+                count++;
+            }
+
+            Assert.AreEqual((DateTime.UtcNow.Date - DateTime.UtcNow.AddMonths(-1).Date).TotalDays, count);
+            Assert.AreEqual(300, sum);
+        }
+
+        [Test, Order(12)]
+        public async Task CheckIfRentIsPaid_RentCostAdded_ShouldReturnIsPaidTrue()
+        {
+            var actionResult = await flatController.CheckIfRentIsPaid(3);
+
+            Assert.IsInstanceOf<RentCostGetReturnModel>(actionResult.Value);
+            Assert.AreEqual(true, actionResult.Value.IsPaid);
+        }
+
+        [Test, Order(12)]
+        public async Task GetAvailableLocators_SessionUserAloneInFlat_ShouldReturnOneUsersNicknameModels()
+        {
+            var actionResult = await flatController.GetAvailableLocators(3);
+
+            Assert.IsInstanceOf<IEnumerable<UserNicknameModel>>(actionResult.Value);
+
+            int count = 0;
+            foreach(var x in actionResult.Value)
+                count++;
+
+            Assert.AreEqual(1, count);
+        }
+
         //GetFlatShoppingLists Tests
-        [Test, Order(10)]
+        [Test, Order(12)]
         public async Task GetFlatShoppingLists_WithNoListsForFlat_ShouldReturnEmptyList()
         {
             var actionResult = await flatController.GetFlatShoppingLists(3);
@@ -270,14 +417,14 @@ namespace RoomMe.API.Tests
             Assert.IsInstanceOf<List<ShoppingListShortModel>>(actionResult.Value);
             Assert.AreEqual("", actionResult.Value);
         }
-        [Test, Order(10)]
+        [Test, Order(12)]
         public async Task GetFlatShoppingLists_WithSessionUserNotOfFlat_ShouldReturnBadRequestResult()
         {
             var actionResult = await flatController.GetFlatShoppingLists(1);
 
             Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
         }
-        [Test, Order(10)]
+        [Test, Order(12)]
         public async Task GetFlatShoppingLists_WithValidUserAndList_ShouldReturnListWithContent()
         {
             var actionResult = await flatController.GetFlatShoppingLists(2);
@@ -320,7 +467,7 @@ namespace RoomMe.API.Tests
                 Password = BCryptNet.BCrypt.EnhancedHashPassword("pass123"),
                 Firstname = "someone2",
                 Lastname = "lastname2",
-                PhoneNumber = "123456789",
+                PhoneNumber = "123456789"
             };
             context.Users.Add(user);
 

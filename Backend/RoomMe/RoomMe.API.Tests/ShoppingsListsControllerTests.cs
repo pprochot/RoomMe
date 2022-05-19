@@ -34,6 +34,7 @@ namespace RoomMe.API.Tests
         SqlContext context;
         SessionHelper sessionHelper;
         ShoppingListController shoppingListController;
+        StatisticsController statisticsController;
 
         User sessionUser;
 
@@ -67,6 +68,7 @@ namespace RoomMe.API.Tests
             sessionHelper = new SessionHelper(mockHttpContextAccesor.Object, mockHeaderConfiguration.Object);
 
             shoppingListController = new ShoppingListController(new NullLogger<ShoppingListController>(), context, sessionHelper);
+            statisticsController = new StatisticsController(new NullLogger<StatisticsController>(), context, sessionHelper);
         }
 
         //CreateNewShoppingLists Tests
@@ -241,11 +243,13 @@ namespace RoomMe.API.Tests
             {
                 new ProductPatchModel()
                 {
-                    Id = 1
+                    Id = 1,
+                    Value = 123
                 },
                 new ProductPatchModel()
                 {
-                    Id = 2
+                    Id = 2,
+                    Value = 321
                 }
             });
 
@@ -271,6 +275,50 @@ namespace RoomMe.API.Tests
             });
 
             Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
+        }
+
+        [Test, Order(6)]
+        public async Task GetCommonCostsStatistics_AllStatsId_ShouldReturnStatistics()
+        {
+            var actionResult = await statisticsController.GetCommonCostsStatistics(1, new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow.AddMonths(1),
+                frequencyId = Consts.AllStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            int count = 0;
+
+            foreach(var x in actionResult.Value)
+            {
+                count++;
+            }
+
+            Assert.AreEqual(2, count);
+        }
+
+        [Test, Order(6)]
+        public async Task GetCommonCostsStatistics_DailyStatsId_ShouldReturnStatistics()
+        {
+            var actionResult = await statisticsController.GetCommonCostsStatistics(1, new StatisticsGetModel()
+            {
+                From = DateTime.UtcNow.AddMonths(-1),
+                To = DateTime.UtcNow,
+                frequencyId = Consts.DailyStatsId
+            });
+
+            Assert.IsInstanceOf<IEnumerable<StatisticsReturnModel>>(actionResult.Value);
+
+            double sum = 0;
+
+            foreach (var x in actionResult.Value)
+            {
+                sum += x.Value;
+            }
+
+            Assert.AreEqual(444, sum);
         }
 
 
