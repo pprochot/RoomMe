@@ -95,7 +95,8 @@ class OngoingListsFragment(private val viewModel: ShoppingListSelectViewModel) :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val adapter = OngoingShoppingListsAdapter()
-        LayoutRecyclerviewFullscreenBinding.bind(view).run {
+        val binding = LayoutRecyclerviewFullscreenBinding.bind(view)
+        binding.run {
             rvShoppingLists.layoutManager = LinearLayoutManager(context)
             rvShoppingLists.adapter = adapter
         }
@@ -111,7 +112,8 @@ class FinishedListsFragment(private val viewModel: ShoppingListSelectViewModel) 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val adapter = CompletedShoppingListsAdapter()
-        LayoutRecyclerviewFullscreenBinding.bind(view).run {
+        val binding = LayoutRecyclerviewFullscreenBinding.bind(view)
+        binding.run {
             rvShoppingLists.layoutManager = LinearLayoutManager(context)
             rvShoppingLists.adapter = adapter
         }
