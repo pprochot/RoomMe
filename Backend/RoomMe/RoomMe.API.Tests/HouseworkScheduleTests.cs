@@ -294,7 +294,7 @@ namespace RoomMe.API.Tests
             });
 
             Assert.IsInstanceOf<Dictionary<DateTime,List<ScheduleModel>>>(actionResult.Value);
-            Assert.AreEqual(DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month), actionResult.Value.Count);
+            Assert.AreEqual(31, actionResult.Value.Count);
 
             int count = 0;
 
@@ -331,7 +331,7 @@ namespace RoomMe.API.Tests
             });
 
             Assert.IsInstanceOf<Dictionary<DateTime, List<ScheduleModel>>>(actionResult.Value);
-            Assert.AreEqual(DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month), actionResult.Value.Count);
+            Assert.AreEqual(31, actionResult.Value.Count);
 
             int count = 0;
 
