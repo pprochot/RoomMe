@@ -37,7 +37,6 @@ struct LittleFriendsView: View {
                 task in TaskRow3(task: task)
             }}
         NavigationView {
-            //Spacer()
             
             VStack{
                 Spacer()

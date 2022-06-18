@@ -41,7 +41,6 @@ struct NewHouseworkView: View {
                        .padding()
                        .frame(width: 150, height: 100)
                         .cornerRadius(40)
-            //print(exists)
         }
     }
 }

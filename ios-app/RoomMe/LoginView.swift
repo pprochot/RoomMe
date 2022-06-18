@@ -102,25 +102,6 @@ struct LoginView: View {
                                    }
                                }
                                task.resume()
-                               /*
-                               let json: [String: Any] = ["email": "\(login)",
-                                                          "password": "\(password)"
-                                                        ]
-                               let rs = RequestSender()
-                               //let result = rs.postRequest(path: "/Auth/sign-in", body: json)
-                               var result = ""
-                               rs.myFunction(path: "/Auth/sign-in") { (str) in
-                                 if let st = str {
-                                   print(st)
-                                     result = st
-                                  }
-                               }
-                               if(result.contains("result: true")) {
-                                    self.push = 1
-                               }
-                               else {
-                                   NSLog("logowanie nieudane")
-                               }*/
                            }
                        }) {
                            Text("Login")

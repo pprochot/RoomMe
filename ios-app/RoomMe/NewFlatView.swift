@@ -52,53 +52,8 @@ struct NewFlatView: View {
                        .padding()
                        .frame(width: 150, height: 100)
                         .cornerRadius(40)
-            //print(exists)
         }
     }
     
 }
 
-
-/*
-
-HStack{
-Text("Create apartment")
-}
-
-
-HStack {
-    Image(systemName: "house")
-        .foregroundColor(.gray)
-        .imageScale(.large)
-        TextField("Name", text: $name)
-        .foregroundColor(.gray)
-        .font(.headline)
-}
-    .padding(.top, 30)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-HStack {
-    Image(systemName: "location.fill")
-        .foregroundColor(.gray)
-        .imageScale(.large)
-        SecureField("Address", text: $address)
-        .foregroundColor(.gray)
-        .font(.headline)
-}
-    .padding(.top, 30)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
-HStack{
-    Button(action: {
-               withAnimation(.easeOut(duration: 0.3)) {
-                   self.sceneNumber = 0
-               }
-           }) {
-               Text("CREATE")
-           }
-           .padding()
-           .frame(width: 100, height: 100)
-            .cornerRadius(40)
-}
-*/

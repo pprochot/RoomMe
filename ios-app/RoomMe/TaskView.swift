@@ -39,7 +39,6 @@ struct TaskView: View {
                 task in TaskRow(task: task)
             }}
         NavigationView {
-            //Spacer()
             
             VStack{
                 Spacer()
