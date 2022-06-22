@@ -28,7 +28,6 @@ struct TaskRow: View {
 
 var first = Task(description: "grzybobranie")
 var second = Task(description: "rosol cooking")
-//var tasks = [first, second]
 struct TaskView: View {
     @Binding var sceneNumber: Int
     @State var tasks = [first, second]
@@ -43,18 +42,6 @@ struct TaskView: View {
             VStack{
                 Spacer()
                 HStack {
-                    
-                    /*Button(action: {
-                                   withAnimation(.easeOut(duration: 0.3)) {
-                                       self.sceneNumber = 1
-                                   }
-                               }) {
-                                   Text("CREATE NEW HOUSEWORK")
-                               }
-                    
-                               .padding()
-                               .frame(width: 150, height: 100)
-                                .cornerRadius(40)*/
                     
                     NavigationLink(destination: NewHouseworkView(tasks: $tasks), label: {
                 Text("CREATE NEW HOUSEWORK")

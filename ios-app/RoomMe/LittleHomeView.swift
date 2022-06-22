@@ -42,7 +42,6 @@ struct LittleHomeView: View {
                 task in TaskRow1(task: task)
             }}
         NavigationView {
-            //Spacer()
             
             VStack{
                 Spacer()

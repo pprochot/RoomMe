@@ -60,11 +60,6 @@ struct ToBuyView: View {
                 List {
                     ForEach(tasks) { task in NavigationLink(destination: ListItems(), label: {Text(task.description)})}
                 }
-            /*
-            List(tasks) {
-                task in TaskRow2(task: task)
-            }}
-            */
             
             NavigationView {
             

@@ -116,7 +116,6 @@ struct RegisterView: View {
                                                                "lastname": "\(lastName)",
                                                                "phoneNumber": "\(phoneNumber)"
                                                             ]
-                                   //let rs = RequestSender()
                                    let url = URL(string: "http://959a-95-155-99-184.ngrok.io/auth/sign-up")!
                                    var request = URLRequest(url: url)
                                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")

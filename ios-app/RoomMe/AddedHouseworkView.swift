@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AddedHouseworkView: View {
-    //@Binding var exists = false
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
