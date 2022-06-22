@@ -44,18 +44,6 @@ struct TaskView: View {
                 Spacer()
                 HStack {
                     
-                    /*Button(action: {
-                                   withAnimation(.easeOut(duration: 0.3)) {
-                                       self.sceneNumber = 1
-                                   }
-                               }) {
-                                   Text("CREATE NEW HOUSEWORK")
-                               }
-                    
-                               .padding()
-                               .frame(width: 150, height: 100)
-                                .cornerRadius(40)*/
-                    
                     NavigationLink(destination: NewHouseworkView(tasks: $tasks), label: {
                 Text("CREATE NEW HOUSEWORK")
                     .padding()
