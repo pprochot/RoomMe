@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using RoomMe.SQLContext.Dictionaries;
 using RoomMe.SQLContext.Models;
 
 namespace RoomMe.SQLContext
@@ -24,14 +25,27 @@ namespace RoomMe.SQLContext
         public DbSet<CommonCost> CommonCosts { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
+        public DbSet<RentCost> RentCosts { get; set; }
+        public DbSet<UserFriend> UserFriends { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<StatisticsFrequency> StatisticsFrequencies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Housework>().HasOne(x => x.Author).WithOne().OnDelete(DeleteBehavior.Restrict);
+            DictionaryBuilder.AddDictionaries(modelBuilder);
+
+            modelBuilder.Entity<Housework>().HasOne(x => x.Author).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Housework>().HasMany(x => x.Users).WithMany(x => x.Houseworks);
 
             modelBuilder.Entity<Product>().HasOne(x => x.CommonCost).WithOne().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Product>().HasOne(x => x.ShoppingList).WithMany(y => y.Products).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<RentCost>().HasKey(x => new { x.UserId, x.FlatId });
+
+            modelBuilder.Entity<UserFriend>().HasKey(x => new { x.UserId, x.FriendId });
+            modelBuilder.Entity<UserFriend>().HasOne(x => x.User).WithMany(y => y.Friends).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Flat>().HasOne(x => x.Creator).WithMany(y => y.OwnedFlats).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

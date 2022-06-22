@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+        <item
+            android:id="@id/destSelectApartmentFragment"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
+            android:id="@id/destProfileFragment"
+            android:icon="@drawable/ic_person"
+            android:title="Profile" />
+        <item
+            android:id="@id/destFriendsFragments"
+            android:icon="@drawable/ic_friends"
+            android:title="Friends" />
+        <item
+            android:id="@id/destPrivateStatisticsFragment"
+            android:icon="@drawable/ic_chart"
+            android:title="Statistics" />
+    </group>
+</menu>

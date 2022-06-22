@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainNavGraph"
+    app:startDestination="@id/homeNavGraph">
+
+    <action
+        android:id="@+id/actionGlobalToProfile"
+        app:destination="@id/destProfileFragment" />
+    <action
+        android:id="@+id/actionGlobalToFriends"
+        app:destination="@id/destFriendsFragments" />
+
+    <fragment
+        android:id="@+id/destProfileFragment"
+        android:name="uj.roomme.app.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/destFriendsFragments"
+        android:name="uj.roomme.app.ui.friends.fragments.FriendsFragment"
+        android:label="Friends"
+        tools:layout="@layout/fragment_friends">
+        <action
+            android:id="@+id/actionFriendsToAddFriend"
+            app:destination="@id/destAddFriendFragment" />
+    </fragment>
+
+    <include app:graph="@navigation/home_nav_graph" />
+    <fragment
+        android:id="@+id/destAddFriendFragment"
+        android:name="uj.roomme.app.ui.friends.fragments.FriendsAddFragment"
+        android:label="Add Friend"
+        tools:layout="@layout/fragment_friends_add"/>
+</navigation>

@@ -11,7 +11,7 @@ namespace RoomMe.SQLContext.Models
         public int Id { get; set; }
         public int FlatId { get; set; }
         public Flat Flat { get; set; }
-        public int CompletorId { get; set; }
+        public int? CompletorId { get; set; }
         public User Completor { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

@@ -17,5 +17,6 @@ namespace RoomMe.SQLContext.Models
         public string Description { get; set; }
         public List<User> Users { get; set; }
         public List<HouseworkSchedule> HouseworkSchedules { get; set; }
+        public HouseworkSettings HouseworkSettings { get; set; }
     }
 }

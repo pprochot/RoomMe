@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeNavGraph"
+    app:startDestination="@id/destSelectApartmentFragment">
+
+    <action
+        android:id="@+id/actionGlobalToShoppingLists"
+        app:destination="@id/product_list_nav_graph" />
+    <action
+        android:id="@+id/actionGlobalToHouseWorks"
+        app:destination="@id/houseworkNavGraph" />
+    <action
+        android:id="@+id/actionGlobalToRoommates"
+        app:destination="@id/destRoommatesFragment" />
+    <action
+        android:id="@+id/actionGlobalToStatistics"
+        app:destination="@id/destCommonStatisticsFragment" />
+    <action
+        android:id="@+id/actionGlobalToPrivateStatistics"
+        app:destination="@id/destPrivateStatisticsFragment" />
+
+    <fragment
+        android:id="@+id/destSelectApartmentFragment"
+        android:name="uj.roomme.app.ui.home.fragments.SelectApartmentFragment"
+        android:label="Select apartment"
+        tools:layout="@layout/fragment_apartment_select" >
+        <action
+            android:id="@+id/actionSelectApartmentToCreateApartment"
+            app:destination="@id/destCreateApartmentFragment" />
+        <action
+            android:id="@+id/actionSelectApartmentToHome"
+            app:destination="@id/destHomeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/destCreateApartmentFragment"
+        android:name="uj.roomme.app.ui.home.fragments.ApartmentCreateFragment"
+        android:label="Create apartment"
+        tools:layout="@layout/fragment_apartment_create" >
+        <action
+            android:id="@+id/actionCreateApartmentToHome"
+            app:destination="@id/destHomeFragment"
+            app:popUpTo="@id/destSelectApartmentFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/destHomeFragment"
+        android:name="uj.roomme.app.ui.home.fragments.ApartmentHomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_apartment_home" />
+
+    <fragment
+        android:id="@+id/destRoommatesFragment"
+        android:name="uj.roomme.app.ui.roommates.fragments.RoommatesFragment"
+        android:label="Roommates"
+        tools:layout="@layout/fragment_roommates">
+        <action
+            android:id="@+id/actionRoommatesToAddRoommate"
+            app:destination="@id/destAddRoommateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/destCommonStatisticsFragment"
+        android:name="uj.roomme.app.ui.statistics.fragments.CommonStatisticsFragment"
+        android:label="Common statistics"
+        tools:layout="@layout/fragment_statistics"/>
+
+    <include app:graph="@navigation/shopping_list_nav_graph" />
+    <include app:graph="@navigation/housework_nav_graph"/>
+    <fragment
+        android:id="@+id/destAddRoommateFragment"
+        android:name="uj.roomme.app.ui.roommates.fragments.RoommatesAddFragment"
+        android:label="Add roommate"
+        tools:layout="@layout/fragment_roommates_add"/>
+    <fragment
+        android:id="@+id/destPrivateStatisticsFragment"
+        android:name="uj.roomme.app.ui.statistics.fragments.PrivateStatisticsFragment"
+        android:label="Private statistics"
+        tools:layout="@layout/fragment_statistics"/>
+
+</navigation>

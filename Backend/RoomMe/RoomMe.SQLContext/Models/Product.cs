@@ -13,7 +13,7 @@ namespace RoomMe.SQLContext.Models
         public ShoppingList ShoppingList { get; set; }
         public int AuthorId { get; set; }
         public User Author { get; set; }
-        public int CommonCostId { get; set; }
+        public int? CommonCostId { get; set; }
         public CommonCost CommonCost { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
